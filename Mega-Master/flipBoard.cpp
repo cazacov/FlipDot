@@ -9,7 +9,7 @@ FlipBoard::FlipBoard()
   rtcPanel = 0;
 }
 
-void FlipBoard::begin(uint8_t panelInfo[][2], uint8_t prows, uint8_t pcolumns, uint8_t prtcPanel = 0)
+void FlipBoard::begin(uint8_t panelInfo[][2], uint8_t prows, uint8_t pcolumns, uint8_t prtcPanel)
 {
   rows = prows;
   columns = pcolumns;
@@ -110,7 +110,7 @@ bool FlipBoard::readTime()
 {
   if (!rtcPanel)
   {
-    return;
+    return false;
   }
   
   char date[20];
@@ -173,7 +173,7 @@ void FlipBoard::drawDigit(int charNumber, int x0, int y0) {
   }
 }
 
-void FlipBoard::drawNumber(int number, int x0, int y0, int minLength = 0) {
+void FlipBoard::drawNumber(int number, int x0, int y0, int minLength) {
   int digitCount = 0;
   int n = number;
   while (n > 0)

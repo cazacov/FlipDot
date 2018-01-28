@@ -19,13 +19,13 @@ private:
   void sendCommand(uint8_t panel, uint8_t command, uint8_t param1, uint8_t param2);
 public:
   FlipBoard();
-  void begin(uint8_t panels[][2], uint8_t rows, uint8_t columns,uint8_t rtcPanel = 0);
+  void begin(uint8_t panels[][2], uint8_t rows, uint8_t columns,uint8_t rtcPanel);
   void dot_set(uint8_t x, uint8_t y);
   void dot_reset(uint8_t x, uint8_t y);
   void test();
   bool readTime();
   void drawDigit(int charNumber, int x0, int y0);
-  void drawNumber(int number, int x0, int y0, int minLength = 0);
+  void drawNumber(int number, int x0, int y0, int minLength);
   void clearScreen();
 
   int year;
