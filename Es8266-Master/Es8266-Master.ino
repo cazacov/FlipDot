@@ -3,8 +3,10 @@
 
 #include "flipBoard.h"
 #include "clock.h"
+#include "textwriter.h"
 
 FlipBoard flipBoard;
+TextWriter textwriter(flipBoard);
 
 uint8_t panels[][2] = {
   { 10, D5 },
@@ -20,18 +22,21 @@ void setup() {
   Serial.begin(57600);
   delay(2000);
   flipBoard.clearScreen();
-  flipBoard.dot_set(24,4);
+  /*flipBoard.dot_set(24,4);
   flipBoard.dot_set(24,6);
   flipBoard.dot_set(38,4);
-  flipBoard.dot_set(38,6);
+  flipBoard.dot_set(38,6);*/
 }
 
 void loop() {
   char date[20];
   delay(200);
   clock.read();
-  //sprintf(date, "%04d-%02d-%02d %02d:%02d:%02d", flipBoard.year, flipBoard.month, flipBoard.day, flipBoard.hours, flipBoard.minutes, flipBoard.seconds);
 
+  textwriter.DrawNumber(clock.hours, 1, 2, 2);
+  textwriter.DrawNumber(clock.minutes, 25, 2, 2);
+  
+  /*
   flipBoard.drawNumber(clock.hours, 13, 2, 2);
   flipBoard.drawNumber(clock.minutes, 27, 2, 2);
   flipBoard.drawNumber(clock.seconds, 41, 2, 2);
@@ -39,7 +44,7 @@ void loop() {
   flipBoard.drawNumber(clock.day, 9, 12, 2);
   flipBoard.drawNumber(clock.month, 22, 12, 2);
   flipBoard.drawNumber(clock.year, 36, 12, 2);
-  
+  */
 
-  delay(10000);
+  delay(5000);
 }
