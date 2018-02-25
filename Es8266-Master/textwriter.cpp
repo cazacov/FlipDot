@@ -7,13 +7,16 @@ TextWriter::TextWriter(FlipBoard& flipboard_) : flipboard(flipboard_)
 {
 }
 
-void TextWriter::DrawDigit(uint8_t digit, uint8_t pos_x, uint8_t pos_y) {
+void TextWriter::DrawDigit(uint8_t digit, uint8_t pos_x, uint8_t pos_y, uint8_t size_x, uint8_t size_y, const unsigned short font[]) {
 
-    for (uint8_t x = 0; x < 8; x++) {
-        for (uint8_t y = 0; y < 12; y++)
+    uint8_t bytes_per_column = size_y > 8 ? 2 : 1;
+
+    for (uint8_t x = 0; x < size_x; x++) {
+        for (uint8_t y = 0; y < size_y; y++)
         {
-            int idx = digit * 17 + 1 + (x * 2) + (y / 8);
-            if (Digits8x12[idx] & (1 << (y & 0x07))) {
+
+            int idx = digit * 17 + 1 + (x * bytes_per_column) + (y / 8);
+            if (font[idx] & (1 << (y & 0x07))) {
                 this->flipboard.dot_set(pos_x + x, pos_y + y);
             }
             else {
@@ -42,7 +45,7 @@ void TextWriter::DrawNumber(int number, int x0, int y0, int minLength) {
 
   while(digitCount)
   {
-    DrawDigit(number % 10, x0 + digitCount * 8 - 8, y0);
+    DrawDigit(number % 10, x0 + digitCount * 8 - 8,  y0, 8, 12, Digits8x12);
     number /= 10;
     digitCount--;
   }
