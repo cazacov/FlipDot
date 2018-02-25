@@ -42,7 +42,7 @@ void TextWriter::DrawNumber(int number, int x0, int y0, int minLength) {
 
   while(digitCount)
   {
-    DrawDigit(number % 10, x0 + digitCount * 10 - 10, y0);
+    DrawDigit(number % 10, x0 + digitCount * 9 - 9, y0);
     number /= 10;
     digitCount--;
   }
