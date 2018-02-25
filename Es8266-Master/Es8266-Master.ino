@@ -22,14 +22,14 @@ void setup() {
   Serial.begin(57600);
   delay(2000);
   flipBoard.clearScreen();
-  flipBoard.dot_set(19,5);
-  flipBoard.dot_set(19,6);
-  flipBoard.dot_set(20,5);
-  flipBoard.dot_set(20,6);
-  flipBoard.dot_set(19,11);
-  flipBoard.dot_set(19,12);
-  flipBoard.dot_set(20,11);
-  flipBoard.dot_set(20,12);
+  flipBoard.dot_set(16,3);
+  flipBoard.dot_set(16,4);
+  flipBoard.dot_set(17,3);
+  flipBoard.dot_set(17,4);
+  flipBoard.dot_set(16,8);
+  flipBoard.dot_set(16,9);
+  flipBoard.dot_set(17,8);
+  flipBoard.dot_set(17,9);
 }
 
 void loop() {
@@ -37,8 +37,8 @@ void loop() {
   delay(200);
   clock.read();
 
-  textwriter.DrawNumber(clock.hours, 0, 2, 2);
-  textwriter.DrawNumber(clock.minutes, 22, 2, 2);
+  textwriter.DrawNumber(clock.hours, 0, 0, 2);
+  textwriter.DrawNumber(clock.minutes, 20, 0, 2);
   
   /*
   flipBoard.drawNumber(clock.hours, 13, 2, 2);
