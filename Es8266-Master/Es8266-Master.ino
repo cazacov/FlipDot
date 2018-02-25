@@ -16,7 +16,7 @@ Clock clock;
 
 void setup() {
   // put your setup code here, to run once:
-  flipBoard.begin(panels, 1, 3, 12);
+  flipBoard.begin(panels, 1, 3);
   Serial.begin(57600);
   delay(2000);
   flipBoard.clearScreen();
@@ -30,7 +30,7 @@ void loop() {
   char date[20];
   delay(200);
   clock.read();
-  sprintf(date, "%04d-%02d-%02d %02d:%02d:%02d", flipBoard.year, flipBoard.month, flipBoard.day, flipBoard.hours, flipBoard.minutes, flipBoard.seconds);
+  //sprintf(date, "%04d-%02d-%02d %02d:%02d:%02d", flipBoard.year, flipBoard.month, flipBoard.day, flipBoard.hours, flipBoard.minutes, flipBoard.seconds);
 
   flipBoard.drawNumber(clock.hours, 13, 2, 2);
   flipBoard.drawNumber(clock.minutes, 27, 2, 2);
@@ -39,5 +39,7 @@ void loop() {
   flipBoard.drawNumber(clock.day, 9, 12, 2);
   flipBoard.drawNumber(clock.month, 22, 12, 2);
   flipBoard.drawNumber(clock.year, 36, 12, 2);
-  Serial.println(date);
+  
+
+  delay(10000);
 }

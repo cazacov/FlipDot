@@ -6,14 +6,12 @@
 
 FlipBoard::FlipBoard()
 {
-  rtcPanel = 0;
 }
 
-void FlipBoard::begin(uint8_t panelInfo[][2], uint8_t prows, uint8_t pcolumns, uint8_t prtcPanel)
+void FlipBoard::begin(uint8_t panelInfo[][2], uint8_t prows, uint8_t pcolumns)
 {
   rows = prows;
   columns = pcolumns;
-  rtcPanel = prtcPanel;
   
   for (int panelCount = 0; panelCount < rows * columns; panelCount++)
   { 
@@ -105,52 +103,6 @@ void FlipBoard::test()
     }
   }
 }
-
-bool FlipBoard::readTime()
-{
-  if (!rtcPanel)
-  {
-    return false;
-  }
-  
-  char date[20];
-  int count = 0;
-
-  sendCommand(rtcPanel, CMD_TIME_GET, 0,0);
-  delay(5);
-
-  Wire.requestFrom((int)rtcPanel, 19);
-  delay(2);
-  while (Wire.available() && count < 20) { // slave may send less than requested
-    char ch =  Wire.read();
-    date[count++] = ch;
-  }
-  while (Wire.available())
-  {
-    Wire.read();
-    Serial.print(".");
-  }
-  
-  if (count == 19)
-  {
-    date[4] = 0;
-    year = atoi(date);
-    date[7] = 0;
-    month = atoi(date + 5);
-    date[10] = 0;
-    day = atoi(date + 8);
-    date[13] = 0;
-    hours = atoi(date + 11);
-    date[16] = 0;
-    minutes = atoi(date + 14);
-    date[19] = 0;
-    seconds = atoi(date + 17);
-
-    Serial.print(year);
-    return true;
-  }
-  return false;
-} 
 
 const uint8_t  ziffer[][4] = {
   { 0x7C , 0x82 , 0x82 , 0x7C }, // 0
