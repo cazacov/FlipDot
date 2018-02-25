@@ -14,6 +14,8 @@ public:
   uint8_t hours;
   uint8_t minutes;
   uint8_t seconds;
+  uint8_t dayOfWeek;
+
 
   Clock();
   void read(void);

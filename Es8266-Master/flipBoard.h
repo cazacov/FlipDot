@@ -22,8 +22,6 @@ public:
   void dot_set(uint8_t x, uint8_t y);
   void dot_reset(uint8_t x, uint8_t y);
   void test();
-  void drawDigit(int charNumber, int x0, int y0);
-  void drawNumber(int number, int x0, int y0, int minLength);
   void clearScreen();
 };
 

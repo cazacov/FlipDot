@@ -21,11 +21,27 @@ void Clock::read(void) {
   seconds    = bcdToDec(Wire.read() & 0x7f);
   minutes     = bcdToDec(Wire.read()); 
   hours     = bcdToDec(Wire.read() & 0x3f); 
-  //Der Wochentag wird hier nicht ausgelesen da dieses mit 
-  //dem Modul RTC DS3231 nicht über die Wire.h zuverlässig funktioniert.
-  /* wochentag  =*/ bcdToDec(Wire.read());
+  // Reading day of week is not stable
+  bcdToDec(Wire.read());
   day        = bcdToDec(Wire.read());
   month      = bcdToDec(Wire.read());
   year       = bcdToDec(Wire.read())+2000; 
+
+
+  // https://en.wikipedia.org/wiki/Determination_of_the_day_of_the_week#Sakamoto's_methods
+
+  int y = year;
+  int m = month;
+  int d = day;
+
+  static int t[] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
+  y -= m < 3;
+  dayOfWeek = (y + y/4 - y/100 + y/400 + t[m-1] + d) % 7;
+  
+  if (dayOfWeek == 0)
+  {
+    // Sunday
+    dayOfWeek = 7; 
+  }
 }
 

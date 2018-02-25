@@ -4,6 +4,7 @@
 #include "flipBoard.h"
 #include "clock.h"
 #include "textwriter.h"
+#include "glcdfonts.h"
 
 FlipBoard flipBoard;
 TextWriter textwriter(flipBoard);
@@ -39,16 +40,10 @@ void loop() {
 
   textwriter.DrawNumber(clock.hours, 0, 0, 2);
   textwriter.DrawNumber(clock.minutes, 20, 0, 2);
+
+  textwriter.SmallNumber(clock.day, 1, 14, 2);
+
+  textwriter.DrawDigit(clock.dayOfWeek - 1, 10, 14, 24, 5, DaysOfWeek24x5);
   
-  /*
-  flipBoard.drawNumber(clock.hours, 13, 2, 2);
-  flipBoard.drawNumber(clock.minutes, 27, 2, 2);
-  flipBoard.drawNumber(clock.seconds, 41, 2, 2);
-
-  flipBoard.drawNumber(clock.day, 9, 12, 2);
-  flipBoard.drawNumber(clock.month, 22, 12, 2);
-  flipBoard.drawNumber(clock.year, 36, 12, 2);
-  */
-
   delay(5000);
 }
