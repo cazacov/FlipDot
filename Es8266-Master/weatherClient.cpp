@@ -52,6 +52,8 @@ void WeatherClient::Begin()
 #pragma align(4)
 char respBuf[8192];
 
+WeatherIcon ParseWeatherDescription(const char* description);
+
 bool WeatherClient::GetWeatherData()
 {
     // Open socket to WU server port 80
@@ -154,28 +156,17 @@ bool WeatherClient::ParseResponse(char *json)
 
     // Extract weather info from parsed JSON
     JsonObject &current = root["current_observation"];
-    const float temp_f = current["temp_f"];
-    Serial.print(temp_f, 1);
-    Serial.print(F(" F, "));
     const float temp_c = current["temp_c"];
+    this->temperature_current = temp_c;
     Serial.print(temp_c, 1);
     Serial.print(F(" C, "));
-    const char *humi = current[F("relative_humidity")];
-    Serial.print(humi);
-    Serial.println(F(" RH"));
     const char *weather = current["weather"];
+    this->weather_icon = ParseWeatherDescription(weather);
     Serial.println(weather);
-    const char *pressure_mb = current["pressure_mb"];
-    Serial.println(pressure_mb);
-    const char *observation_time = current["observation_time_rfc822"];
-    Serial.println(observation_time);
-
-    // Extract local timezone fields
-    const char *local_tz_short = current["local_tz_short"];
-    Serial.println(local_tz_short);
-    const char *local_tz_long = current["local_tz_long"];
-    Serial.println(local_tz_long);
-    const char *local_tz_offset = current["local_tz_offset"];
-    Serial.println(local_tz_offset);
     return true;
+}
+
+WeatherIcon ParseWeatherDescription(const char* description)
+{
+    WeatherIcon result = kUnknown;
 }

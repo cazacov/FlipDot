@@ -38,25 +38,40 @@ void setup() {
 }
 
 int last_minute = -1;
+float last_temperature = -100;
+WeatherIcon last_icon = kUnknown;
 
 void ShowTime();
+void ShowWeather();
 
 void loop() {
   clock.read();
-  delay(5000);
+  delay(500);
 
   if (clock.minutes != last_minute)
   {
       last_minute = clock.minutes;
-      //ShowTime();
+      ShowTime();
   }
   weather_client.GetWeatherData();
-  delay(10000);
+
+  if (last_temperature != weather_client.temperature_current || last_icon != weather_client.weather_icon)
+  {
+    last_temperature = weather_client.temperature_current;
+    last_icon = weather_client.weather_icon;
+    ShowWeather();
+  }
 }
 
 void ShowTime() {
    textwriter.DrawNumber(clock.hours, 0, 0, 2);
   textwriter.DrawNumber(clock.minutes, 20, 0, 2);
   textwriter.SmallNumber(clock.day, 0, 14, 2);
-  textwriter.DrawDigit(clock.dayOfWeek - 1, 10, 14, 24, 5, DaysOfWeek24x5);
+  textwriter.DrawDigit(clock.dayOfWeek - 1 + 32, 10, 14, 24, 5, DaysOfWeek24x5);
+}
+
+void ShowWeather() {
+  char buf[20];
+  sprintf(buf, "%d'", (int)weather_client.temperature_current);
+  textwriter.DrawText(buf, 40, 14);
 }
