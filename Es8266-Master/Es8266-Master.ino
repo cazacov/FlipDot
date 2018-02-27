@@ -5,9 +5,11 @@
 #include "clock.h"
 #include "textwriter.h"
 #include "glcdfonts.h"
+#include "weatherClient.h"
 
 FlipBoard flipBoard;
 TextWriter textwriter(flipBoard);
+WeatherClient weather_client;
 
 uint8_t panels[][2] = {
   { 10, D5 },
@@ -19,8 +21,8 @@ Clock clock;
 
 void setup() {
   // put your setup code here, to run once:
+  Serial.begin(115200);
   flipBoard.begin(panels, 1, 3);
-  Serial.begin(57600);
   delay(2000);
   flipBoard.clearScreen();
   flipBoard.dot_set(16,3);
@@ -31,26 +33,30 @@ void setup() {
   flipBoard.dot_set(16,9);
   flipBoard.dot_set(17,8);
   flipBoard.dot_set(17,9);
+
+  weather_client.Begin();
 }
 
 int last_minute = -1;
 
+void ShowTime();
+
 void loop() {
   clock.read();
+  delay(5000);
 
-  if (clock.minutes == last_minute)
+  if (clock.minutes != last_minute)
   {
-    // Nothing new to show
-    delay(500);
-    return;
+      last_minute = clock.minutes;
+      //ShowTime();
   }
+  weather_client.GetWeatherData();
+  delay(10000);
+}
 
-  last_minute = clock.minutes;
-
-  textwriter.DrawNumber(clock.hours, 0, 0, 2);
+void ShowTime() {
+   textwriter.DrawNumber(clock.hours, 0, 0, 2);
   textwriter.DrawNumber(clock.minutes, 20, 0, 2);
-  textwriter.SmallNumber(clock.day, 1, 14, 2);
+  textwriter.SmallNumber(clock.day, 0, 14, 2);
   textwriter.DrawDigit(clock.dayOfWeek - 1, 10, 14, 24, 5, DaysOfWeek24x5);
-
-  delay(500);
 }
