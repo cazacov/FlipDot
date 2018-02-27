@@ -168,5 +168,74 @@ bool WeatherClient::ParseResponse(char *json)
 
 WeatherIcon ParseWeatherDescription(const char* description)
 {
-    WeatherIcon result = kUnknown;
+    Serial.println(description);
+    if (strstr(description, "Clear"))
+    {
+        return kSunny;
+    }
+    if (strstr(description, "Partly Cloudy"))
+    {
+        return kPartlyCloudy;
+    }
+    if (strstr(description, "Mostly Cloudy"))
+    {
+        return kMostlyCloudy;
+    }
+    if (strstr(description, "Cloudy"))
+    {
+        return kCloudy;
+    }
+    if (strstr(description, "Scattered Clouds"))
+    {
+        return kPartlyCloudy;
+    }
+    if (strstr(description, "Overcast"))
+    {
+        return kCloudy;
+    }
+    if (strstr(description, "Mostly Sunny"))
+    {
+        return kSunny;
+    }
+    if (strstr(description, "Partly Sunny"))
+    {
+        return kPartlyCloudy;
+    }
+    if (strstr(description, "Sunny"))
+    {
+        return kSunny;
+    }
+    if (strstr(description, "Fog"))
+    {
+        return kFog;
+    }
+    if (strstr(description, "Haze"))
+    {
+        return kFog;
+    }
+    if (strstr(description, "Rain"))
+    {
+        return kRain;
+    }
+    if (strstr(description, "Freezing Rain"))
+    {
+        return kRain;
+    }
+    if (strstr(description, "Flurries"))
+    {
+        return kRain;
+    }
+    if (strstr(description, "Sleet"))
+    {
+        return kSnow;
+    }
+    if (strstr(description, "Snow"))
+    {
+        return kSnow;
+    }
+    if (strstr(description, "Thunderstorm"))
+    {
+        return kThunderstorm;
+    }
+    return kUnknown;
 }

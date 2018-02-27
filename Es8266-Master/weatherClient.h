@@ -3,6 +3,7 @@
 
 enum WeatherIcon
 {
+    kUnknown,
     kSunny,
     kPartlyCloudy,
     kMostlyCloudy,
@@ -10,8 +11,7 @@ enum WeatherIcon
     kFog,
     kRain,
     kSnow,
-    kThunderstorms,
-    kUnknown
+    kThunderstorm
 };
 
 class WeatherClient
