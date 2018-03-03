@@ -25,14 +25,14 @@ void setup()
   flipBoard.begin(panels, 1, 3);
   delay(2000);
   flipBoard.clearScreen();
-  flipBoard.dot_set(16, 3);
-  flipBoard.dot_set(16, 4);
-  flipBoard.dot_set(17, 3);
-  flipBoard.dot_set(17, 4);
-  flipBoard.dot_set(16, 8);
-  flipBoard.dot_set(16, 9);
-  flipBoard.dot_set(17, 8);
-  flipBoard.dot_set(17, 9);
+  flipBoard.dot_set(18, 3);
+  flipBoard.dot_set(18, 4);
+  flipBoard.dot_set(19, 3);
+  flipBoard.dot_set(19, 4);
+  flipBoard.dot_set(18, 8);
+  flipBoard.dot_set(18, 9);
+  flipBoard.dot_set(19, 8);
+  flipBoard.dot_set(19, 9);
 
   weather_client.Begin();
 }
@@ -74,18 +74,20 @@ void loop()
 
 void ShowTime()
 {
-  textwriter.DrawNumber(clock.hours, 0, 0, 2);
-  textwriter.DrawNumber(clock.minutes, 20, 0, 2);
-  textwriter.SmallNumber(clock.day, 0, 14, 2);
+  textwriter.DrawNumber(clock.hours, 2, -1, 2);
+  textwriter.DrawNumber(clock.minutes, 22, -1, 2);
   flipBoard.dot_set(8, 18);
-  textwriter.DrawDigit(clock.dayOfWeek - 1 + 32, 11, 14, 24, 5, DaysOfWeek24x5);
+  textwriter.DrawDigit(clock.dayOfWeek - 1 + 32, 0, 14, 10, 5, WochenTage10x5);
+  textwriter.SmallNumber(clock.day, 12, 14, 2);
+  flipBoard.dot_set(20, 18);
+  textwriter.DrawDigit(clock.month - 1 + 32, 23, 14, 15, 5, Monate15x5);
+
 }
 
 void ShowWeather()
 {
   char buf[20];
   sprintf(buf, "%d'", (int)weather_client.temperature_current);
-  textwriter.DrawText(buf, 42, 14);
-  Serial.println((int)(weather_client.weather_icon));
-  textwriter.DrawDigit(weather_client.weather_icon + 32, 38, 0, 24, 12, Weather24x12);
+  textwriter.DrawText(buf, 46, 14);
+  textwriter.DrawDigit((int)(weather_client.weather_icon) + 32, 39, 0, 24, 12, Weather24x12);
 }

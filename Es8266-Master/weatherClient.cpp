@@ -84,7 +84,6 @@ bool WeatherClient::GetWeatherData()
     while (httpclient.connected() || httpclient.available())
     {
         String aLine = httpclient.readStringUntil('\n');
-        Serial.println(aLine);
         delay(10);
         // Blank line denotes end of headers
         if (aLine.length() <= 1)
@@ -92,8 +91,6 @@ bool WeatherClient::GetWeatherData()
             break;
         }
     }
-
-    Serial.println("Reading body");
 
     while (httpclient.connected() || httpclient.available())
     {
@@ -125,8 +122,6 @@ bool WeatherClient::GetWeatherData()
     }
     // Terminate the C string
     respBuf[respLen++] = '\0';
-    Serial.print(F("respLen "));
-    Serial.println(respLen);
     return ParseResponse(respBuf);
 }
 
@@ -158,11 +153,8 @@ bool WeatherClient::ParseResponse(char *json)
     JsonObject &current = root["current_observation"];
     const float temp_c = current["temp_c"];
     this->temperature_current = temp_c;
-    Serial.print(temp_c, 1);
-    Serial.print(F(" C, "));
     const char *weather = current["weather"];
     this->weather_icon = ParseWeatherDescription(weather);
-    Serial.println(weather);
     return true;
 }
 
