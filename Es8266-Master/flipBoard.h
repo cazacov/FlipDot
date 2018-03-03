@@ -25,6 +25,7 @@ public:
   void clearScreen();
   void powerOn();
   void powerOff();
+  void sleep();
 };
 
 #endif

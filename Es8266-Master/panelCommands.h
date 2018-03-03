@@ -6,3 +6,4 @@
 #define CMD_DOT_RESET 6
 #define CMD_DURATION_SET 7
 #define CMD_TIME_GET 8
+#define CMD_SLEEP 9

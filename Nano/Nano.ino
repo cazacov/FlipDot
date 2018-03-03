@@ -12,6 +12,7 @@
 #include <RtcDS3231.h>
 RtcDS3231<TwoWire> Rtc(Wire);
 RtcDateTime now;
+#include "LowPower.h"
 #endif
 
 #define panelNumber 12          // die I2C Nummer des jeweiligen Panels
@@ -77,12 +78,20 @@ volatile int param2 = 0;
 volatile int command = 0;                
 volatile bool isReceiving = false;
 int readCounter = 0;
+int sleep_count = 0;
 
 void loop() {
   if (isReceiving)
   {
     return;
   }
+  
+  if (sleep_count)
+  {
+    sleep_count--;
+    LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);  
+  }
+  
   if (!command)
   {
     return;
@@ -117,6 +126,8 @@ void loop() {
       now = Rtc.GetDateTime();
       break;
 #endif      
+    case CMD_SLEEP:
+      sleep_count = 6;
   }
   command = 0;
 }

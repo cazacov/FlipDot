@@ -42,6 +42,7 @@ float last_temperature = -100;
 WeatherIcon last_icon = kUnknown;
 int last_read_minute = -100;
 bool isPowered = true;
+bool isSleeping = false;
 
 void ShowTime();
 void ShowWeather();
@@ -72,15 +73,25 @@ void loop()
     ShowWeather();
   }
 
-  if (isPowered && clock.seconds > 5 && clock.seconds < 55)
+  if (isPowered && clock.seconds > 0 && clock.seconds < 55)
   {
     isPowered = false;
     flipBoard.powerOff();
   }
-  else if (!isPowered && clock.seconds < 5 || clock.seconds > 55)
+  else if (!isPowered && clock.seconds < 1 || clock.seconds > 55)
   {
     isPowered = true;
     flipBoard.powerOn();
+  }
+  if (!isSleeping && clock.seconds == 2)
+  {
+    isSleeping = true;
+    flipBoard.sleep();
+  }
+  if (isSleeping && clock.seconds > 51)
+  {
+    // Nanos wake up after 48 seconds
+    isSleeping = false; 
   }
 }
 

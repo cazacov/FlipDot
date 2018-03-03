@@ -119,5 +119,12 @@ void FlipBoard::powerOff() {
   }
 }
 
+void FlipBoard::sleep() {
+  for(int i = 0; i < rows * columns; i++)
+  {
+    sendCommand(i, CMD_SLEEP, 0, 0);
+  }
+}
+
 
 
