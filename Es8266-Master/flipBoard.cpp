@@ -104,5 +104,20 @@ void FlipBoard::test()
   }
 }
 
+void FlipBoard::powerOn()
+{
+  for(int i = 0; i < rows * columns; i++)
+  {
+    sendCommand(i, CMD_POWER_ON, 0, 0);
+  }
+}
+
+void FlipBoard::powerOff() {
+  for(int i = 0; i < rows * columns; i++)
+  {
+    sendCommand(i, CMD_POWER_OFF, 0, 0);
+  }
+}
+
 
 

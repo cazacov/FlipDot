@@ -41,6 +41,7 @@ int last_minute = -1;
 float last_temperature = -100;
 WeatherIcon last_icon = kUnknown;
 int last_read_minute = -100;
+bool isPowered = true;
 
 void ShowTime();
 void ShowWeather();
@@ -69,6 +70,17 @@ void loop()
     last_temperature = weather_client.temperature_current;
     last_icon = weather_client.weather_icon;
     ShowWeather();
+  }
+
+  if (isPowered && clock.seconds > 5 && clock.seconds < 55)
+  {
+    isPowered = false;
+    flipBoard.powerOff();
+  }
+  else if (!isPowered && clock.seconds < 5 || clock.seconds > 55)
+  {
+    isPowered = true;
+    flipBoard.powerOn();
   }
 }
 

@@ -23,6 +23,8 @@ public:
   void dot_reset(uint8_t x, uint8_t y);
   void test();
   void clearScreen();
+  void powerOn();
+  void powerOff();
 };
 
 #endif
