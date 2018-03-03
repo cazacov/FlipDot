@@ -77,10 +77,10 @@ void ShowTime()
   textwriter.DrawNumber(clock.hours, 2, -1, 2);
   textwriter.DrawNumber(clock.minutes, 22, -1, 2);
   flipBoard.dot_set(8, 18);
-  textwriter.DrawDigit(clock.dayOfWeek - 1 + 32, 0, 14, 10, 5, WochenTage10x5);
+  textwriter.DrawDigit(clock.dayOfWeek - 1 + 32, 0, 14, 10, 5, DaysOfWeeksRu10x5);
   textwriter.SmallNumber(clock.day, 12, 14, 2);
   flipBoard.dot_set(20, 18);
-  textwriter.DrawDigit(clock.month - 1 + 32, 23, 14, 15, 5, Monate15x5);
+  textwriter.DrawDigit(clock.month - 1 + 32, 23, 14, 15, 5, MonthsRu15x5);
 
 }
 
