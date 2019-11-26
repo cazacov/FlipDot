@@ -3,8 +3,7 @@
 #define PANEL_WIDTH 21 
 #define PANEL_HEIGHT 19
 
-void CommandProcessor::init()
-{
+void CommandProcessor::init() {
   dotSetup(8, PANEL_WIDTH, 1, PANEL_HEIGHT, 0); 
   dotPowerOn();
   delay(50);
@@ -28,10 +27,8 @@ void CommandProcessor::init()
 #endif
 }
 
-void CommandProcessor::execute(int command, int param1, int param2)
-{
-  switch (command)
-  {
+void CommandProcessor::execute(int command, int param1, int param2) {
+  switch (command) {
   case CMD_ALL_SET:
     setAll(0);
     break;
@@ -51,8 +48,7 @@ void CommandProcessor::execute(int command, int param1, int param2)
     resetDot(param1, param2);
     break;
   case CMD_DURATION_SET:
-    if (param1 >= 1 && param1 <= 10)
-    {
+    if (param1 >= 1 && param1 <= 10) {
       setCoilOnDuration(param1 * 100);
     }
     break;
@@ -75,21 +71,16 @@ const uint8_t ziffer[][4] = {
     {0x70, 0x8A, 0x8A, 0x7C}, // 9
 };
 
-void CommandProcessor::drawChar(int charNumber, int x0, int y0)
-{
+void CommandProcessor::drawChar(int charNumber, int x0, int y0) {
   uint8_t anzeigeByte = 0;
 
-  for (int xc = 0; xc < 4; xc++)
-  {
+  for (int xc = 0; xc < 4; xc++) {
     anzeigeByte = ziffer[charNumber][xc];
-    for (int yc = 0; yc < 7; yc++)
-    {
-      if ((anzeigeByte & 128) == 128)
-      {
+    for (int yc = 0; yc < 7; yc++) {
+      if ((anzeigeByte & 128) == 128) {
         setDot(x0 + xc, y0 + yc);
       }
-      else
-      {
+      else {
         resetDot(x0 + xc, y0 + yc);
       }
       anzeigeByte = anzeigeByte << 1; //select next bit
@@ -108,10 +99,8 @@ void CommandProcessor::test()
   delay(500);
 
   // Fill the screen
-  for (int row = 1; row <= 19; row++)
-  {
-    for (int column = 1; column <= 21; column++)
-    {
+  for (int row = 1; row <= 19; row++) {
+    for (int column = 1; column <= 21; column++) {
       setDot(column, row);
       delay(5);
     }
@@ -120,10 +109,8 @@ void CommandProcessor::test()
   delay(1000);
 
   // Clear the screen
-  for (int row = 1; row <= 19; row++)
-  {
-    for (int column = 1; column <= 21; column++)
-    {
+  for (int row = 1; row <= 19; row++) {
+    for (int column = 1; column <= 21; column++) {
       resetDot(column, row);
       delay(5);
     }
@@ -134,16 +121,14 @@ void CommandProcessor::test()
   // Draw a frame
 
   // Vertical lines
-  for (int row = 1; row <= 19; row++)
-  {
+  for (int row = 1; row <= 19; row++) {
     setDot(1, row);
     setDot(21, row);
     delay(5);
   }
 
   // Horizontal lines
-  for (int column = 1; column <= 21; column++)
-  {
+  for (int column = 1; column <= 21; column++) {
     setDot(column, 1);
     setDot(column, 19);
     delay(5);
