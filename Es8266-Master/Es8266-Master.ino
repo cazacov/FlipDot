@@ -11,7 +11,7 @@ FlipBoard flipBoard;
 TextWriter textwriter(flipBoard);
 WeatherClient weather_client;
 
-uint8_t panels[][2] = {
+Panel panels[] = {
     {10, D5},
     {11, D6},
     {12, D7}};

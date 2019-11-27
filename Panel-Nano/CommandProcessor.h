@@ -11,6 +11,7 @@ private:
     void drawChar(int charNumber, int x0, int y0);
     void displayNumber(int id);
     void test();
+    void calibrate();
 public:
     CommandProcessor(int panelNumber){panel_number = panelNumber;};
     void init();

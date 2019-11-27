@@ -8,7 +8,7 @@ FlipBoard::FlipBoard()
 {
 }
 
-void FlipBoard::begin(uint8_t panelInfo[][2], uint8_t prows, uint8_t pcolumns)
+void FlipBoard::begin(Panel panelInfo[], uint8_t prows, uint8_t pcolumns)
 {
   rows = prows;
   columns = pcolumns;
@@ -16,8 +16,8 @@ void FlipBoard::begin(uint8_t panelInfo[][2], uint8_t prows, uint8_t pcolumns)
   
   for (int i = 0; i < panelCount; i++)
   { 
-    panels[i] = panelInfo[i][0];
-    pins[i] = panelInfo[i][1];
+    panels[i] = panelInfo[i].i2cAddress;
+    pins[i] = panelInfo[i].resetPin;
     pinMode(pins[i], INPUT);
   }
   maxx = PANEL_WIDTH * columns;

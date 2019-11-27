@@ -8,3 +8,4 @@
 #define CMD_TIME_GET 8
 #define CMD_SLEEP 9
 #define CMD_TEST 10
+#define CMD_CALIBRATE 11

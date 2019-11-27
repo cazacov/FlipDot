@@ -3,6 +3,8 @@
 #define PANEL_WIDTH 21 
 #define PANEL_HEIGHT 19
 
+//#define TEST
+
 void CommandProcessor::init() {
   dotSetup(8, PANEL_WIDTH, 1, PANEL_HEIGHT, 0); 
   dotPowerOn();
@@ -11,12 +13,12 @@ void CommandProcessor::init() {
   Serial.println("Panel is on");
 #endif
   resetAll(5);
-  setCoilOnDuration(200);
+  setCoilOnDuration(250);
 #ifdef SERIAL_TRACE
   Serial.println("Init done");
 #endif  
 #ifdef TEST
-  test();
+  calibrate();
 #endif
 #ifdef SERIAL_TRACE
   Serial.println("Test done");
@@ -54,6 +56,9 @@ void CommandProcessor::execute(int command, int param1, int param2) {
     break;
   case CMD_TEST:
     test();
+    break;
+  case CMD_CALIBRATE:
+    calibrate();
     break;
   }
 }
@@ -134,3 +139,23 @@ void CommandProcessor::test()
     delay(5);
   }
 }
+
+void CommandProcessor::calibrate() {
+  resetAll(0);
+
+  for (int pos = 0; pos < 19*21; pos++) {
+    for (int c = 0; c < 2; c++) {
+      for (int i = 0; i < 5; i++) {
+        int col = (pos+i)%21 + 1;
+        int row = (pos+i)/21 + 1;
+        if (c == 0) {          
+          setDot(col, row);
+        } else {
+          resetDot(col, row);
+        }
+        delay(25);
+      }
+    }
+  }
+  resetAll(0);
+}      

@@ -6,6 +6,11 @@
 #define PANEL_WIDTH 21
 #define PANEL_HEIGHT 19
 
+struct Panel {
+  uint8_t i2cAddress;
+  uint8_t resetPin;
+};
+
 class FlipBoard
 {
 private:
@@ -19,7 +24,7 @@ private:
   void sendCommand(uint8_t panel, uint8_t command, uint8_t param1, uint8_t param2);
 public:
   FlipBoard();
-  void begin(uint8_t panels[][2], uint8_t rows, uint8_t columns);
+  void begin(Panel panels[], uint8_t rows, uint8_t columns);
   void dot_set(uint8_t x, uint8_t y);
   void dot_reset(uint8_t x, uint8_t y);
   void test();

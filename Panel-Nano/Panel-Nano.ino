@@ -9,7 +9,7 @@
 #include "RtcClock.h"
 #endif
 
-#define panelNumber 10          // die I2C Nummer des jeweiligen Panels
+#define panelNumber 11          // die I2C Nummer des jeweiligen Panels
 
 CommandProcessor command_processor(panelNumber);
 
