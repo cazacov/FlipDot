@@ -13,6 +13,7 @@ private:
   uint8_t panels[10];
   uint8_t rows;
   uint8_t columns;
+  uint8_t panelCount;
   int maxx;
   int maxy;
   void sendCommand(uint8_t panel, uint8_t command, uint8_t param1, uint8_t param2);
@@ -29,4 +30,3 @@ public:
 };
 
 #endif
-

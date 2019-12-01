@@ -12,12 +12,13 @@ void FlipBoard::begin(uint8_t panelInfo[][2], uint8_t prows, uint8_t pcolumns)
 {
   rows = prows;
   columns = pcolumns;
+  panelCount = prows * pcolumns;
   
-  for (int panelCount = 0; panelCount < rows * columns; panelCount++)
+  for (int i = 0; i < panelCount; i++)
   { 
-    panels[panelCount] = panelInfo[panelCount][0];
-    pins[panelCount] = panelInfo[panelCount][1];
-    pinMode(pins[panelCount], INPUT);
+    panels[i] = panelInfo[i][0];
+    pins[i] = panelInfo[i][1];
+    pinMode(pins[i], INPUT);
   }
   maxx = PANEL_WIDTH * columns;
   maxy = PANEL_HEIGHT * rows;
@@ -26,7 +27,7 @@ void FlipBoard::begin(uint8_t panelInfo[][2], uint8_t prows, uint8_t pcolumns)
   Wire.setClock(400000);
   delay(1000);
 
-  for(int i = 0; i < rows * columns; i++)
+  for(int i = 0; i < panelCount; i++)
   {
     // reset panel
     pinMode(pins[i], OUTPUT);
@@ -34,9 +35,9 @@ void FlipBoard::begin(uint8_t panelInfo[][2], uint8_t prows, uint8_t pcolumns)
     delay(10);
     digitalWrite(pins[i], HIGH);
   }
-  delay(2000);
+  delay(2500);
 
-  for(int i = 0; i < rows * columns; i++)
+  for(int i = 0; i < panelCount; i++)
   {
     sendCommand(i, CMD_DURATION_SET, 5, 0);
     sendCommand(i, CMD_ALL_RESET, 0, 0);
@@ -90,7 +91,7 @@ void FlipBoard::test()
     for (int x = 0; x < maxx; x++)
     {
       dot_set(x, y);
-      delay(50);
+      delay(5);
     }
   }
   delay(500);
@@ -99,7 +100,7 @@ void FlipBoard::test()
     for (int x = 0; x < maxx; x++)
     {
       dot_reset(x, y);
-      delay(50);
+      delay(5);
     }
   }
 }
@@ -125,6 +126,3 @@ void FlipBoard::sleep() {
     sendCommand(i, CMD_SLEEP, 0, 0);
   }
 }
-
-
-

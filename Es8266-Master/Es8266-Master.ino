@@ -24,6 +24,8 @@ void setup()
   Serial.begin(115200);
   flipBoard.begin(panels, 1, 3);
   delay(2000);
+  flipBoard.test();
+  delay(2000);
   flipBoard.clearScreen();
   flipBoard.dot_set(18, 3);
   flipBoard.dot_set(18, 4);
@@ -33,8 +35,9 @@ void setup()
   flipBoard.dot_set(18, 9);
   flipBoard.dot_set(19, 8);
   flipBoard.dot_set(19, 9);
-
+#ifdef SHOW_WEATHER  
   weather_client.Begin();
+#endif  
 }
 
 int last_minute = -1;
@@ -60,6 +63,7 @@ void loop()
 
   int minute = clock.hours * 60 + clock.minutes;
 
+#ifdef SHOW_WEATHER  
   if (minute < last_read_minute || minute - last_read_minute > 10)
   {
     last_read_minute = minute;
@@ -72,7 +76,9 @@ void loop()
     last_icon = weather_client.weather_icon;
     ShowWeather();
   }
+#endif  
 
+#ifdef LOWPOWER
   if (isPowered && clock.seconds > 0 && clock.seconds < 55)
   {
     isPowered = false;
@@ -93,6 +99,7 @@ void loop()
     // Nanos wake up after 48 seconds
     isSleeping = false; 
   }
+#endif  
 }
 
 void ShowTime()
