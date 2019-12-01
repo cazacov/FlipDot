@@ -8,77 +8,25 @@
 #include "panelCommands.h"
 #include "CommandProcessor.h"
 
-#define panelNumber 11          // die I2C Nummer des jeweiligen Panels
-
-
-
 #ifdef RTC
-#include <RtcDS3231.h>
-RtcDS3231<TwoWire> Rtc(Wire);
-RtcDateTime now;
+#include "RtcClock.h"
 #endif
 
+#define panelNumber 11          // die I2C Nummer des jeweiligen Panels
+
 CommandProcessor command_processor(panelNumber);
+
+#ifdef RTC
+RtcClock rtc_processor(panelNumber);
+#endif
 
 void setup() {
   Serial.begin(57600);
   Wire.begin(panelNumber);      // join i2c bus with address panelNumber
-
   command_processor.init();
 
-#ifdef RTC
-#ifdef SERIAL_TRACE
-  Serial.begin(57600);
-#endif;  
-  RtcDateTime compiled = RtcDateTime(__DATE__, __TIME__);
-  Rtc.Begin();
-  if (!Rtc.IsDateTimeValid())
-  {
-#ifdef SERIAL_TRACE    
-    Serial.println("RTC lost confidence in the DateTime!");
-#endif    
-    Rtc.SetDateTime(compiled);
-  }
-  if (!Rtc.GetIsRunning())
-  {
-#ifdef SERIAL_TRACE    
-    Serial.println("RTC was not actively running, starting now");
-#endif    
-    Rtc.SetIsRunning(true);
-  }
-  if (!Rtc.GetIsRunning())
-  {
-#ifdef SERIAL_TRACE    
-    Serial.println("RTC was not actively running, starting now");
-#endif    
-    Rtc.SetIsRunning(true);
-  }
-  now = Rtc.GetDateTime();
-  if (now < compiled)
-  {
-#ifdef SERIAL_TRACE    
-    Serial.println("RTC is older than compile time!  (Updating DateTime)");
-#endif    
-    Rtc.SetDateTime(compiled);
-  }
-  else if (now > compiled)
-  {
-#ifdef SERIAL_TRACE    
-    Serial.println("RTC is newer than compile time. (this is expected)");
-#endif    
-  }
-  else if (now == compiled)
-  {
-#ifdef SERIAL_TRACE    
-    Serial.println("RTC is the same as compile time! (not expected but all is fine)");
-#endif    
-  }
-
-  // never assume the Rtc was last configured by you, so
-  // just clear them to your needed state
-  Rtc.Enable32kHzPin(false);
-  Rtc.SetSquareWavePin(DS3231SquareWavePin_ModeNone);
-  Wire.onRequest(requestEvent);
+#ifdef RTC  
+  rtc_processor.init();
 #endif
   Wire.onReceive(receiveEvent); // register event
 }
@@ -111,7 +59,7 @@ void loop() {
   switch(command) {
 #ifdef RTC    
     case CMD_TIME_GET:
-      now = Rtc.GetDateTime();
+      rtc_processor.read_time();
       break;
 #endif      
     case CMD_SLEEP:
@@ -154,20 +102,3 @@ void receiveEvent(int howMany)
     isReceiving = false;
   }
 }
-
-
-#ifdef RTC
-void requestEvent() {
-  char datestring[20];
-
-  sprintf(datestring,
-             "%04u-%02u-%02u %02u:%02u:%02u",
-             now.Year(),
-             now.Month(),
-             now.Day(),
-             now.Hour(),
-             now.Minute(),
-             now.Second() );
-  Wire.write(datestring); 
-}
-#endif

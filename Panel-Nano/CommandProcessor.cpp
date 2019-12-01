@@ -1,11 +1,11 @@
 #include "CommandProcessor.h"
 
-#define TEST
-#define SERIAL_TRACE
+#define PANEL_WIDTH 21 
+#define PANEL_HEIGHT 19
 
 void CommandProcessor::init()
 {
-  dotSetup(8, 21, 1, 19, 0); //21x19
+  dotSetup(8, PANEL_WIDTH, 1, PANEL_HEIGHT, 0); 
   dotPowerOn();
   delay(50);
 #ifdef SERIAL_TRACE
@@ -51,7 +51,7 @@ void CommandProcessor::execute(int command, int param1, int param2)
     resetDot(param1, param2);
     break;
   case CMD_DURATION_SET:
-    if (param1 >= 1 && param1 <= 5)
+    if (param1 >= 1 && param1 <= 10)
     {
       setCoilOnDuration(param1 * 100);
     }

@@ -4,9 +4,6 @@
 #include "wwFlipdot02.h"
 #include "panelCommands.h"
 
-void displayNumber(int id);
-void test(int id);
-
 class CommandProcessor
 {
 private:
@@ -14,7 +11,6 @@ private:
     void drawChar(int charNumber, int x0, int y0);
     void displayNumber(int id);
     void test();
-
 public:
     CommandProcessor(int panelNumber){panel_number = panelNumber;};
     void init();
