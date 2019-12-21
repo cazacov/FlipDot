@@ -5,7 +5,7 @@
 #ifndef DAY_02_01_INTCODECOMPUTER_H
 #define DAY_02_01_INTCODECOMPUTER_H
 
-#define RAM_SIZE 50000
+#define RAM_SIZE 2450
 
 enum ExecutionResult {
     Halt,
@@ -19,22 +19,17 @@ enum ExecutionResult {
 
 class IntcodeComputer {
 private:
-    std::vector<long> output_buf;
+    int32_t last_out;
     Command load_next_command();
     int ip;
     int base;
     bool i_am_halted;
 public:
     IntcodeComputer() {reset();};
-    std::vector<long> ram;
-    bool step(bool trace, std::function<long(void)> input_required);
-    long get_last_output() {
-        if (output_buf.empty()) {
-            return 0;
-        }
-        else {
-            return *output_buf.rbegin();
-        }
+    std::vector<int32_t> ram;
+    bool step(bool trace, std::function<int32_t(void)> input_required);
+    int32_t get_last_output() {
+      return last_out;
     }
     void reset();
     void load_day_13();

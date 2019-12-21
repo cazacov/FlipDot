@@ -52,7 +52,7 @@ void TextWriter::DrawNumber(int number, int x0, int y0, int minLength) {
   }
 }
 
-void TextWriter::SmallNumber(int number, int x0, int y0, int minLength) {
+void TextWriter::SmallNumber(int number, int x0, int y0, int minLength, int prev) {
   int digitCount = 0;
   int n = number;
   while (n > 0)
@@ -69,10 +69,16 @@ void TextWriter::SmallNumber(int number, int x0, int y0, int minLength) {
     digitCount = minLength;
   }
 
+  int pre = prev;
   while(digitCount)
   {
-    DrawDigit((number % 10) + 48, x0 + digitCount * 4 - 4,  y0, 4, 5, Small4x5);
+    int newd = number % 10;
+    int pred = pre % 10;
+    if (newd != pred) {
+      DrawDigit((newd) + 48, x0 + digitCount * 4 - 4,  y0, 4, 5, Small4x5);
+    }
     number /= 10;
+    pre /= 10;
     digitCount--;
   }
 }

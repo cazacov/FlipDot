@@ -23,16 +23,12 @@ Panel panels[] = {
     {11, D6},
     {12, D7}};
 
-  
-
 void setup()
 {
   // put your setup code here, to run once:
-  Serial.begin(115200);
   flipBoard.begin(panels, 1, 3);  // Panels in 1 row and 3 columns
-  delay(2000);
-  flipBoard.test();
-  delay(2000);
+  flipBoard.clearScreen();
+  delay(10000);
   flipBoard.clearScreen();
 }
 
@@ -40,7 +36,7 @@ int last_ball_x = 0;
 int last_paddle_x = 0;
 
 long on_input() {
-  delay(2000);
+  delay(50);
   if (last_ball_x < last_paddle_x) {
       return -1;
   } else if (last_ball_x > last_paddle_x) {
@@ -51,11 +47,13 @@ long on_input() {
   }
 }
 
+void show_score(int32_t score, int32_t last_score);
+int32_t last_score = 0;
+
+IntcodeComputer computer;
 void loop()
 {
-  IntcodeComputer computer;
   computer.load_day_13();
-
   computer.ram[0] = 2; // play for free
 
   int out[3];
@@ -65,13 +63,14 @@ void loop()
       out[out_pos++] = (int)computer.get_last_output();
       if (out_pos == 3) {
         if (out[0] == -1 && out[1] == 0) {  // show new score
-            //screen.text(1, 20, std::to_string(out[2]));
+          show_score(out[2], last_score);
+          last_score = out[2];
         } else {
             if (out[2] == 0) {
-              flipBoard.dot_reset(out[0], out[1]);  
+              flipBoard.dot_reset(out[0]-1, out[1]-1);  
             }
             else {
-              flipBoard.dot_set(out[0], out[1]); 
+              flipBoard.dot_set(out[0]-1, out[1]-1); 
             }
         }
         if (out[2] == Tile::Ball) {
@@ -87,19 +86,19 @@ void loop()
   delay(10000);
 }
 
-/*
-void ShowTime()
+void show_score(int32_t score, int32_t last_score)
 {
-  textwriter.DrawNumber(clock.hours, 2, -1, 2);
+  textwriter.SmallNumber(score, 44, 2, 5, last_score);
+/*  
   textwriter.DrawNumber(clock.minutes, 22, -1, 2);
   flipBoard.dot_set(8, 18);
   textwriter.DrawDigit(clock.dayOfWeek - 1 + 32, 0, 14, 10, 5, DaysOfWeeksRu10x5);
   textwriter.SmallNumber(clock.day, 12, 14, 2);
   flipBoard.dot_set(20, 18);
   textwriter.DrawDigit(clock.month - 1 + 32, 23, 14, 15, 5, MonthsRu15x5);
-
-}
 */
+}
+
 
 /*
 void ShowWeather()
