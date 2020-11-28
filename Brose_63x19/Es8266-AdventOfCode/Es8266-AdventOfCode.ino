@@ -89,23 +89,4 @@ void loop()
 void show_score(int32_t score, int32_t last_score)
 {
   textwriter.SmallNumber(score, 44, 2, 5, last_score);
-/*  
-  textwriter.DrawNumber(clock.minutes, 22, -1, 2);
-  flipBoard.dot_set(8, 18);
-  textwriter.DrawDigit(clock.dayOfWeek - 1 + 32, 0, 14, 10, 5, DaysOfWeeksRu10x5);
-  textwriter.SmallNumber(clock.day, 12, 14, 2);
-  flipBoard.dot_set(20, 18);
-  textwriter.DrawDigit(clock.month - 1 + 32, 23, 14, 15, 5, MonthsRu15x5);
-*/
 }
-
-
-/*
-void ShowWeather()
-{
-  char buf[20];
-  sprintf(buf, "%d'", (int)weather_client.temperature_current);
-  textwriter.DrawText(buf, 46, 14);
-  textwriter.DrawDigit((int)(weather_client.weather_icon) + 32, 39, 0, 24, 12, Weather24x12);
-}
-*/
