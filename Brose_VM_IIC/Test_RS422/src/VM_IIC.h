@@ -47,6 +47,7 @@ class VM_IIC : public Adafruit_GFX {
         // +7 so it gets rounded up instead of down
         uint8_t* frameBuffer;
         uint8_t* previousFrameBuffer;
+        uint16_t frameBufferWidth;
         uint16_t frameBufferSize;
 
         uint16_t scrollTextWidth = 0;
