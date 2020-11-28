@@ -30,8 +30,8 @@ void setup() {
   // put your setup code here, to run once:
   flipdot->setModuleMapping(1, 0, 0, 0);
 
+  delay(100);    
   // blank display
-  delay(500);
   flipdot->clearDisplay();
 } 
 
