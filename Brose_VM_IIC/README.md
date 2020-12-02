@@ -35,16 +35,64 @@
 |       | 1       | Row - A0          |
 |       | 2       | Row - B1          |
 |       | 3       | Row - B0          |
-|       | 4       | Row Low - DATA    |
-|       | 5       | Row Low - ENABLE  |
-|       | 6       | Row High - DATA   |
-|       | 7       | Row High - ENABLE |
+|       | 4       | Row 1-14 - DATA   |
+|       | 5       | Row 1-14 - ENABLE |
+|       | 6       | Row 15-20 - DATA  |
+|       | 7       | Row 15-20 - ENABLE|
 
 
 
 ## Интерфейс матрицы
 
-Brose flip-dot 60 pinout.
+### Brose flip-dot 60 pinout.
+
+### Драйверы рядов
+
+Контроллер поддерживает до 20 рядов, для каждый на разъём матрицы выведены пины SETx и RESETx. Одну из микросхем драйверов FP2800A разработчики использовали по-полной, вторая отвечает за ряды с номерами 15-20.
+
+| Сигнал  | Драйвер | Выход |
+|-------- |-------- | ----- |
+| SET 1   | IC1     | 0A    |
+| SET 2   | IC1     | 0B    |
+| SET 3   | IC1     | 0C    |
+| SET 4   | IC1     | 0D    |
+| SET 5   | IC1     | 0E    |
+| SET 6   | IC1     | 0F    |
+| SET 7   | IC1     | 0G    |
+| SET 8   | IC1     | 2A    |
+| SET 9   | IC1     | 2B    |
+| SET10   | IC1     | 2C    |
+| SET11   | IC1     | 2D    |
+| SET12   | IC1     | 2E    |
+| SET13   | IC1     | 2F    |
+| SET14   | IC1     | 2G    |
+| SET15   | IC13    | 0A    |
+| SET16   | IC13    | 0B    |
+| SET17   | IC13    | 0C    |
+| SET18   | IC13    | 0D    |
+| SET19   | IC13    | 0E    |
+| SET20   | IC13    | 0F    |
+| RESET 1 | IC1     | 1A    |
+| RESET 2 | IC1     | 1B    |
+| RESET 3 | IC1     | 1C    |
+| RESET 4 | IC1     | 1D    |
+| RESET 5 | IC1     | 1E    |
+| RESET 6 | IC1     | 1F    |
+| RESET 7 | IC1     | 1G    |
+| RESET 8 | IC1     | 3A    |
+| RESET 9 | IC1     | 3B    |
+| RESET10 | IC1     | 3C    |
+| RESET11 | IC1     | 3D    |
+| RESET12 | IC1     | 3E    |
+| RESET13 | IC1     | 3F    |
+| RESET14 | IC1     | 3G    |
+| RESET15 | IC13    | 1A    |
+| RESET16 | IC13    | 1B    |
+| RESET17 | IC13    | 1C    |
+| RESET18 | IC13    | 1D    |
+| RESET19 | IC13    | 1E    |
+| RESET20 | IC13    | 1F    |
+
 
 ## Выбор матрицы
 
