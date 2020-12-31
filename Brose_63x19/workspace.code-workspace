@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "Master\\Esp8266-GFX"
+		},
+		{
+			"name": "Panel-Platformio",
+			"path": "Panel\\Panel-Platformio"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.tcc": "cpp",
+			"array": "cpp",
+			"deque": "cpp",
+			"list": "cpp",
+			"string": "cpp",
+			"unordered_map": "cpp",
+			"vector": "cpp",
+			"initializer_list": "cpp"
+		}
+	}
+}
