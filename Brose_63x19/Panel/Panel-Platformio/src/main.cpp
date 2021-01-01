@@ -4,7 +4,7 @@
 #include "panelCommands.h"
 #include "CommandProcessor.h"
 
-#define panelNumber 12    // I2C port number that the panel listens to
+#define panelNumber 14    // I2C port number that the panel listens to
 
 CommandProcessor command_processor(panelNumber);
 
@@ -16,16 +16,15 @@ volatile uint8_t param1 = 0;
 volatile uint8_t param2 = 0;
 volatile uint8_t command = 0;     
 
-#define RING_BUFFER_SIZE 32
+#define RING_BUFFER_SIZE 400
 struct Command {
   uint8_t command;
   uint8_t param1;
   uint8_t param2;
 };
-
 Command ring_buffer[RING_BUFFER_SIZE];
-volatile uint8_t head = 0;
-uint8_t tail = 0;
+volatile uint16_t head = 0;
+uint16_t tail = 0;
 
 void receiveEvent(int howMany);
 void inline addCommand(uint8_t p_command, uint8_t p_param1, uint8_t p_param2);
@@ -42,11 +41,14 @@ void setup() {
   head = tail = 0;
 #ifdef TEST
   addCommand(CMD_START, 0, 0);
+  addCommand(CMD_TEST, 0, 0);
+  addCommand(CMD_DELAY, 20, 0);
   addCommand(CMD_SHOWID, 0, 0);
-#endif // DEBUG  
+#endif 
 }
 
 void loop() {
+  
   if (isReceiving) {
     return;
   }
@@ -67,10 +69,12 @@ void loop() {
     return;
   }
 
-  Command cmd = ring_buffer[tail];
+  uint8_t cmd = ring_buffer[tail].command;
+  uint8_t p1 = ring_buffer[tail].param1;
+  uint8_t p2 = ring_buffer[tail].param2;
   tail = (tail + 1) % RING_BUFFER_SIZE;
-  
-  switch(cmd.command) {
+
+  switch(cmd) {
     case CMD_SLEEP:
       isSleeping = true;
       digitalWrite(LED_BUILTIN, LOW);
@@ -78,11 +82,9 @@ void loop() {
       sleep_count = 6;
       break;
     default:
-      command_processor.execute(cmd.command, cmd.param1, cmd.param2);
+      command_processor.execute(cmd, p1, p2);
       break;
   }
-
-
 }
 
 // function that executes whenever data is received from master
@@ -91,34 +93,45 @@ void receiveEvent(int howMany)
 {
   if (!isReceiving) {
     isReceiving = true;
-    command = Wire.read();
-    readCounter = 0;
   }
   while(Wire.available()){
     switch(readCounter) {
       case 0:
-        param1 = Wire.read();         
+        command = Wire.read();
         break;
       case 1:
+        param1 = Wire.read();         
+        break;
+      case 2:
         param2 = Wire.read();         
         break;
       default:
         Wire.read();         
     }
     readCounter++;
+    if (readCounter > 2) {
+      if (CommandProcessor::isValidCommand(command)) {
+        addCommand(command, param1, param2);
+        readCounter = 0;
+      }
+      else {
+        // I2C got out of sync, clear input buffer
+        readCounter = 0;
+        isReceiving = false;
+        while(Wire.available()) {
+          Wire.read();       
+        }
+      }
+    }
   }
-  if (readCounter > 1) {
+  if (readCounter  == 0) {
     isReceiving = false;
-    addCommand(command, param1, param2);
   }
 }
 
 void inline addCommand(uint8_t p_command, uint8_t p_param1, uint8_t p_param2) {
-  ring_buffer[head] = Command {
-      p_command,
-      p_param1,
-      p_param2
-    };
+  ring_buffer[head].command = p_command;
+  ring_buffer[head].param1 = p_param1;
+  ring_buffer[head].param2 = p_param2;
   head = (head + 1) % RING_BUFFER_SIZE;
-}
-
+} 

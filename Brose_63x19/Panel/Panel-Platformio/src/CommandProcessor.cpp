@@ -6,9 +6,6 @@
 void CommandProcessor::init() {
   dotSetup(28 - PANEL_WIDTH + 1, PANEL_WIDTH, 1, PANEL_HEIGHT, 0); 
   setCoilOnDuration(250);
-#ifdef SERIAL_TRACE
-  Serial.println("Panel is initialized");
-#endif
 }
 
 void CommandProcessor::execute(uint8_t command, uint8_t param1, uint8_t param2) {
@@ -48,6 +45,8 @@ void CommandProcessor::execute(uint8_t command, uint8_t param1, uint8_t param2) 
   case CMD_SHOWID:
     showId();
     break;
+  case CMD_DELAY:
+    delay100ms(param1);
   }
 }
 
@@ -77,6 +76,7 @@ void CommandProcessor::drawChar(uint8_t digit, uint8_t x0, uint8_t y0) {
         resetDot(x0 + xc, y0 + yc);
       }
       bitmask <<= 1; //select next bit
+      delay(2);
     }
   }
 }
@@ -142,35 +142,34 @@ void CommandProcessor::calibrate() {
 
 void CommandProcessor::showId() {
 
-  resetAll(5);
+  resetAll(2);
 
     // Vertical lines
   for (uint8_t row = 1; row <= PANEL_HEIGHT; row++) {
     setDot(1, row);
     setDot(PANEL_WIDTH, row);
-    delay(5);
   }
+  delay(2*PANEL_HEIGHT);
 
   // Horizontal lines
   for (uint8_t column = 1; column <= PANEL_WIDTH; column++) {
     setDot(column, 1);
     setDot(column, PANEL_HEIGHT);
-    delay(5);
   }  
+  delay(2*PANEL_WIDTH);
   drawChar(panel_number / 10, 5, 5);
   drawChar(panel_number % 10, 10, 5);
-
-  #ifdef SERIAL_TRACE
-  Serial.println("Panel ID ");
-  Serial.println(panel_number);
-  #endif
 }
 
 void CommandProcessor::start() {
   dotPowerOn();
-  delay(50);
-  resetAll(5);
-#ifdef SERIAL_TRACE
-  Serial.println("Panel started");
-#endif
+  resetAll(1);
+}
+
+void CommandProcessor::delay100ms(uint8_t n) {
+  delay(n*100);
+}
+
+bool CommandProcessor::isValidCommand(uint8_t command) {
+  return command > 0 && command <= CMD_DELAY;
 }

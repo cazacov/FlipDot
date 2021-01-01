@@ -13,9 +13,11 @@ private:
     void test();
     void calibrate();
     void showId();
+    void delay100ms(uint8_t n); // Wait n*100 milliseconds
 public:
     CommandProcessor(uint8_t panelNumber) : panel_number(panelNumber) {};
     void init();
     void execute(uint8_t command, uint8_t param1, uint8_t param2);
+    static bool isValidCommand(uint8_t command);
 };
 #endif

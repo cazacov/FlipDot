@@ -12,30 +12,30 @@ Rainer Radow
 // Feldwerte ergen sich aus der Beschaltung des Flip Dot Moduls
 // Zeilen Feld zum -Setzen- der Zeilen 0 bis 18 -----------------------------------------------
 //                            0,  1,  2,   3,  4,  5,  6,   7,  8,  9, 10,  11, 12, 13, 14,  15, 16, 17, 18
-static int zeileSetHig[]  = { 0,  0,  0,   0,  0,  0,  0,   0,  0,  0,  0,   0,  0,  0,  0,   0,  1,  2,  4};
-static int zeileSetMid[]  = { 0,  0,  0,   0,  0,  0,  0,   0,  1,  2,  4,   8, 16, 32, 64, 128,  0,  0,  0};
-static int zeileSetLow[]  = { 1,  2,  4,   8, 16, 32, 64, 128,  0,  0,  0,   0,  0,  0,  0,   0,  0,  0,  0};
+static uint8_t zeileSetHig[]  = { 0,  0,  0,   0,  0,  0,  0,   0,  0,  0,  0,   0,  0,  0,  0,   0,  1,  2,  4};
+static uint8_t zeileSetMid[]  = { 0,  0,  0,   0,  0,  0,  0,   0,  1,  2,  4,   8, 16, 32, 64, 128,  0,  0,  0};
+static uint8_t zeileSetLow[]  = { 1,  2,  4,   8, 16, 32, 64, 128,  0,  0,  0,   0,  0,  0,  0,   0,  0,  0,  0};
 
 // Zeilen Feld zum -Löschen- der Zeilen 0 bis 18 -----------------------------------------------
-static int zeileResHig[]  = { 0,  0,  0,   0,  0,  0,  0,   0,  0,  0,  0,   0,  1,  2,  4,   8, 16, 32, 64};
-static int zeileResMid[]  = { 0,  0,  0,   0,  1,  2,  4,   8, 16, 32, 64, 128,  0,  0,  0,   0,  0,  0,  0};
-static int zeileResLow[]  = {16, 32, 64, 128,  0,  0,  0,   0,  0,  0,  0,   0,  0,  0,  0,   0,  0,  0,  0};
+static uint8_t zeileResHig[]  = { 0,  0,  0,   0,  0,  0,  0,   0,  0,  0,  0,   0,  1,  2,  4,   8, 16, 32, 64};
+static uint8_t zeileResMid[]  = { 0,  0,  0,   0,  1,  2,  4,   8, 16, 32, 64, 128,  0,  0,  0,   0,  0,  0,  0};
+static uint8_t zeileResLow[]  = {16, 32, 64, 128,  0,  0,  0,   0,  0,  0,  0,   0,  0,  0,  0,   0,  0,  0,  0};
 
 // Spalten-Feld zur Anwahl der Spalten 0 bis 20 ------------------------------------------------
 //Originalverdrahtung         0,   1,   2,   3,  4,  5,  6,  7,  8,  9, 10,  11,  12,  13,  14,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27
-static int spaltenWahl[] = {  8,  16,  24,  32, 40, 48, 56, 74, 80, 88, 96, 104, 112, 120, 136, 144, 152, 160, 168, 176, 184, 200, 208, 216, 224, 232, 240, 248};
+static uint8_t spaltenWahl[] = {  8,  16,  24,  32, 40, 48, 56, 74, 80, 88, 96, 104, 112, 120, 136, 144, 152, 160, 168, 176, 184, 200, 208, 216, 224, 232, 240, 248};
 
-	// Beschreibung des Displaylayouts
-	int arrayStartX;     //Schiberegister-Position des ersten Pixels in X
-	int arrayStartY;     //Schiberegister-Position des ersten Pixels in Y
-	int arrayMaxX;       //größte erlaubte Arrayposition in X = 0 bis 27 = 28 Pixel
-	int arrayMaxY;       //größte erlaubte Arrayposition in Y = 0 bis 18 = 19 Pixel
-	int xMaxAnzahl; 
-	int yMaxAnzahl;
-	int lastX = 0;       // letzter geflippte Dot - x Position: verhindert mehrmaliges oder endloses Flippen eines Dots als Schutz vor dem Durchbrennen
-	int lastY = 0;       // letzter geflippte Dot - y Position
-	unsigned long flipTime;  //remember time of the last flip action to ensure cool down time
-	int coilOnDuration = 500;   // Timer1.setPeriod(coilOnDuration); Dauer des Flippimpuls.
+// Beschreibung des Displaylayouts
+int arrayStartX;     //Schiberegister-Position des ersten Pixels in X
+int arrayStartY;     //Schiberegister-Position des ersten Pixels in Y
+int arrayMaxX;       //größte erlaubte Arrayposition in X = 0 bis 27 = 28 Pixel
+int arrayMaxY;       //größte erlaubte Arrayposition in Y = 0 bis 18 = 19 Pixel
+int xMaxAnzahl; 
+int yMaxAnzahl;
+int lastX = 0;       // letzter geflippte Dot - x Position: verhindert mehrmaliges oder endloses Flippen eines Dots als Schutz vor dem Durchbrennen
+int lastY = 0;       // letzter geflippte Dot - y Position
+unsigned long flipTime;  //remember time of the last flip action to ensure cool down time
+int coilOnDuration = 500;   // Timer1.setPeriod(coilOnDuration); Dauer des Flippimpuls.
 
 /*=========================================================================*/
 	volatile int dotPowerIstAn;

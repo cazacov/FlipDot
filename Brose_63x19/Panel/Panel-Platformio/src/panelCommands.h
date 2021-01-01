@@ -10,4 +10,5 @@
 #define CMD_TEST 10
 #define CMD_CALIBRATE 11
 #define CMD_SHOWID 12
+#define CMD_DELAY 13
 
