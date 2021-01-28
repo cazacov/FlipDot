@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "panel-api\\api-sync"
+		},
+		{
+			"name": "api-async",
+			"path": "panel-api\\api-async"
+		}
+	],
+	"settings": {}
+}
