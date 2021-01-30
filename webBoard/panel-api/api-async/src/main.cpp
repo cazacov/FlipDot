@@ -10,6 +10,10 @@
 #include <ESPAsyncWebServer.h>
 #include <SPIFFS.h>
 #include "secrets.h"
+#include "base64.h"
+
+#include "AsyncJson.h"
+#include "ArduinoJson.h"
 
 const uint8_t PIN_SCL = 21;
 const uint8_t PIN_SDA = 5;
@@ -37,11 +41,17 @@ void setup() {
     return;
   }
 
+  display.displayOn();
+  delay(200);
+  display.clearDisplay();
+  delay(500);
 
   // Initialize WiFi connection
-  Serial.println("Try Connecting to ");
-  Serial.println(WIFI_SSID);
   
+  
+  display.print("WiFi: ");
+  display.print(WIFI_SSID);
+  display.update();
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
   do  {
@@ -57,8 +67,11 @@ void setup() {
   Serial.println("WiFi connected successfully");
   Serial.print("Got IP: ");
   Serial.println(WiFi.localIP());  //Show ESP32 IP on serial
-
-  
+  display.setCursor(0,8);
+  display.print("IP:");
+  display.print(WiFi.localIP());
+  display.update(); 
+   
   server.on("/displayon", HTTP_GET, [](AsyncWebServerRequest *request){
     display.displayOn();
     request->send(200, "text/plain", "Display on");
@@ -68,6 +81,21 @@ void setup() {
     display.displayOff();
     request->send(200, "text/plain", "Display off");
   });
+
+  server.on("/data", HTTP_GET, [](AsyncWebServerRequest *request){
+
+    StaticJsonDocument<300> data;
+    data["frameBuffer"] = base64encode(display.getPixels()).c_str();
+    
+    String response;
+    serializeJson(data, response);
+    request->send(200, "application/json", response);
+  });
+
+  server.on("/data", HTTP_POST, [](AsyncWebServerRequest *request){
+    Serial.println("Got data");
+    request->send(200, "text/plain", "accepted");
+  });
   
   // attach filesystem root at URL /
   server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
@@ -75,8 +103,15 @@ void setup() {
   // Catch-All Handlers
   // Any request that can not find a Handler that canHandle it
   // ends in the callbacks below.
-  server.onNotFound(onRequest);
+  server.onNotFound([](AsyncWebServerRequest *request) {
+    if (request->method() == HTTP_OPTIONS) {
+      request->send(200);
+    } else {
+      request->send(404);
+    }
+  });
 
+  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
   server.begin();
   Serial.println("HTTP server started");
   delay(100); 

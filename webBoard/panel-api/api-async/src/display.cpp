@@ -1,17 +1,19 @@
 #include <Wire.h>
-
 #include "display.h"
 
-void Display::i2cWriteByteSoftware(uint8_t addr, uint8_t data) {
-    i2c.start();
-    i2c.writeByte(addr);
-    i2c.readAck(); // discard ack
-    i2c.writeByte(data);
-    i2c.readNack(); // discard nack
-    i2c.stop();
+XantoI2C* xi2c;
+
+void i2cWriteByteSoftware(uint8_t addr, uint8_t data) {
+    xi2c->start();
+    xi2c->writeByte(addr);
+    xi2c->readAck(); // discard ack
+    xi2c->writeByte(data);
+    xi2c->readNack(); // discard nack
+    xi2c->stop();
 }
 
 Display::Display(uint8_t sda_pin, uint8_t scl_pin, uint8_t power_pin, uint8_t lamp_pin) : 
+    VM_IIC(112, 16, 500, i2cWriteByteSoftware),
     display_pin(power_pin), 
     backlight_pin(lamp_pin), 
     i2c(scl_pin, sda_pin, 0) {
@@ -19,6 +21,8 @@ Display::Display(uint8_t sda_pin, uint8_t scl_pin, uint8_t power_pin, uint8_t la
   digitalWrite(power_pin, LOW);
   pinMode(lamp_pin, OUTPUT);
   digitalWrite(lamp_pin, LOW);
+  xi2c = &i2c;
+  setModuleMapping(1,2,3,4);
 }
 
 void Display::backlightOn() {
@@ -35,4 +39,8 @@ void Display::displayOn() {
 
 void Display::displayOff() {
   digitalWrite(display_pin, LOW);
+}
+
+std::vector<uint8_t> Display::getPixels() {
+  return std::vector<uint8_t> (frameBuffer, frameBuffer + frameBufferSize);
 }
