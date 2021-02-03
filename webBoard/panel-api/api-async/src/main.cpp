@@ -13,7 +13,8 @@
 #include "base64.h"
 
 #include "AsyncJson.h"
-#include "ArduinoJson.h"
+#define ARDUINOJSON_ENABLE_STD_STRING 1
+#include <ArduinoJson.h>
 
 const uint8_t PIN_SCL = 21;
 const uint8_t PIN_SDA = 5;
@@ -32,14 +33,40 @@ Display display(PIN_SDA, PIN_SCL, PIN_DISPLAY, PIN_LAMP);
 
 AsyncWebServer server(80); 
 
+AsyncCallbackJsonWebHandler* postDataHandler = new AsyncCallbackJsonWebHandler("/data", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  StaticJsonDocument<500> jsonDoc;
+  if (json.is<JsonArray>())
+  {
+    jsonDoc = json.as<JsonArray>();
+  }
+  else if (json.is<JsonObject>())
+  {
+    jsonDoc = json.as<JsonObject>();
+  }
+  const char* data64 = jsonDoc["frameBuffer"];
+
+  if (data64) {
+    Serial.print("Got new frameBuffer: ");
+    Serial.print(data64);
+    std::vector<uint8_t> frameBuffer = base64decode(data64);
+    display.setPixels(frameBuffer);
+    request->send(200, "application/json", "{ \"accepted\": true }");
+  }
+  else {
+    request->send(400, "application/json", "{ \"error\": \"Invalid request\" }");
+  }
+});
+
+
 void setup() {
   Serial.begin(115200);
-
   // Initialize SPIFFS
   if(!SPIFFS.begin(true)){
     Serial.println("An Error has occurred while mounting SPIFFS");
     return;
   }
+
+  delay(100);
 
   display.displayOn();
   delay(200);
@@ -82,21 +109,28 @@ void setup() {
     request->send(200, "text/plain", "Display off");
   });
 
+  server.on("/lighton", HTTP_GET, [](AsyncWebServerRequest *request){
+    display.backlightOn();
+    request->send(200, "text/plain", "Light on");
+  });
+
+  server.on("/lightoff", HTTP_GET, [](AsyncWebServerRequest *request){
+    display.backlightOff();
+    request->send(200, "text/plain", "Light off");
+  });
+
   server.on("/data", HTTP_GET, [](AsyncWebServerRequest *request){
 
-    StaticJsonDocument<300> data;
-    data["frameBuffer"] = base64encode(display.getPixels()).c_str();
+    StaticJsonDocument<500> data;
+    data["frameBuffer"] = base64encode(display.getPixels());
     
     String response;
     serializeJson(data, response);
     request->send(200, "application/json", response);
   });
 
-  server.on("/data", HTTP_POST, [](AsyncWebServerRequest *request){
-    Serial.println("Got data");
-    request->send(200, "text/plain", "accepted");
-  });
-  
+  server.addHandler(postDataHandler);
+
   // attach filesystem root at URL /
   server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
 

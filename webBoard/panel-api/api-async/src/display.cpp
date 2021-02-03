@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include <Wire.h>
 #include "display.h"
 
@@ -18,29 +19,36 @@ Display::Display(uint8_t sda_pin, uint8_t scl_pin, uint8_t power_pin, uint8_t la
     backlight_pin(lamp_pin), 
     i2c(scl_pin, sda_pin, 0) {
   pinMode(power_pin, OUTPUT);
-  digitalWrite(power_pin, LOW);
+  digitalWrite(power_pin, HIGH);
   pinMode(lamp_pin, OUTPUT);
-  digitalWrite(lamp_pin, LOW);
+  digitalWrite(lamp_pin, HIGH);
   xi2c = &i2c;
   setModuleMapping(1,2,3,4);
 }
 
 void Display::backlightOn() {
-  digitalWrite(backlight_pin, HIGH);
-}
-
-void Display::backlightOff() {
   digitalWrite(backlight_pin, LOW);
 }
 
+void Display::backlightOff() {
+  digitalWrite(backlight_pin, HIGH);
+}
+
 void Display::displayOn() {
-  digitalWrite(display_pin, HIGH);
+  digitalWrite(display_pin, LOW);
 }
 
 void Display::displayOff() {
-  digitalWrite(display_pin, LOW);
+  digitalWrite(display_pin, HIGH);
 }
 
 std::vector<uint8_t> Display::getPixels() {
   return std::vector<uint8_t> (frameBuffer, frameBuffer + frameBufferSize);
+}
+
+void Display::setPixels(std::vector<uint8_t> &newFrameBuffer) {
+  if (newFrameBuffer.size() == frameBufferSize) {
+    memcpy(frameBuffer, newFrameBuffer.data(), frameBufferSize);
+    update();
+  }
 }

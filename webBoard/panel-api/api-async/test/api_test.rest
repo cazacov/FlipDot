@@ -1,0 +1,24 @@
+### Turn backlight on
+GET http://192.168.178.61/lighton
+
+### Turn backlight off
+GET http://192.168.178.61/lightoff
+
+### Turn display on
+GET http://192.168.178.61/displayon
+
+
+### Turn display off
+GET http://192.168.178.61/displayoff
+
+### Get current picture
+GET http://192.168.178.61/data
+
+
+### Post new pixels
+POST http://192.168.178.61/data
+content-type: application/json
+
+{
+  "frameBuffer": "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++AA="
+}
