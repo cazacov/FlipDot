@@ -17,29 +17,33 @@ Display::Display(uint8_t sda_pin, uint8_t scl_pin, uint8_t power_pin, uint8_t la
     VM_IIC(112, 16, 500, i2cWriteByteSoftware),
     display_pin(power_pin), 
     backlight_pin(lamp_pin), 
-    i2c(scl_pin, sda_pin, 0) {
+    i2c(scl_pin, sda_pin, 0),
+    is_display_on(false),
+    is_backlight_on(false) {
   pinMode(power_pin, OUTPUT);
-  digitalWrite(power_pin, HIGH);
-  pinMode(lamp_pin, OUTPUT);
-  digitalWrite(lamp_pin, HIGH);
+  pinMode(lamp_pin, OUTPUT);  
+  setDisplayPower(false);
+  setBacklightPower(false);
   xi2c = &i2c;
   setModuleMapping(1,2,3,4);
 }
 
-void Display::backlightOn() {
-  digitalWrite(backlight_pin, LOW);
+void Display::setDisplayPower(bool new_value) {
+  is_display_on = new_value;
+  digitalWrite(display_pin, is_display_on ? LOW : HIGH);
 }
 
-void Display::backlightOff() {
-  digitalWrite(backlight_pin, HIGH);
+void Display::setBacklightPower(bool new_value) {
+  is_backlight_on = new_value;
+  digitalWrite(backlight_pin, is_display_on ? LOW : HIGH);
 }
 
-void Display::displayOn() {
-  digitalWrite(display_pin, LOW);
+bool Display::getBacklightPower() {
+  return is_backlight_on;
 }
 
-void Display::displayOff() {
-  digitalWrite(display_pin, HIGH);
+bool Display::getDisplayPower() {
+  return is_display_on;
 }
 
 std::vector<uint8_t> Display::getPixels() {
@@ -51,4 +55,8 @@ void Display::setPixels(std::vector<uint8_t> &newFrameBuffer) {
     memcpy(frameBuffer, newFrameBuffer.data(), frameBufferSize);
     update();
   }
+}
+
+void Display::cls() {
+  memset(frameBuffer, 0, frameBufferSize);
 }

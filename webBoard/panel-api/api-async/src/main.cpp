@@ -68,16 +68,13 @@ void setup() {
 
   delay(100);
 
-  display.displayOn();
+  display.setDisplayPower(true);
   delay(200);
   display.clearDisplay();
   delay(500);
 
   // Initialize WiFi connection
-  
-  
-  display.print("WiFi: ");
-  display.print(WIFI_SSID);
+  display.print("Connecting WiFi...");
   display.update();
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
@@ -94,34 +91,38 @@ void setup() {
   Serial.println("WiFi connected successfully");
   Serial.print("Got IP: ");
   Serial.println(WiFi.localIP());  //Show ESP32 IP on serial
+  display.cls();
+  display.setCursor(0,0);
+  display.print("Online");
   display.setCursor(0,8);
   display.print("IP:");
   display.print(WiFi.localIP());
   display.update(); 
    
   server.on("/displayon", HTTP_GET, [](AsyncWebServerRequest *request){
-    display.displayOn();
+    display.setDisplayPower(true);
     request->send(200, "text/plain", "Display on");
   });
 
   server.on("/displayoff", HTTP_GET, [](AsyncWebServerRequest *request){
-    display.displayOff();
+    display.setDisplayPower(false);
     request->send(200, "text/plain", "Display off");
   });
 
   server.on("/lighton", HTTP_GET, [](AsyncWebServerRequest *request){
-    display.backlightOn();
+    display.setBacklightPower(true);
     request->send(200, "text/plain", "Light on");
   });
 
   server.on("/lightoff", HTTP_GET, [](AsyncWebServerRequest *request){
-    display.backlightOff();
+    display.setBacklightPower(false);
     request->send(200, "text/plain", "Light off");
   });
 
-  server.on("/data", HTTP_GET, [](AsyncWebServerRequest *request){
-
+  server.on("/status", HTTP_GET, [](AsyncWebServerRequest *request){
     StaticJsonDocument<500> data;
+    data["displayPower"] = display.getDisplayPower() ? "true" : "false";
+    data["backlightPower"] = display.getBacklightPower() ? "true" : "false";
     data["frameBuffer"] = base64encode(display.getPixels());
     
     String response;

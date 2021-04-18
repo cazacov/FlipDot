@@ -11,12 +11,15 @@ private:
     uint8_t display_pin;
     uint8_t backlight_pin;
     XantoI2C i2c;
+    bool is_display_on;
+    bool is_backlight_on;
 public:
     Display(uint8_t sda_pin, uint8_t scl_pin, uint8_t power_pin, uint8_t lamp_pin);
-    void backlightOn();
-    void backlightOff();
-    void displayOn();
-    void displayOff();
+    bool getBacklightPower();
+    void setBacklightPower(bool new_value);
+    bool getDisplayPower();
+    void setDisplayPower(bool new_value);
     std::vector<uint8_t> getPixels();
     void setPixels(std::vector<uint8_t> &newFrameBuffer);
+    void cls(); // clear screen
 };
