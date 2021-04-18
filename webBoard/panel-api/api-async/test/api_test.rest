@@ -12,6 +12,11 @@ GET http://192.168.178.61/displayon
 GET http://192.168.178.61/displayoff
 
 ### Get current picture
+GET http://192.168.178.61/status
+
+
+
+### Get current picture
 GET http://192.168.178.61/data
 
 
