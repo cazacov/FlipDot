@@ -12,9 +12,18 @@
 #include "secrets.h"
 #include "base64.h"
 
+#include <string>
+
 #include "AsyncJson.h"
 #define ARDUINOJSON_ENABLE_STD_STRING 1
 #include <ArduinoJson.h>
+
+#include <Fonts/FreeSans9pt7b.h>
+#define BIG_FONT FreeSans9pt7b
+//#include <FreeSans10pt7b.h>
+//#define BIG_FONT FreeSans10pt7b
+
+
 
 const uint8_t PIN_SCL = 21;
 const uint8_t PIN_SDA = 5;
@@ -55,6 +64,59 @@ AsyncCallbackJsonWebHandler* postDataHandler = new AsyncCallbackJsonWebHandler("
   else {
     request->send(400, "application/json", "{ \"error\": \"Invalid request\" }");
   }
+});
+
+AsyncCallbackJsonWebHandler* postTextSmallHandler = new AsyncCallbackJsonWebHandler("/textSmall", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  StaticJsonDocument<500> jsonDoc;
+  if (json.is<JsonArray>())
+  {
+    jsonDoc = json.as<JsonArray>();
+  }
+  else if (json.is<JsonObject>())
+  {
+    jsonDoc = json.as<JsonObject>();
+  }
+  std::string line1 = jsonDoc["line1"];
+  std::string line2 = jsonDoc["line2"];
+
+
+  Serial.println("Text SMALL");
+  Serial.println(line1.c_str());
+  Serial.println(line2.c_str());
+
+  display.cls();
+  display.setCursor(0,0);
+  display.print(line1.c_str());
+  display.setCursor(0,8);
+  display.print(line2.c_str());
+  display.update();
+
+  request->send(200, "application/json", "{ \"accepted\": true }");
+});
+
+AsyncCallbackJsonWebHandler* postTextBigHandler = new AsyncCallbackJsonWebHandler("/textBig", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  StaticJsonDocument<500> jsonDoc;
+  if (json.is<JsonArray>())
+  {
+    jsonDoc = json.as<JsonArray>();
+  }
+  else if (json.is<JsonObject>())
+  {
+    jsonDoc = json.as<JsonObject>();
+  }
+  std::string text = jsonDoc["text"];
+
+  Serial.println("Text BIG");
+  Serial.println(text.c_str());
+
+  display.cls();
+  display.setFont(&BIG_FONT);
+  display.setCursor(0,14);
+  display.print(text.c_str());
+  display.update();
+  display.setFont();
+
+  request->send(200, "application/json", "{ \"accepted\": true }");
 });
 
 
@@ -131,6 +193,8 @@ void setup() {
   });
 
   server.addHandler(postDataHandler);
+  server.addHandler(postTextSmallHandler);
+  server.addHandler(postTextBigHandler);
 
   // attach filesystem root at URL /
   server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");

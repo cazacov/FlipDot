@@ -4,6 +4,7 @@
 #include "VM_IIC.h"
 #include "XantoI2C.h"
 
+#include <string>
 #include <vector>
 
 class Display : public VM_IIC {

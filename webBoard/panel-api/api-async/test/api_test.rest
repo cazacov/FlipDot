@@ -22,3 +22,20 @@ content-type: application/json
 {
   "frameBuffer": "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++AA="
 }
+
+### POST small text
+POST http://192.168.178.61/textSmall
+content-type: application/json
+
+{
+  line1: "Line 1",
+  line2: "Line 2"
+}
+
+### POST small text
+POST http://192.168.178.61/textBig
+content-type: application/json
+
+{
+  text: "Hallo Welt!"
+}

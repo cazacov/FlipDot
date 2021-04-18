@@ -60,3 +60,4 @@ void Display::setPixels(std::vector<uint8_t> &newFrameBuffer) {
 void Display::cls() {
   memset(frameBuffer, 0, frameBufferSize);
 }
+
