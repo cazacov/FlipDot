@@ -1,6 +1,7 @@
-FROM alpine:3.7
+FROM alpine:3.7docker ps
 
-RUN apk --no-cache add curl
+
+RUN apk --no-cache add curl tzdata
 
 ADD *.sh /
 RUN chmod +x /*.sh
