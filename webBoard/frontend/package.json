@@ -1,0 +1,14 @@
+{
+  "name": "WebBoard",
+  "version": "0.1.0",
+  "description": "Web UI to flip-dot display",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^11.2.0"
+  }
+}

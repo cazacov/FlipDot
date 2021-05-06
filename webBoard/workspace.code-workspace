@@ -6,6 +6,9 @@
 		{
 			"name": "api-async",
 			"path": "panel-api\\api-async"
+		},
+		{
+			"path": "frontend"
 		}
 	],
 	"settings": {
