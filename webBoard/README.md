@@ -6,4 +6,10 @@ Flip-dot display with REST API
 
 ## How it works
 
+### Hardware
+
 ![WebBoard modules](./_img/diagram.png)
+
+### Software
+
+![WebBoard software](./_img/software.png)
