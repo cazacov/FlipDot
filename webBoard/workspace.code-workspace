@@ -8,7 +8,10 @@
 			"path": "panel-api\\api-async"
 		},
 		{
-			"path": "frontend"
+			"path": "frontend-vue"
+		},
+		{
+			"path": "frontend-react"
 		}
 	],
 	"settings": {
