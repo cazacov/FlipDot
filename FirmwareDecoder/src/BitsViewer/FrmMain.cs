@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BitsViewer
@@ -94,10 +87,10 @@ namespace BitsViewer
             this.render.Render(this.bitSize, this.rows);
             if (this.render.Image != null)
             {
+                pictureBox.AutoSize = true;
                 this.pictureBox.Image = render.Image;
-                this.pictureBox.Width = render.Image.Width;
-                this.pictureBox.Height = render.Image.Height;
-                this.pictureBox.Location = new Point(0, 0);
+                pictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
+                this.pnlScrollbox.AutoScroll = true;
             }
             else
             {

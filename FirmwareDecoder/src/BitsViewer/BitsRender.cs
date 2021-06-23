@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BitsViewer
 {
@@ -39,6 +34,26 @@ namespace BitsViewer
             {
                 graphics.FillRectangle(brush, 0, 0, Image.Width, Image.Height);
             }
+
+            using (var pen = new Pen(Color.White, 1))
+            {
+                var index = 0;
+                while (index < bytes.Length)
+                {
+                    for (var i = 0; i < 8; i++)
+                    {
+                        var bit = (bytes[index] & (1 << i)) != 0;
+                        var y = (index % rows) * bitSize;
+                        var x = (index / rows + 1) * blockPixels - i * bitSize - bitSize;
+                        if (bit)
+                        {
+                            graphics.DrawRectangle(pen, x, y, 1, 1);
+                        }
+                    }
+                    index++;
+                }
+            }
+
         }
     }
 }
