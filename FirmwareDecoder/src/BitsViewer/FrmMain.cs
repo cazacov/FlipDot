@@ -89,8 +89,6 @@ namespace BitsViewer
             {
                 pictureBox.AutoSize = true;
                 this.pictureBox.Image = render.Image;
-                pictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
-                this.pnlScrollbox.AutoScroll = true;
             }
             else
             {
