@@ -1,6 +1,7 @@
 #include <Arduino.h>
 
 #include "flipBoard.h"
+#include <fonts/FreeMonoBold9pt7b.h>
 
 #define nyan_cat_height 17
 #define nyan_cat_width 30
@@ -42,6 +43,8 @@ void setup()
 
 int n = 0;
 void loop() {
+
+  /*
   int8_t coord[][2] = {
     {-1,-1}, {0, -1}, {1, -1}, {1,0}, 
     {1, 1}, {0, 1}, {-1,1},{-1,0}
@@ -63,4 +66,10 @@ void loop() {
     }
   }
   flipBoard.fillScreen(0);
+  */
+  flipBoard.setFont(&FreeMonoBold9pt7b);
+  flipBoard.setCursor(0,12);
+  flipBoard.print("2021");
+  flipBoard.endWrite();
+  delay(100*1000);
 }
