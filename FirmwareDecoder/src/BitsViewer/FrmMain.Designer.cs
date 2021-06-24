@@ -62,16 +62,18 @@ namespace BitsViewer
             this.pnlScrollbox.Controls.Add(this.pictureBox);
             this.pnlScrollbox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlScrollbox.Location = new System.Drawing.Point(0, 0);
+            this.pnlScrollbox.Margin = new System.Windows.Forms.Padding(6);
             this.pnlScrollbox.Name = "pnlScrollbox";
-            this.pnlScrollbox.Size = new System.Drawing.Size(962, 585);
+            this.pnlScrollbox.Size = new System.Drawing.Size(919, 561);
             this.pnlScrollbox.TabIndex = 1;
             // 
             // pictureBox
             // 
             this.pictureBox.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.pictureBox.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox.Margin = new System.Windows.Forms.Padding(6);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(967, 597);
+            this.pictureBox.Size = new System.Drawing.Size(500, 400);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox.TabIndex = 1;
             this.pictureBox.TabStop = false;
@@ -81,9 +83,10 @@ namespace BitsViewer
             this.panel2.Controls.Add(this.gbView);
             this.panel2.Controls.Add(this.gbFile);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel2.Location = new System.Drawing.Point(541, 0);
+            this.panel2.Location = new System.Drawing.Point(583, 0);
+            this.panel2.Margin = new System.Windows.Forms.Padding(6);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(421, 563);
+            this.panel2.Size = new System.Drawing.Size(336, 539);
             this.panel2.TabIndex = 2;
             // 
             // gbView
@@ -94,26 +97,30 @@ namespace BitsViewer
             this.gbView.Controls.Add(this.lblRows);
             this.gbView.Controls.Add(this.label2);
             this.gbView.Controls.Add(this.cbBitSize);
-            this.gbView.Location = new System.Drawing.Point(23, 189);
+            this.gbView.Location = new System.Drawing.Point(18, 128);
+            this.gbView.Margin = new System.Windows.Forms.Padding(6);
             this.gbView.Name = "gbView";
-            this.gbView.Size = new System.Drawing.Size(370, 149);
+            this.gbView.Padding = new System.Windows.Forms.Padding(6);
+            this.gbView.Size = new System.Drawing.Size(275, 100);
             this.gbView.TabIndex = 1;
             this.gbView.TabStop = false;
             this.gbView.Text = "View";
             // 
             // txtCols
             // 
-            this.txtCols.Location = new System.Drawing.Point(256, 85);
+            this.txtCols.Location = new System.Drawing.Point(211, 64);
+            this.txtCols.Margin = new System.Windows.Forms.Padding(6);
             this.txtCols.Name = "txtCols";
             this.txtCols.ReadOnly = true;
-            this.txtCols.Size = new System.Drawing.Size(97, 20);
+            this.txtCols.Size = new System.Drawing.Size(52, 20);
             this.txtCols.TabIndex = 5;
             this.txtCols.Text = "512";
             // 
             // lblCols
             // 
             this.lblCols.AutoSize = true;
-            this.lblCols.Location = new System.Drawing.Point(190, 88);
+            this.lblCols.Location = new System.Drawing.Point(172, 67);
+            this.lblCols.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblCols.Name = "lblCols";
             this.lblCols.Size = new System.Drawing.Size(27, 13);
             this.lblCols.TabIndex = 4;
@@ -121,16 +128,18 @@ namespace BitsViewer
             // 
             // txtRows
             // 
-            this.txtRows.Location = new System.Drawing.Point(108, 85);
+            this.txtRows.Location = new System.Drawing.Point(58, 64);
+            this.txtRows.Margin = new System.Windows.Forms.Padding(6);
             this.txtRows.Name = "txtRows";
-            this.txtRows.Size = new System.Drawing.Size(69, 20);
+            this.txtRows.Size = new System.Drawing.Size(53, 20);
             this.txtRows.TabIndex = 3;
             this.txtRows.Text = "512";
             // 
             // lblRows
             // 
             this.lblRows.AutoSize = true;
-            this.lblRows.Location = new System.Drawing.Point(18, 88);
+            this.lblRows.Location = new System.Drawing.Point(12, 67);
+            this.lblRows.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblRows.Name = "lblRows";
             this.lblRows.Size = new System.Drawing.Size(34, 13);
             this.lblRows.TabIndex = 2;
@@ -139,7 +148,8 @@ namespace BitsViewer
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(18, 38);
+            this.label2.Location = new System.Drawing.Point(12, 30);
+            this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(40, 13);
             this.label2.TabIndex = 1;
@@ -154,21 +164,22 @@ namespace BitsViewer
             "1x1 px",
             "2x2 px",
             "3x3 px"});
-            this.cbBitSize.Location = new System.Drawing.Point(108, 30);
+            this.cbBitSize.Location = new System.Drawing.Point(64, 27);
+            this.cbBitSize.Margin = new System.Windows.Forms.Padding(6);
             this.cbBitSize.Name = "cbBitSize";
-            this.cbBitSize.Size = new System.Drawing.Size(121, 21);
+            this.cbBitSize.Size = new System.Drawing.Size(47, 21);
             this.cbBitSize.TabIndex = 0;
             // 
             // gbFile
             // 
-            this.gbFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.gbFile.Controls.Add(this.btnFile);
             this.gbFile.Controls.Add(this.lblFileSize);
             this.gbFile.Controls.Add(this.lblFileName);
-            this.gbFile.Location = new System.Drawing.Point(23, 23);
+            this.gbFile.Location = new System.Drawing.Point(18, 15);
+            this.gbFile.Margin = new System.Windows.Forms.Padding(6);
             this.gbFile.Name = "gbFile";
-            this.gbFile.Size = new System.Drawing.Size(370, 137);
+            this.gbFile.Padding = new System.Windows.Forms.Padding(6);
+            this.gbFile.Size = new System.Drawing.Size(275, 101);
             this.gbFile.TabIndex = 0;
             this.gbFile.TabStop = false;
             this.gbFile.Text = "File";
@@ -177,9 +188,10 @@ namespace BitsViewer
             // 
             this.btnFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnFile.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnFile.Location = new System.Drawing.Point(256, 84);
+            this.btnFile.Location = new System.Drawing.Point(177, 68);
+            this.btnFile.Margin = new System.Windows.Forms.Padding(6);
             this.btnFile.Name = "btnFile";
-            this.btnFile.Size = new System.Drawing.Size(92, 37);
+            this.btnFile.Size = new System.Drawing.Size(86, 24);
             this.btnFile.TabIndex = 2;
             this.btnFile.Text = "Select";
             this.btnFile.UseVisualStyleBackColor = true;
@@ -188,7 +200,8 @@ namespace BitsViewer
             // lblFileSize
             // 
             this.lblFileSize.AutoSize = true;
-            this.lblFileSize.Location = new System.Drawing.Point(18, 90);
+            this.lblFileSize.Location = new System.Drawing.Point(12, 74);
+            this.lblFileSize.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblFileSize.Name = "lblFileSize";
             this.lblFileSize.Size = new System.Drawing.Size(91, 13);
             this.lblFileSize.TabIndex = 1;
@@ -197,7 +210,8 @@ namespace BitsViewer
             // lblFileName
             // 
             this.lblFileName.AutoSize = true;
-            this.lblFileName.Location = new System.Drawing.Point(18, 43);
+            this.lblFileName.Location = new System.Drawing.Point(12, 28);
+            this.lblFileName.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblFileName.Name = "lblFileName";
             this.lblFileName.Size = new System.Drawing.Size(16, 13);
             this.lblFileName.TabIndex = 0;
@@ -208,9 +222,10 @@ namespace BitsViewer
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.stlPosition});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 563);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 539);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(962, 22);
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 28, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(919, 22);
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -227,12 +242,12 @@ namespace BitsViewer
             // 
             // frmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(962, 585);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.ClientSize = new System.Drawing.Size(919, 561);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.pnlScrollbox);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "frmMain";
             this.Text = "BitsViewer";
             this.Load += new System.EventHandler(this.frmMain_Load);
