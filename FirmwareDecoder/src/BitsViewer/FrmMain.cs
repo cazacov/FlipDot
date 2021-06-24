@@ -40,7 +40,7 @@ namespace BitsViewer
             else
             {
                 lblFileName.Text = System.IO.Path.GetFileName(fileName);
-                lblFileSize.Text = $"Size: {fileSize}";
+                lblFileSize.Text = $"Size: {fileSize} bytes";
                 pnlScrollbox.BackColor = Color.DarkGray;
                 pictureBox.BackColor = Color.Black;
             }
@@ -74,13 +74,17 @@ namespace BitsViewer
         {
             this.bytes = System.IO.File.ReadAllBytes(this.fileName);
             this.fileSize = bytes.Length;
-            ShowFile();
             this.fileLoaded = true;
+            ShowFile();
             DisplayVariables();
         }
 
         private void ShowFile()
         {
+            if (!this.fileLoaded)
+            {
+                return;
+            }
             this.columns = (fileSize - 1)/ rows + 1;
             this.position = 0;
             this.render.LoadBytes(this.bytes);
@@ -94,6 +98,18 @@ namespace BitsViewer
             {
                 pictureBox.BackColor = SystemColors.InactiveCaption;
             }
+        }
+
+        private void cbBitSize_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.bitSize = cbBitSize.SelectedIndex + 1;
+            ShowFile();
+        }
+
+        private void pictureBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            var offset = this.render.GetOffset(e.X, e.Y);
+            stlPosition.Text = offset;
         }
     }
 }

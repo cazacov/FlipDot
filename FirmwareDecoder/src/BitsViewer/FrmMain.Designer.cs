@@ -80,6 +80,7 @@ namespace BitsViewer
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox.TabIndex = 1;
             this.pictureBox.TabStop = false;
+            this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
             // 
             // panel2
             // 
@@ -166,12 +167,14 @@ namespace BitsViewer
             this.cbBitSize.Items.AddRange(new object[] {
             "1x1 px",
             "2x2 px",
-            "3x3 px"});
+            "3x3 px",
+            "4x4 px"});
             this.cbBitSize.Location = new System.Drawing.Point(106, 32);
             this.cbBitSize.Margin = new System.Windows.Forms.Padding(6);
             this.cbBitSize.Name = "cbBitSize";
             this.cbBitSize.Size = new System.Drawing.Size(106, 33);
             this.cbBitSize.TabIndex = 0;
+            this.cbBitSize.SelectedIndexChanged += new System.EventHandler(this.cbBitSize_SelectedIndexChanged);
             // 
             // gbFile
             // 
