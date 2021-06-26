@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace BitsViewer
 {
@@ -16,27 +17,35 @@ namespace BitsViewer
         private int bmpHeight;
         private int bmpWidth;
         private int[] bits;
-        private int col;
+        private int colBitOn;
         private int bitSize;
         private int wordLength;
         private bool isBigEndian;
+        private int offset;
+        private int colBitOff;
+        private int colBack;
+        private int colBorder;
 
         public void LoadBytes(byte[] bytes)
         {
             this.bytes = bytes;
             this.len = bytes.Length;
             this.Image = null;
-            this.col = Color.LightGray.ToArgb();
+            this.colBitOn = Color.White.ToArgb();
+            this.colBitOff = Color.Black.ToArgb();
+            this.colBorder = Color.DimGray.ToArgb();
+            this.colBack = Color.Navy.ToArgb();
         }
 
         public Image Image { get; set; }
 
-        public void Render(int bitSize, int rows, int wordLength, bool isBigEndian)
+        public void Render(int bitSize, int rows, int wordLength, bool isBigEndian, int offset)
         {
             this.bitSize = bitSize;
             this.bytesInBlock = wordLength;
             this.wordLength = wordLength;
             this.isBigEndian = isBigEndian;
+            this.offset = offset;
             this.rows = rows;
             this.columns = (len / bytesInBlock - 1) / rows + 1;
             this.blockPixels = bytesInBlock * 8 * bitSize + (bytesInBlock + 1) * bitSize;
@@ -44,6 +53,10 @@ namespace BitsViewer
             this.bmpHeight = rows * bitSize;
             this.bmpWidth = columns * blockPixels;
             this.bits = new Int32[bmpWidth * bmpHeight];
+            for (int i = 0; i < bits.Length; i++)
+            {
+                bits[i] = colBack;
+            }
 
             var index = 0;
             while (index < bytes.Length)
@@ -52,7 +65,12 @@ namespace BitsViewer
                 {
                     for (var i = 0; i < 8; i++)
                     {
-                        var bit = (bytes[index] & (1 << i)) != 0;
+                        var data = 0;
+                        if (index + offset < bytes.Length)
+                        {
+                            data = bytes[index + offset];
+                        }
+                        var bit = (data & (1 << i)) != 0;
                         var y = ((index/ wordLength) % rows) * bitSize;
                         int x = index / (rows * wordLength) * blockPixels;
                         if (isBigEndian)
@@ -63,10 +81,7 @@ namespace BitsViewer
                         {
                             x += (wordLength - j - 1) * 8 * this.bitSize + (7 - i) * bitSize;
                         }
-                        if (bit)
-                        {
-                            ShowBit(x, y);
-                        }
+                        ShowBit(x, y, bit);
                     }
                     index++;
                     if (index == bytes.Length)
@@ -84,18 +99,44 @@ namespace BitsViewer
 //            bits = null;
         }
 
-        private void ShowBit(int x, int y)
+        private void ShowBit(int x, int y, bool bit)
         {
-            var idx = x + y * bmpWidth;
-            for (var j = 0; j < this.bitSize; j++)
-            {
-                for (var k = 0; k < this.bitSize; k++)
-                {
-                    bits[idx++] = col;
-                }
+            var border = colBorder;
+            var pixel = bit ? colBitOn : colBitOff;
 
-                idx -= this.bitSize;
-                idx += bmpWidth;
+            var idx = x + y * bmpWidth;
+
+            if (bitSize < 3)
+            {
+                for (var j = 0; j < this.bitSize; j++)
+                {
+                    for (var k = 0; k < this.bitSize; k++)
+                    {
+                        bits[idx++] = pixel;
+                    }
+
+                    idx -= this.bitSize;
+                    idx += bmpWidth;
+                }
+            }
+            else
+            {
+                for (var j = 0; j < this.bitSize; j++)
+                {
+                    for (var k = 0; k < this.bitSize; k++)
+                    {
+                        if (j > 0 && k > 0 && j < bitSize - 1 && k < bitSize - 1)
+                        {
+                            bits[idx++] = pixel;
+                        }
+                        else
+                        {
+                            bits[idx++] = border;
+                        }
+                    }
+                    idx -= this.bitSize;
+                    idx += bmpWidth;
+                }
             }
         }
 

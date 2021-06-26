@@ -51,6 +51,8 @@ namespace BitsViewer
             this.stlPosition = new System.Windows.Forms.ToolStripStatusLabel();
             this.dlgFile = new System.Windows.Forms.OpenFileDialog();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.cbOffset = new System.Windows.Forms.ComboBox();
             this.pnlScrollbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.panel2.SuspendLayout();
@@ -99,6 +101,8 @@ namespace BitsViewer
             // 
             // gbView
             // 
+            this.gbView.Controls.Add(this.cbOffset);
+            this.gbView.Controls.Add(this.label4);
             this.gbView.Controls.Add(this.cbEndian);
             this.gbView.Controls.Add(this.label3);
             this.gbView.Controls.Add(this.cbWordSize);
@@ -113,7 +117,7 @@ namespace BitsViewer
             this.gbView.Margin = new System.Windows.Forms.Padding(6);
             this.gbView.Name = "gbView";
             this.gbView.Padding = new System.Windows.Forms.Padding(6);
-            this.gbView.Size = new System.Drawing.Size(468, 193);
+            this.gbView.Size = new System.Drawing.Size(468, 251);
             this.gbView.TabIndex = 1;
             this.gbView.TabStop = false;
             this.gbView.Text = "View";
@@ -228,7 +232,11 @@ namespace BitsViewer
             "1x1 px",
             "2x2 px",
             "3x3 px",
-            "4x4 px"});
+            "4x4 px",
+            "5x5 px",
+            "6x6 px",
+            "7x7 px",
+            "8x8 px"});
             this.cbBitSize.Location = new System.Drawing.Point(104, 32);
             this.cbBitSize.Margin = new System.Windows.Forms.Padding(6);
             this.cbBitSize.Name = "cbBitSize";
@@ -315,6 +323,33 @@ namespace BitsViewer
             this.panel1.Size = new System.Drawing.Size(873, 860);
             this.panel1.TabIndex = 4;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 201);
+            this.label4.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(69, 25);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Offset";
+            // 
+            // cbOffset
+            // 
+            this.cbOffset.CausesValidation = false;
+            this.cbOffset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbOffset.FormattingEnabled = true;
+            this.cbOffset.Items.AddRange(new object[] {
+            "0",
+            "1",
+            "2",
+            "3"});
+            this.cbOffset.Location = new System.Drawing.Point(104, 198);
+            this.cbOffset.Margin = new System.Windows.Forms.Padding(6);
+            this.cbOffset.Name = "cbOffset";
+            this.cbOffset.Size = new System.Drawing.Size(126, 33);
+            this.cbOffset.TabIndex = 11;
+            this.cbOffset.SelectedIndexChanged += new System.EventHandler(this.cbOffset_SelectedIndexChanged);
+            // 
             // frmMain
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -366,6 +401,8 @@ namespace BitsViewer
         private System.Windows.Forms.ComboBox cbEndian;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cbWordSize;
+        private System.Windows.Forms.ComboBox cbOffset;
+        private System.Windows.Forms.Label label4;
     }
 }
 

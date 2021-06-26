@@ -15,6 +15,7 @@ namespace BitsViewer
         private bool fileLoaded;
         private bool isBigEndian;
         private int wordLength;
+        private int offset;
         private byte[] bytes;
         private readonly BitsRender render;
 
@@ -51,6 +52,7 @@ namespace BitsViewer
             txtCols.Text = columns.ToString();
             cbWordSize.SelectedIndex = this.wordLength - 1;
             cbEndian.SelectedIndex = this.isBigEndian ? 0 : 1;
+            cbOffset.SelectedIndex = this.offset;
         }
 
         private void InitVariables()
@@ -63,6 +65,7 @@ namespace BitsViewer
             this.columns = 0;
             this.wordLength = 1;
             this.isBigEndian = true;
+            this.offset = 0;
         }
 
         private void btnFile_Click(object sender, EventArgs e)
@@ -92,7 +95,7 @@ namespace BitsViewer
             }
             this.columns = (fileSize - 1)/ rows + 1;
             this.render.LoadBytes(this.bytes);
-            this.render.Render(this.bitSize, this.rows, this.wordLength, this.isBigEndian);
+            this.render.Render(this.bitSize, this.rows, this.wordLength, this.isBigEndian, this.offset);
             if (this.render.Image != null)
             {
                 pictureBox.AutoSize = true;
@@ -125,6 +128,12 @@ namespace BitsViewer
         private void cbEndian_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.isBigEndian = cbEndian.SelectedIndex == 0;
+            ShowFile();
+        }
+
+        private void cbOffset_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.offset = cbOffset.SelectedIndex;
             ShowFile();
         }
     }
