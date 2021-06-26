@@ -18,6 +18,8 @@ namespace BitsViewer
         private int[] bits;
         private int col;
         private int bitSize;
+        private int wordLength;
+        private bool isBigEndian;
 
         public void LoadBytes(byte[] bytes)
         {
@@ -29,13 +31,15 @@ namespace BitsViewer
 
         public Image Image { get; set; }
 
-        public void Render(int bitSize, int rows)
+        public void Render(int bitSize, int rows, int wordLength, bool isBigEndian)
         {
             this.bitSize = bitSize;
-            this.bytesInBlock = 1;
+            this.bytesInBlock = wordLength;
+            this.wordLength = wordLength;
+            this.isBigEndian = isBigEndian;
             this.rows = rows;
             this.columns = (len / bytesInBlock - 1) / rows + 1;
-            this.blockPixels = bytesInBlock * 8 * bitSize + bytesInBlock - 1 + bitSize;
+            this.blockPixels = bytesInBlock * 8 * bitSize + (bytesInBlock + 1) * bitSize;
 
             this.bmpHeight = rows * bitSize;
             this.bmpWidth = columns * blockPixels;
@@ -44,17 +48,32 @@ namespace BitsViewer
             var index = 0;
             while (index < bytes.Length)
             {
-                for (var i = 0; i < 8; i++)
+                for (var j = 0; j < wordLength; j++)
                 {
-                    var bit = (bytes[index] & (1 << i)) != 0;
-                    var y = (index % rows) * bitSize;
-                    var x = (index / rows + 1) * blockPixels - i * bitSize - bitSize;
-                    if (bit)
+                    for (var i = 0; i < 8; i++)
                     {
-                        ShowBit(x, y);
+                        var bit = (bytes[index] & (1 << i)) != 0;
+                        var y = ((index/ wordLength) % rows) * bitSize;
+                        int x = index / (rows * wordLength) * blockPixels;
+                        if (isBigEndian)
+                        {
+                            x += j * 8 * this.bitSize + (7 - i) * bitSize;
+                        }
+                        else
+                        {
+                            x += (wordLength - j - 1) * 8 * this.bitSize + (7 - i) * bitSize;
+                        }
+                        if (bit)
+                        {
+                            ShowBit(x, y);
+                        }
+                    }
+                    index++;
+                    if (index == bytes.Length)
+                    {
+                        break;
                     }
                 }
-                index++;
             }
             var bitsHandle = GCHandle.Alloc(bits, GCHandleType.Pinned);
             var bmp = new Bitmap(bmpWidth, bmpHeight, bmpWidth * 4, PixelFormat.Format32bppPArgb,
@@ -84,6 +103,10 @@ namespace BitsViewer
 
         public string GetOffset(int ptrX, int ptrY)
         {
+            if (bytes == null)
+            {
+                return "";
+            }
             var y = ptrY / bitSize;
             var x = ptrX / blockPixels;
             var pos = x * rows + y;

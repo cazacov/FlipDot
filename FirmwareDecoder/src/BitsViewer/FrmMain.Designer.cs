@@ -33,6 +33,10 @@ namespace BitsViewer
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.gbView = new System.Windows.Forms.GroupBox();
+            this.cbEndian = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cbWordSize = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.txtCols = new System.Windows.Forms.TextBox();
             this.lblCols = new System.Windows.Forms.Label();
             this.txtRows = new System.Windows.Forms.TextBox();
@@ -67,7 +71,7 @@ namespace BitsViewer
             this.pnlScrollbox.Location = new System.Drawing.Point(8, 5);
             this.pnlScrollbox.Margin = new System.Windows.Forms.Padding(6);
             this.pnlScrollbox.Name = "pnlScrollbox";
-            this.pnlScrollbox.Size = new System.Drawing.Size(893, 849);
+            this.pnlScrollbox.Size = new System.Drawing.Size(861, 849);
             this.pnlScrollbox.TabIndex = 1;
             // 
             // pictureBox
@@ -87,14 +91,18 @@ namespace BitsViewer
             this.panel2.Controls.Add(this.gbView);
             this.panel2.Controls.Add(this.gbFile);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel2.Location = new System.Drawing.Point(905, 0);
+            this.panel2.Location = new System.Drawing.Point(873, 0);
             this.panel2.Margin = new System.Windows.Forms.Padding(6);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(469, 860);
+            this.panel2.Size = new System.Drawing.Size(501, 860);
             this.panel2.TabIndex = 2;
             // 
             // gbView
             // 
+            this.gbView.Controls.Add(this.cbEndian);
+            this.gbView.Controls.Add(this.label3);
+            this.gbView.Controls.Add(this.cbWordSize);
+            this.gbView.Controls.Add(this.label1);
             this.gbView.Controls.Add(this.txtCols);
             this.gbView.Controls.Add(this.lblCols);
             this.gbView.Controls.Add(this.txtRows);
@@ -105,25 +113,77 @@ namespace BitsViewer
             this.gbView.Margin = new System.Windows.Forms.Padding(6);
             this.gbView.Name = "gbView";
             this.gbView.Padding = new System.Windows.Forms.Padding(6);
-            this.gbView.Size = new System.Drawing.Size(436, 144);
+            this.gbView.Size = new System.Drawing.Size(468, 193);
             this.gbView.TabIndex = 1;
             this.gbView.TabStop = false;
             this.gbView.Text = "View";
             // 
+            // cbEndian
+            // 
+            this.cbEndian.CausesValidation = false;
+            this.cbEndian.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbEndian.FormattingEnabled = true;
+            this.cbEndian.Items.AddRange(new object[] {
+            "big",
+            "little"});
+            this.cbEndian.Location = new System.Drawing.Point(363, 142);
+            this.cbEndian.Margin = new System.Windows.Forms.Padding(6);
+            this.cbEndian.Name = "cbEndian";
+            this.cbEndian.Size = new System.Drawing.Size(93, 33);
+            this.cbEndian.TabIndex = 9;
+            this.cbEndian.SelectedIndexChanged += new System.EventHandler(this.cbEndian_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(275, 145);
+            this.label3.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(79, 25);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Endian";
+            // 
+            // cbWordSize
+            // 
+            this.cbWordSize.CausesValidation = false;
+            this.cbWordSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbWordSize.FormattingEnabled = true;
+            this.cbWordSize.Items.AddRange(new object[] {
+            "1 byte",
+            "2 bytes",
+            "3 bytes",
+            "4 bytes"});
+            this.cbWordSize.Location = new System.Drawing.Point(105, 142);
+            this.cbWordSize.Margin = new System.Windows.Forms.Padding(6);
+            this.cbWordSize.Name = "cbWordSize";
+            this.cbWordSize.Size = new System.Drawing.Size(126, 33);
+            this.cbWordSize.TabIndex = 7;
+            this.cbWordSize.SelectedIndexChanged += new System.EventHandler(this.cbWordSize_SelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 145);
+            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(63, 25);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Word";
+            // 
             // txtCols
             // 
-            this.txtCols.Location = new System.Drawing.Point(321, 84);
+            this.txtCols.Location = new System.Drawing.Point(342, 84);
             this.txtCols.Margin = new System.Windows.Forms.Padding(6);
             this.txtCols.Name = "txtCols";
             this.txtCols.ReadOnly = true;
-            this.txtCols.Size = new System.Drawing.Size(103, 31);
+            this.txtCols.Size = new System.Drawing.Size(114, 31);
             this.txtCols.TabIndex = 5;
             this.txtCols.Text = "512";
             // 
             // lblCols
             // 
             this.lblCols.AutoSize = true;
-            this.lblCols.Location = new System.Drawing.Point(254, 87);
+            this.lblCols.Location = new System.Drawing.Point(275, 87);
             this.lblCols.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblCols.Name = "lblCols";
             this.lblCols.Size = new System.Drawing.Size(55, 25);
@@ -132,10 +192,10 @@ namespace BitsViewer
             // 
             // txtRows
             // 
-            this.txtRows.Location = new System.Drawing.Point(107, 87);
+            this.txtRows.Location = new System.Drawing.Point(105, 87);
             this.txtRows.Margin = new System.Windows.Forms.Padding(6);
             this.txtRows.Name = "txtRows";
-            this.txtRows.Size = new System.Drawing.Size(105, 31);
+            this.txtRows.Size = new System.Drawing.Size(126, 31);
             this.txtRows.TabIndex = 3;
             this.txtRows.Text = "512";
             // 
@@ -169,10 +229,10 @@ namespace BitsViewer
             "2x2 px",
             "3x3 px",
             "4x4 px"});
-            this.cbBitSize.Location = new System.Drawing.Point(106, 32);
+            this.cbBitSize.Location = new System.Drawing.Point(104, 32);
             this.cbBitSize.Margin = new System.Windows.Forms.Padding(6);
             this.cbBitSize.Name = "cbBitSize";
-            this.cbBitSize.Size = new System.Drawing.Size(106, 33);
+            this.cbBitSize.Size = new System.Drawing.Size(127, 33);
             this.cbBitSize.TabIndex = 0;
             this.cbBitSize.SelectedIndexChanged += new System.EventHandler(this.cbBitSize_SelectedIndexChanged);
             // 
@@ -185,7 +245,7 @@ namespace BitsViewer
             this.gbFile.Margin = new System.Windows.Forms.Padding(6);
             this.gbFile.Name = "gbFile";
             this.gbFile.Padding = new System.Windows.Forms.Padding(6);
-            this.gbFile.Size = new System.Drawing.Size(436, 119);
+            this.gbFile.Size = new System.Drawing.Size(468, 119);
             this.gbFile.TabIndex = 0;
             this.gbFile.TabStop = false;
             this.gbFile.Text = "File";
@@ -194,7 +254,7 @@ namespace BitsViewer
             // 
             this.btnFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnFile.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnFile.Location = new System.Drawing.Point(319, 74);
+            this.btnFile.Location = new System.Drawing.Point(351, 74);
             this.btnFile.Margin = new System.Windows.Forms.Padding(6);
             this.btnFile.Name = "btnFile";
             this.btnFile.Size = new System.Drawing.Size(105, 33);
@@ -252,7 +312,7 @@ namespace BitsViewer
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(905, 860);
+            this.panel1.Size = new System.Drawing.Size(873, 860);
             this.panel1.TabIndex = 4;
             // 
             // frmMain
@@ -302,6 +362,10 @@ namespace BitsViewer
         private System.Windows.Forms.TextBox txtCols;
         private System.Windows.Forms.OpenFileDialog dlgFile;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cbEndian;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox cbWordSize;
     }
 }
 

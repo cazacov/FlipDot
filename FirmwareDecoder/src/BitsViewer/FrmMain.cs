@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace BitsViewer
 {
@@ -11,8 +12,9 @@ namespace BitsViewer
         private int bitSize;
         private int rows;
         private int columns;
-        private int position;
         private bool fileLoaded;
+        private bool isBigEndian;
+        private int wordLength;
         private byte[] bytes;
         private readonly BitsRender render;
 
@@ -47,6 +49,8 @@ namespace BitsViewer
             cbBitSize.SelectedIndex = this.bitSize - 1;
             txtRows.Text = rows.ToString();
             txtCols.Text = columns.ToString();
+            cbWordSize.SelectedIndex = this.wordLength - 1;
+            cbEndian.SelectedIndex = this.isBigEndian ? 0 : 1;
         }
 
         private void InitVariables()
@@ -57,7 +61,8 @@ namespace BitsViewer
             this.bitSize = 2;
             this.rows = 512;
             this.columns = 0;
-            this.position = 0;
+            this.wordLength = 1;
+            this.isBigEndian = true;
         }
 
         private void btnFile_Click(object sender, EventArgs e)
@@ -86,9 +91,8 @@ namespace BitsViewer
                 return;
             }
             this.columns = (fileSize - 1)/ rows + 1;
-            this.position = 0;
             this.render.LoadBytes(this.bytes);
-            this.render.Render(this.bitSize, this.rows);
+            this.render.Render(this.bitSize, this.rows, this.wordLength, this.isBigEndian);
             if (this.render.Image != null)
             {
                 pictureBox.AutoSize = true;
@@ -110,6 +114,18 @@ namespace BitsViewer
         {
             var offset = this.render.GetOffset(e.X, e.Y);
             stlPosition.Text = offset;
+        }
+
+        private void cbWordSize_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.wordLength = cbWordSize.SelectedIndex + 1;
+            ShowFile();
+        }
+
+        private void cbEndian_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.isBigEndian = cbEndian.SelectedIndex == 0;
+            ShowFile();
         }
     }
 }
