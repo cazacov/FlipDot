@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 namespace BitsViewer
 {
@@ -25,6 +25,10 @@ namespace BitsViewer
         private int colBitOff;
         private int colBack;
         private int colBorder;
+        private int colOnSelected;
+        private int colBorderSelected;
+        private int selectedFrom;
+        private int selectedTo;
 
         public void LoadBytes(byte[] bytes)
         {
@@ -34,7 +38,11 @@ namespace BitsViewer
             this.colBitOn = Color.White.ToArgb();
             this.colBitOff = Color.Black.ToArgb();
             this.colBorder = Color.DimGray.ToArgb();
+            this.colOnSelected = Color.Yellow.ToArgb();
+            this.colBorderSelected = Color.SaddleBrown.ToArgb();
             this.colBack = Color.Navy.ToArgb();
+            this.selectedFrom = 0;
+            this.selectedTo = 0;
         }
 
         public Image Image { get; set; }
@@ -61,28 +69,9 @@ namespace BitsViewer
             var index = 0;
             while (index < bytes.Length)
             {
-                for (var j = 0; j < wordLength; j++)
+                for (var k = 0; k < wordLength; k++)
                 {
-                    for (var i = 0; i < 8; i++)
-                    {
-                        var data = 0;
-                        if (index + offset < bytes.Length)
-                        {
-                            data = bytes[index + offset];
-                        }
-                        var bit = (data & (1 << i)) != 0;
-                        var y = ((index/ wordLength) % rows) * bitSize;
-                        int x = index / (rows * wordLength) * blockPixels;
-                        if (isBigEndian)
-                        {
-                            x += j * 8 * this.bitSize + (7 - i) * bitSize;
-                        }
-                        else
-                        {
-                            x += (wordLength - j - 1) * 8 * this.bitSize + (7 - i) * bitSize;
-                        }
-                        ShowBit(x, y, bit);
-                    }
+                    RenderByte(index);
                     index++;
                     if (index == bytes.Length)
                     {
@@ -99,10 +88,49 @@ namespace BitsViewer
 //            bits = null;
         }
 
-        private void ShowBit(int x, int y, bool bit)
+        private void RenderPart(int from, int to)
         {
-            var border = colBorder;
-            var pixel = bit ? colBitOn : colBitOff;
+            if (from < offset)
+            {
+                from = offset;
+            }
+            for (var i = from; i < to; i++)
+            {
+                RenderByte(i - offset);
+            }
+        }
+
+        private void RenderByte(int index)
+        {
+            var j = index % this.wordLength;
+            for (var i = 0; i < 8; i++)
+            {
+                var data = 0;
+                var pos = index + this.offset;
+                if (pos < bytes.Length)
+                {
+                    data = bytes[pos];
+                }
+                var bit = (data & (1 << i)) != 0;
+                var y = ((index / this.wordLength) % this.rows) * this.bitSize;
+                int x = index / (this.rows * this.wordLength) * this.blockPixels;
+                if (this.isBigEndian)
+                {
+                    x += j * 8 * this.bitSize + (7 - i) * this.bitSize;
+                }
+                else
+                {
+                    x += (this.wordLength - j - 1) * 8 * this.bitSize + (7 - i) * this.bitSize;
+                }
+                var isSelected = pos >= selectedFrom && pos < selectedTo;
+                ShowBit(x, y, bit, isSelected);
+            }
+        }
+
+        private void ShowBit(int x, int y, bool bit, bool isSelected)
+        {
+            var border = isSelected ? colBorderSelected : colBorder;
+            var pixel = bit ? (isSelected ? colOnSelected : colBitOn) : colBitOff;
 
             var idx = x + y * bmpWidth;
 
@@ -166,6 +194,28 @@ namespace BitsViewer
                 return -1;
             }
             return pos;
+        }
+
+        public void SetSelection(int from, int to)
+        {
+            bool isOverlap = from < selectedTo && to > selectedFrom;
+            if (isOverlap)
+            {
+                var updateFrom = Math.Min(selectedFrom, from);
+                var updateTo = Math.Max(selectedTo, to);
+                selectedFrom = from;
+                selectedTo = to;
+                RenderPart(updateFrom, updateTo);
+            }
+            else
+            {
+                var updateFrom = selectedFrom;
+                var updateTo = selectedTo;
+                selectedFrom = from;
+                selectedTo = to;
+                RenderPart(updateFrom, updateTo);
+                RenderPart(selectedFrom, selectedTo);
+            }
         }
     }
 }

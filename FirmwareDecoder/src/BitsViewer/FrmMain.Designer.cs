@@ -92,6 +92,7 @@ namespace BitsViewer
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox.TabIndex = 1;
             this.pictureBox.TabStop = false;
+            this.pictureBox.Click += new System.EventHandler(this.pictureBox_Click);
             this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
             // 
             // panel2
@@ -117,6 +118,7 @@ namespace BitsViewer
             this.chByteHex,
             this.clBits});
             this.lvDump.Font = new System.Drawing.Font("Courier New", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lvDump.FullRowSelect = true;
             this.lvDump.HideSelection = false;
             this.lvDump.Location = new System.Drawing.Point(18, 433);
             this.lvDump.Name = "lvDump";

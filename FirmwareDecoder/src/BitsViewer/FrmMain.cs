@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 
 namespace BitsViewer
 {
@@ -19,6 +18,8 @@ namespace BitsViewer
         private byte[] bytes;
         private readonly BitsRender bitsRender;
         private readonly DumpRender dumpRender;
+        private int selectedFrom;
+        private int selectedTo;
 
         public frmMain()
         {
@@ -68,6 +69,8 @@ namespace BitsViewer
             this.wordLength = 1;
             this.isBigEndian = true;
             this.offset = 0;
+            this.selectedFrom = 0;
+            this.selectedTo = 0;
         }
 
         private void btnFile_Click(object sender, EventArgs e)
@@ -85,8 +88,11 @@ namespace BitsViewer
             this.bytes = System.IO.File.ReadAllBytes(this.fileName);
             this.fileSize = bytes.Length;
             this.fileLoaded = true;
+            this.selectedFrom = 0;
+            this.selectedTo = 0;
             ShowFile();
             DisplayVariables();
+            DisplaySelection();
             this.dumpRender.Load(this.bytes);
         }
 
@@ -148,6 +154,61 @@ namespace BitsViewer
         {
             this.offset = cbOffset.SelectedIndex;
             ShowFile();
+        }
+
+        private void pictureBox_Click(object sender, EventArgs e)
+        {
+            var mea = e as MouseEventArgs;
+            if (mea == null)
+            {
+                return;
+            }
+
+            var pos = this.bitsRender.GetOffset(mea.X, mea.Y);
+            if (pos >= 0)
+            {
+                if ((Control.ModifierKeys & Keys.Shift) != 0)
+                {
+                    if (pos < selectedFrom)
+                    {
+                        selectedFrom = pos;
+                    }
+                    else if (pos >= selectedTo)
+                    {
+                        selectedTo = pos + 1;
+                    }
+                }
+                else
+                {
+                    selectedFrom = pos;
+                    selectedTo = pos + 1;
+                }
+                DisplaySelection(pos);
+            }
+        }
+
+        private void DisplaySelection(int pos = -1)
+        {
+            lvDump.BeginUpdate();
+            if (pos <= 0 || selectedTo - selectedFrom <= 0)
+            {
+                lvDump.SelectedIndices.Clear();
+                lvDump.EndUpdate();
+                bitsRender.SetSelection(0, 0);
+                return;
+            }
+            
+
+            lvDump.SelectedIndices.Clear();
+            for (int i = selectedFrom; i < selectedTo; i++)
+            {
+                lvDump.SelectedIndices.Add(i);
+            }
+            var item = lvDump.Items[pos];
+            item.EnsureVisible();
+            lvDump.EndUpdate();
+            bitsRender.SetSelection(selectedFrom, selectedTo);
+            this.pictureBox.Image = bitsRender.Image;
         }
     }
 }
