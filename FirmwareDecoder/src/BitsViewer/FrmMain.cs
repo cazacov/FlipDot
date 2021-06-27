@@ -17,12 +17,14 @@ namespace BitsViewer
         private int wordLength;
         private int offset;
         private byte[] bytes;
-        private readonly BitsRender render;
+        private readonly BitsRender bitsRender;
+        private readonly DumpRender dumpRender;
 
         public frmMain()
         {
             InitializeComponent();
-            this.render = new BitsRender();
+            this.bitsRender = new BitsRender();
+            this.dumpRender = new DumpRender(this.lvDump);
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -85,6 +87,7 @@ namespace BitsViewer
             this.fileLoaded = true;
             ShowFile();
             DisplayVariables();
+            this.dumpRender.Load(this.bytes);
         }
 
         private void ShowFile()
@@ -94,12 +97,12 @@ namespace BitsViewer
                 return;
             }
             this.columns = (fileSize - 1)/ rows + 1;
-            this.render.LoadBytes(this.bytes);
-            this.render.Render(this.bitSize, this.rows, this.wordLength, this.isBigEndian, this.offset);
-            if (this.render.Image != null)
+            this.bitsRender.LoadBytes(this.bytes);
+            this.bitsRender.Render(this.bitSize, this.rows, this.wordLength, this.isBigEndian, this.offset);
+            if (this.bitsRender.Image != null)
             {
                 pictureBox.AutoSize = true;
-                this.pictureBox.Image = render.Image;
+                this.pictureBox.Image = bitsRender.Image;
             }
             else
             {
@@ -115,8 +118,18 @@ namespace BitsViewer
 
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            var offset = this.render.GetOffset(e.X, e.Y);
-            stlPosition.Text = offset;
+            var offset = this.bitsRender.GetOffset(e.X, e.Y);
+
+            if (offset >= 0)
+            {
+                stlPosition.Text = $"Address: 0x{offset:X6} {offset:D8}";
+                strValue.Text = $"Value: {bytes[offset]:D3} {bytes[offset]:X2}";
+            }
+            else
+            {
+                stlPosition.Text = "";
+                strValue.Text = "";
+            }
         }
 
         private void cbWordSize_SelectedIndexChanged(object sender, EventArgs e)

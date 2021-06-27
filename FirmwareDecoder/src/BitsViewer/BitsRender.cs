@@ -142,16 +142,30 @@ namespace BitsViewer
 
         public Bitmap Bitmap { get; set; }
 
-        public string GetOffset(int ptrX, int ptrY)
+        public int GetOffset(int ptrX, int ptrY)
         {
             if (bytes == null)
             {
-                return "";
+                return -1;
             }
+
             var y = ptrY / bitSize;
             var x = ptrX / blockPixels;
-            var pos = x * rows + y;
-            return $"{pos}  0x{pos:X04}";
+            var xx = ptrX % blockPixels / (8 * bitSize);
+            if (xx >= wordLength)
+            {
+                xx = wordLength - 1;
+            }
+            if (!isBigEndian)
+            {
+                xx = wordLength - xx - 1;
+            }
+            var pos = x * rows * wordLength + y * wordLength + xx + offset;
+            if (pos >= bytes.Length)
+            {
+                return -1;
+            }
+            return pos;
         }
     }
 }

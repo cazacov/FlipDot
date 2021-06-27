@@ -32,7 +32,14 @@ namespace BitsViewer
             this.pnlScrollbox = new System.Windows.Forms.Panel();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.lvDump = new System.Windows.Forms.ListView();
+            this.clAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.clByteDec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chByteHex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.clBits = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.gbView = new System.Windows.Forms.GroupBox();
+            this.cbOffset = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.cbEndian = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.cbWordSize = new System.Windows.Forms.ComboBox();
@@ -51,8 +58,7 @@ namespace BitsViewer
             this.stlPosition = new System.Windows.Forms.ToolStripStatusLabel();
             this.dlgFile = new System.Windows.Forms.OpenFileDialog();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label4 = new System.Windows.Forms.Label();
-            this.cbOffset = new System.Windows.Forms.ComboBox();
+            this.strValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlScrollbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.panel2.SuspendLayout();
@@ -90,6 +96,7 @@ namespace BitsViewer
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.lvDump);
             this.panel2.Controls.Add(this.gbView);
             this.panel2.Controls.Add(this.gbFile);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
@@ -98,6 +105,44 @@ namespace BitsViewer
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(501, 860);
             this.panel2.TabIndex = 2;
+            // 
+            // lvDump
+            // 
+            this.lvDump.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvDump.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.clAddress,
+            this.clByteDec,
+            this.chByteHex,
+            this.clBits});
+            this.lvDump.Font = new System.Drawing.Font("Courier New", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lvDump.HideSelection = false;
+            this.lvDump.Location = new System.Drawing.Point(18, 433);
+            this.lvDump.Name = "lvDump";
+            this.lvDump.Size = new System.Drawing.Size(468, 403);
+            this.lvDump.TabIndex = 2;
+            this.lvDump.UseCompatibleStateImageBehavior = false;
+            this.lvDump.View = System.Windows.Forms.View.Details;
+            // 
+            // clAddress
+            // 
+            this.clAddress.Text = "Address";
+            this.clAddress.Width = 100;
+            // 
+            // clByteDec
+            // 
+            this.clByteDec.Text = "Dec";
+            this.clByteDec.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // chByteHex
+            // 
+            this.chByteHex.Text = "Hex";
+            // 
+            // clBits
+            // 
+            this.clBits.Text = "Bits";
+            this.clBits.Width = 200;
             // 
             // gbView
             // 
@@ -121,6 +166,33 @@ namespace BitsViewer
             this.gbView.TabIndex = 1;
             this.gbView.TabStop = false;
             this.gbView.Text = "View";
+            // 
+            // cbOffset
+            // 
+            this.cbOffset.CausesValidation = false;
+            this.cbOffset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbOffset.FormattingEnabled = true;
+            this.cbOffset.Items.AddRange(new object[] {
+            "0",
+            "1",
+            "2",
+            "3"});
+            this.cbOffset.Location = new System.Drawing.Point(104, 198);
+            this.cbOffset.Margin = new System.Windows.Forms.Padding(6);
+            this.cbOffset.Name = "cbOffset";
+            this.cbOffset.Size = new System.Drawing.Size(126, 33);
+            this.cbOffset.TabIndex = 11;
+            this.cbOffset.SelectedIndexChanged += new System.EventHandler(this.cbOffset_SelectedIndexChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 201);
+            this.label4.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(69, 25);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Offset";
             // 
             // cbEndian
             // 
@@ -236,7 +308,11 @@ namespace BitsViewer
             "5x5 px",
             "6x6 px",
             "7x7 px",
-            "8x8 px"});
+            "8x8 px",
+            "9x9 px",
+            "10x10 px",
+            "11x11 px",
+            "12x12 px"});
             this.cbBitSize.Location = new System.Drawing.Point(104, 32);
             this.cbBitSize.Margin = new System.Windows.Forms.Padding(6);
             this.cbBitSize.Name = "cbBitSize";
@@ -295,7 +371,8 @@ namespace BitsViewer
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.stlPosition});
+            this.stlPosition,
+            this.strValue});
             this.statusStrip1.Location = new System.Drawing.Point(0, 860);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 28, 0);
@@ -305,9 +382,11 @@ namespace BitsViewer
             // 
             // stlPosition
             // 
+            this.stlPosition.AutoSize = false;
             this.stlPosition.Name = "stlPosition";
-            this.stlPosition.Size = new System.Drawing.Size(125, 32);
+            this.stlPosition.Size = new System.Drawing.Size(320, 32);
             this.stlPosition.Text = "Offset: 0 0";
+            this.stlPosition.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // dlgFile
             // 
@@ -323,32 +402,11 @@ namespace BitsViewer
             this.panel1.Size = new System.Drawing.Size(873, 860);
             this.panel1.TabIndex = 4;
             // 
-            // label4
+            // strValue
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 201);
-            this.label4.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(69, 25);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "Offset";
-            // 
-            // cbOffset
-            // 
-            this.cbOffset.CausesValidation = false;
-            this.cbOffset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbOffset.FormattingEnabled = true;
-            this.cbOffset.Items.AddRange(new object[] {
-            "0",
-            "1",
-            "2",
-            "3"});
-            this.cbOffset.Location = new System.Drawing.Point(104, 198);
-            this.cbOffset.Margin = new System.Windows.Forms.Padding(6);
-            this.cbOffset.Name = "cbOffset";
-            this.cbOffset.Size = new System.Drawing.Size(126, 33);
-            this.cbOffset.TabIndex = 11;
-            this.cbOffset.SelectedIndexChanged += new System.EventHandler(this.cbOffset_SelectedIndexChanged);
+            this.strValue.Name = "strValue";
+            this.strValue.Size = new System.Drawing.Size(85, 32);
+            this.strValue.Text = "Value: ";
             // 
             // frmMain
             // 
@@ -403,6 +461,12 @@ namespace BitsViewer
         private System.Windows.Forms.ComboBox cbWordSize;
         private System.Windows.Forms.ComboBox cbOffset;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ListView lvDump;
+        private System.Windows.Forms.ColumnHeader clAddress;
+        private System.Windows.Forms.ColumnHeader clByteDec;
+        private System.Windows.Forms.ColumnHeader chByteHex;
+        private System.Windows.Forms.ColumnHeader clBits;
+        private System.Windows.Forms.ToolStripStatusLabel strValue;
     }
 }
 
