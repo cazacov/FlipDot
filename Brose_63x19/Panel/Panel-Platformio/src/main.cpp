@@ -4,7 +4,7 @@
 #include "panelCommands.h"
 #include "CommandProcessor.h"
 
-#define panelNumber 14    // I2C port number that the panel listens to
+#define panelNumber 12    // I2C port number that the panel listens to
 
 CommandProcessor command_processor(panelNumber);
 
