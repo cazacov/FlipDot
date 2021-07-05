@@ -46,7 +46,8 @@ namespace FontExporter
                 {
                     var targetDir = args[1];
                     var fontName = $"bus_{font.FontCode}_{refChar.Width}x{maxHeight}";
-                    exporter.Export(System.IO.Path.Combine(targetDir, fontName) + ".h", fontName, font, refChar);
+                    var fileBase = System.IO.Path.Combine(targetDir, fontName);
+                    exporter.Export( fileBase+ ".h", fileBase + ".png", fontName, font, refChar);
                     Console.WriteLine($" -> {fontName}");
                 }
                 else
