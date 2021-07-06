@@ -1,7 +1,5 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
-using System.Net.Mime;
 
 namespace FontExporter
 {
@@ -18,12 +16,28 @@ namespace FontExporter
             var parser = new FontsParser();
             var exporter = new AdafruitFontExporter();
 
-            if (!System.IO.Directory.Exists(args[1]))
+            if (args.Length < 3)
             {
-                System.IO.Directory.CreateDirectory(args[1]);
+                Console.Error.WriteLine("FontExporter.exe VERB ROMfile outputDir [parameters]");
+                return -1;
             }
-            
-            var bytes = System.IO.File.ReadAllBytes(args[0]);
+
+            var verb = args[0].ToLower();
+
+            if (verb != "preview" && verb != "export")
+            {
+                Console.Error.WriteLine("Supported verbs: PREVIEW | EXPORT");
+                return -1;
+            }
+
+            var romFile = args[1];
+            var outputDir = args[2];
+            if (!System.IO.Directory.Exists(outputDir))
+            {
+                System.IO.Directory.CreateDirectory(outputDir);
+            }
+
+            var bytes = System.IO.File.ReadAllBytes(romFile);
             parser.Parse(bytes);
 
             foreach (var font in parser.Fonts.Values)
@@ -32,9 +46,9 @@ namespace FontExporter
                 var minCode = font.Characters.Values.Min(x => x.Code);
                 var maxCode = font.Characters.Values.Max(x => x.Code);
                 Character refChar;
-                if (font.Characters.ContainsKey(65))
+                if (font.Characters.ContainsKey(48))
                 {
-                    refChar = font.Characters[65];
+                    refChar = font.Characters[48];
                 }
                 else
                 {
@@ -42,12 +56,11 @@ namespace FontExporter
                 }
                 Console.Write($"{font.FontCode} - {font.Characters.Count}  [{minCode}-{maxCode}]");
 
-                if (font.Characters.Count > 20)
+                if (verb == "preview" && font.Characters.Count > 10)
                 {
-                    var targetDir = args[1];
                     var fontName = $"bus_{font.FontCode}_{refChar.Width}x{maxHeight}";
-                    var fileBase = System.IO.Path.Combine(targetDir, fontName);
-                    exporter.Export( fileBase+ ".h", fileBase + ".png", fontName, font, refChar);
+                    var fileBase = System.IO.Path.Combine(outputDir, fontName);
+                    exporter.Preview( fileBase + ".png", font, refChar);
                     Console.WriteLine($" -> {fontName}");
                 }
                 else

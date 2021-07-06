@@ -12,7 +12,7 @@ namespace FontExporter
         private const int PREVIEW_Y = 128;
         private const int PIXEL_SIZE = 4;
 
-        public void Export(string headerFileName, string previewFileName, string fontName, Font font, Character refChar)
+        public void Preview(string previewFileName, Font font, Character refChar)
         {
             var cols = 8;
             var rows = (font.Characters.Count - 1) / 8 + 1;
@@ -36,7 +36,8 @@ namespace FontExporter
                         var frame = new Rectangle(col * PREVIEW_X, row * PREVIEW_Y, PREVIEW_X-1, PREVIEW_Y-1);
                         gr.DrawRectangle(Pens.Gray, frame);
                         var rect = new Rectangle(col * PREVIEW_X, (row  + 1)* PREVIEW_Y - 18 , PREVIEW_X-1, 18);
-                        gr.DrawString(ch.Code.ToString(), ft, Brushes.Cyan, rect, stringFormat);
+                        var charDesc = $"{ch.Code} {ch.Width}x{ch.Height}";
+                        gr.DrawString(charDesc, ft, Brushes.Cyan, rect, stringFormat);
 
                         var x0 = PREVIEW_X / 2 - ch.Width * PIXEL_SIZE  / 2 + col * PREVIEW_X;
                         var y0 = row * PREVIEW_Y + 4;
