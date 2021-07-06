@@ -1,8 +1,11 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
 
 namespace FontExporter
 {
@@ -66,6 +69,121 @@ namespace FontExporter
 
 
 
+        }
+
+        public void Export(string fileName, Font font, string fontName, Character refChar, int fromChar, int toChar,
+            int advance)
+        {
+            var rc = CharPlaceholder(refChar);
+
+            var bitmaps = new List<int>();
+            var glyphs = new List<List<int>>();
+
+            if (toChar < 0)
+            {
+                toChar = font.Characters.Values.Max(x => x.Code);
+            }
+
+            var height = font.Characters.Values
+                .Where(x => x.Code >= fromChar && x.Code <= toChar)
+                .Max(x => x.Height);
+
+            using (var sr = new StreamWriter(fileName))
+            {
+                sr.WriteLine($"const uint8_t {fontName}Bitmaps[] PROGMEM = {{");
+
+                for (var ch = fromChar; ch <= toChar; ch++)
+                {
+                    Character character;
+                    if (!font.Characters.TryGetValue(ch, out character))
+                    {
+                        character = refChar;
+                    }
+
+                    var data = GetPixels(character.Bits, character.Width, height);
+                    var glyph = new List<int>();
+                    glyph.Add(character.Code);
+                    glyph.Add(bitmaps.Count); // bitmap index
+                    glyph.Add(character.Width);
+                    glyph.Add(height);
+                    glyph.Add(character.Width + advance);
+                    glyph.Add(0);
+                    glyph.Add(-character.Height - 1);
+                    bitmaps.AddRange(data);
+                    glyphs.Add(glyph);
+                    var bytes = String.Join(", ", data.ConvertAll(x => "0x" + x.ToString("X2"))) + ",";
+                    sr.WriteLine($"\t{bytes}  // {character.Code}" );
+                }
+                sr.WriteLine("};");
+
+                sr.WriteLine();
+                sr.WriteLine($"const GFXglyph {fontName}Glyphs[] PROGMEM = {{");
+                foreach (var glyph in glyphs)
+                {
+                    var glStr = String.Join(", ", glyph.ConvertAll(x => x.ToString()).Skip(1));
+                    sr.WriteLine($"\t{{ {glStr} }}, \t // 0x{glyph[0]:X2}");
+                }
+                sr.WriteLine("}");
+
+                sr.WriteLine($"const GFXfont {fontName} PROGMEM = {{(uint8_t*){fontName}Bitmaps,\n\t(GFXglyph *){fontName}Glyphs,\n\t 0x{fromChar:X2},0x{toChar:X2},{height+1}}}; ");
+            }
+        }
+
+        private List<int> GetPixels(bool[,] bits, int width, int height)
+        {
+            var shift = 7;
+            var result = new List<int>();
+            var acc = 0;
+
+            for (var y = 0; y < height; y++)
+            {
+                for (var x = 0; x < width; x++)
+                {
+                    if (bits[y, x])
+                    {
+                        acc += 1 << shift;
+                    }
+                    shift--;
+                    if (shift >= 0)
+                    {
+                        continue;
+                    }
+                    shift = 7;
+                    result.Add(acc);
+                    acc = 0;
+                }
+            }
+
+            if (shift != 7)
+            {
+                result.Add(acc);
+            }
+            return result;
+        }
+
+        private Character CharPlaceholder(Character refChar)
+        {
+            var result = new Character()
+            {
+                Bits = new bool[refChar.Height, refChar.Width],
+                Code = 0,
+                FontCode = 0,
+                Height = refChar.Height,
+                Width = refChar.Width
+            };
+
+            for (int x = 0; x < result.Width; x++)
+            {
+                result.Bits[0, x] = true;
+                result.Bits[result.Height - 1, x] = true;
+            }
+
+            for (var y = 0; y < result.Height; y++)
+            {
+                result.Bits[y, 0] = true;
+                result.Bits[y, result.Width - 1] = true;
+            }
+            return result;
         }
     }
 }

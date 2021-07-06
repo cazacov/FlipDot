@@ -40,6 +40,29 @@ namespace FontExporter
             var bytes = System.IO.File.ReadAllBytes(romFile);
             parser.Parse(bytes);
 
+            var fontCode = parser.Fonts.Values.First().FontCode;
+            var fromChar = 32;
+            var toChar = -1;
+            var advance = 1;
+
+            if (args.Length > 3)
+            {
+                Int32.TryParse(args[3], out fontCode);
+            }
+            if (args.Length > 4)
+            {
+                Int32.TryParse(args[4], out fromChar);
+            }
+            if (args.Length > 5)
+            {
+                Int32.TryParse(args[5], out toChar);
+            }
+            if (args.Length > 6)
+            {
+                Int32.TryParse(args[6], out advance);
+            }
+
+
             foreach (var font in parser.Fonts.Values)
             {
                 var maxHeight = font.Characters.Values.Max(x => x.Height);
@@ -56,12 +79,17 @@ namespace FontExporter
                 }
                 Console.Write($"{font.FontCode} - {font.Characters.Count}  [{minCode}-{maxCode}]");
 
+                var fontName = $"bus_{font.FontCode}_{refChar.Width}x{maxHeight}";
+                var fileBase = System.IO.Path.Combine(outputDir, fontName);
                 if (verb == "preview" && font.Characters.Count > 10)
                 {
-                    var fontName = $"bus_{font.FontCode}_{refChar.Width}x{maxHeight}";
-                    var fileBase = System.IO.Path.Combine(outputDir, fontName);
                     exporter.Preview( fileBase + ".png", font, refChar);
-                    Console.WriteLine($" -> {fontName}");
+                    Console.WriteLine($" PREVIEW {fontName}");
+                }
+                else if (verb == "export" && font.FontCode == fontCode)
+                {
+                    exporter.Export(fileBase + ".h", font, fontName, refChar, fromChar, toChar, advance);
+                    Console.WriteLine($" EXPORT {fontName}");
                 }
                 else
                 {
