@@ -118,7 +118,7 @@ namespace FontExporter
                     glyph.Add(character.Height);
                     glyph.Add(character.Width + advance);
                     glyph.Add(0);
-                    glyph.Add(-(height - 1));
+                    glyph.Add(  isPlaceholder ? 0 : -(height - 1));
                     glyphs.Add(glyph);
 
                     bitmaps.AddRange(data);

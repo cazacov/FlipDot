@@ -69,7 +69,11 @@ namespace FontExporter
                 var minCode = font.Characters.Values.Min(x => x.Code);
                 var maxCode = font.Characters.Values.Max(x => x.Code);
                 Character refChar;
-                if (font.Characters.ContainsKey(48))
+                if (font.Characters.ContainsKey(66))
+                {
+                    refChar = font.Characters[66];
+                }
+                else if (font.Characters.ContainsKey(48))
                 {
                     refChar = font.Characters[48];
                 }
