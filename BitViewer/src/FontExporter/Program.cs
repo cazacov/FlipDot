@@ -79,7 +79,7 @@ namespace FontExporter
                 }
                 Console.Write($"{font.FontCode} - {font.Characters.Count}  [{minCode}-{maxCode}]");
 
-                var fontName = $"bus_{font.FontCode}_{refChar.Width}x{maxHeight}";
+                var fontName = $"bus_{font.FontCode}_{refChar.Width}x{refChar.Height}";
                 var fileBase = System.IO.Path.Combine(outputDir, fontName);
                 if (verb == "preview" && font.Characters.Count > 10)
                 {

@@ -74,7 +74,7 @@ namespace FontExporter
         public void Export(string fileName, Font font, string fontName, Character refChar, int fromChar, int toChar,
             int advance)
         {
-            var rc = CharPlaceholder(refChar);
+            var rc = CharPlaceholderUnderscore(refChar);
 
             var bitmaps = new List<int>();
             var glyphs = new List<List<int>>();
@@ -84,9 +84,15 @@ namespace FontExporter
                 toChar = font.Characters.Values.Max(x => x.Code);
             }
 
+            /*
             var height = font.Characters.Values
                 .Where(x => x.Code >= fromChar && x.Code <= toChar)
                 .Max(x => x.Height);
+            */
+
+            var height = refChar.Height;
+
+            var refCharIndex = -1;
 
             using (var sr = new StreamWriter(fileName))
             {
@@ -94,25 +100,31 @@ namespace FontExporter
 
                 for (var ch = fromChar; ch <= toChar; ch++)
                 {
+                    bool isPlaceholder = false;
+                    var bitmapIndex = bitmaps.Count;
+
                     Character character;
                     if (!font.Characters.TryGetValue(ch, out character))
                     {
-                        character = refChar;
+                        character = rc;
+                        isPlaceholder = true;
                     }
 
-                    var data = GetPixels(character.Bits, character.Width, height);
+                    var data = GetPixels(character.Bits, character.Width, character.Height);
                     var glyph = new List<int>();
                     glyph.Add(character.Code);
-                    glyph.Add(bitmaps.Count); // bitmap index
+                    glyph.Add(bitmapIndex); // bitmap index
                     glyph.Add(character.Width);
-                    glyph.Add(height);
+                    glyph.Add(character.Height);
                     glyph.Add(character.Width + advance);
                     glyph.Add(0);
-                    glyph.Add(-character.Height - 1);
-                    bitmaps.AddRange(data);
+                    glyph.Add(-(height - 1));
                     glyphs.Add(glyph);
+
+                    bitmaps.AddRange(data);
                     var bytes = String.Join(", ", data.ConvertAll(x => "0x" + x.ToString("X2"))) + ",";
-                    sr.WriteLine($"\t{bytes}  // {character.Code}" );
+                    sr.WriteLine($"\t{bytes}  // {character.Code}");
+                    
                 }
                 sr.WriteLine("};");
 
@@ -161,7 +173,7 @@ namespace FontExporter
             return result;
         }
 
-        private Character CharPlaceholder(Character refChar)
+        private Character CharPlaceholderBox(Character refChar)
         {
             var result = new Character()
             {
@@ -182,6 +194,24 @@ namespace FontExporter
             {
                 result.Bits[y, 0] = true;
                 result.Bits[y, result.Width - 1] = true;
+            }
+            return result;
+        }
+
+        private Character CharPlaceholderUnderscore(Character refChar)
+        {
+            var result = new Character()
+            {
+                Bits = new bool[1, refChar.Width],
+                Code = 0,
+                FontCode = 0,
+                Height = 1,
+                Width = refChar.Width
+            };
+
+            for (int x = 0; x < result.Width; x++)
+            {
+                result.Bits[0, x] = true;
             }
             return result;
         }

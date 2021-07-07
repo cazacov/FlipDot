@@ -2,7 +2,7 @@
   "profiles": {
     "FontExporter": {
       "commandName": "Project",
-      "commandLineArgs": "EXPORT ..\\..\\..\\..\\..\\data\\P28F010@DIP32.BIN ..\\..\\..\\..\\..\\fonts 171 48 57 1"
+      "commandLineArgs": "PREVIEW ..\\..\\..\\..\\..\\data\\P28F010@DIP32.BIN ..\\..\\..\\..\\..\\fonts 169 32 225 1"
     }
   }
 }
