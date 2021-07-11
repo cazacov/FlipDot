@@ -44,6 +44,7 @@ namespace FontExporter
             var fromChar = 32;
             var toChar = -1;
             var advance = 1;
+            var namePrefix = "";
 
             if (args.Length > 3)
             {
@@ -60,6 +61,10 @@ namespace FontExporter
             if (args.Length > 6)
             {
                 Int32.TryParse(args[6], out advance);
+            }
+            if (args.Length > 7)
+            {
+                namePrefix = args[7];
             }
 
 
@@ -83,7 +88,16 @@ namespace FontExporter
                 }
                 Console.Write($"{font.FontCode} - {font.Characters.Count}  [{minCode}-{maxCode}]");
 
-                var fontName = $"bus_{font.FontCode}_{refChar.Width}x{refChar.Height}";
+                var fontName = $"{font.FontCode}_{refChar.Width}x{refChar.Height}";
+                if (!String.IsNullOrEmpty(namePrefix))
+                {
+                    fontName = namePrefix +"_" + fontName;
+                }
+                else
+                {
+                    fontName = "bus_" + fontName;
+                }
+
                 var fileBase = System.IO.Path.Combine(outputDir, fontName);
                 if (verb == "preview" && font.Characters.Count > 10)
                 {

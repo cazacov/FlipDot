@@ -1,4 +1,4 @@
-const uint8_t bus_171_6x15Bitmaps[] PROGMEM = {
+const uint8_t bus_numbers_171_6x15Bitmaps[] PROGMEM = {
 	0x7B, 0xFC, 0xF3, 0xCF, 0x3C, 0xF3, 0xCF, 0x3C, 0xF3, 0xCF, 0xF7, 0x80,  // 48
 	0x37, 0xFF, 0x33, 0x33, 0x33, 0x33, 0x33, 0x30,  // 49
 	0x7B, 0xFC, 0xC3, 0x0C, 0x73, 0x9C, 0xE3, 0x0C, 0x30, 0xC3, 0xFF, 0xC0,  // 50
@@ -11,7 +11,7 @@ const uint8_t bus_171_6x15Bitmaps[] PROGMEM = {
 	0x7B, 0xFC, 0xF3, 0xCF, 0x3F, 0xDF, 0x0C, 0x30, 0xC3, 0xCF, 0xF7, 0x80,  // 57
 };
 
-const GFXglyph bus_171_6x15Glyphs[] PROGMEM = {
+const GFXglyph bus_numbers_171_6x15Glyphs[] PROGMEM = {
 	{ 0, 6, 15, 8, 1, -14 }, 	 // 0x30
 	{ 12, 4, 15, 6, 1, -14 }, 	 // 0x31
 	{ 20, 6, 15, 8, 1, -14 }, 	 // 0x32
@@ -23,6 +23,8 @@ const GFXglyph bus_171_6x15Glyphs[] PROGMEM = {
 	{ 92, 6, 15, 8, 1, -14 }, 	 // 0x38
 	{ 104, 6, 15, 8, 1, -14 }, 	 // 0x39
 }
-const GFXfont bus_171_6x15 PROGMEM = {(uint8_t*)bus_171_6x15Bitmaps,
-	(GFXglyph *)bus_171_6x15Glyphs,
+const GFXfont bus_numbers_171_6x15 PROGMEM = {(uint8_t*)bus_numbers_171_6x15Bitmaps,
+	(GFXglyph *)bus_numbers_171_6x15Glyphs,
 	 0x30,0x39,16}; 
+
+// Font #171, characters from 48 to 57, advance 2

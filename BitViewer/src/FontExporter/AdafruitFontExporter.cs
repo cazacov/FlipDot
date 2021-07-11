@@ -91,8 +91,7 @@ namespace FontExporter
             */
 
             var height = refChar.Height;
-
-            var refCharIndex = -1;
+            var maxHeight = height;
 
             using (var sr = new StreamWriter(fileName))
             {
@@ -124,7 +123,11 @@ namespace FontExporter
                     bitmaps.AddRange(data);
                     var bytes = String.Join(", ", data.ConvertAll(x => "0x" + x.ToString("X2"))) + ",";
                     sr.WriteLine($"\t{bytes}  // {character.Code}");
-                    
+
+                    if (character.Height > maxHeight)
+                    {
+                        maxHeight = character.Height;
+                    }
                 }
                 sr.WriteLine("};");
 
@@ -137,7 +140,16 @@ namespace FontExporter
                 }
                 sr.WriteLine("}");
 
-                sr.WriteLine($"const GFXfont {fontName} PROGMEM = {{(uint8_t*){fontName}Bitmaps,\n\t(GFXglyph *){fontName}Glyphs,\n\t 0x{fromChar:X2},0x{toChar:X2},{height+1}}}; ");
+                var lineHeight = height + 1;
+                if (maxHeight > lineHeight)
+                {
+                    lineHeight = maxHeight;
+                }
+
+                sr.WriteLine($"const GFXfont {fontName} PROGMEM = {{(uint8_t*){fontName}Bitmaps,\n\t(GFXglyph *){fontName}Glyphs,\n\t 0x{fromChar:X2},0x{toChar:X2},{lineHeight}}}; ");
+
+                sr.WriteLine();
+                sr.WriteLine($"// Font #{font.FontCode}, characters from {fromChar} to {toChar}, advance {advance}");
             }
         }
 
