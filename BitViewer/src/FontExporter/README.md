@@ -9,7 +9,7 @@ EXPORT ..\..\..\..\..\data\P28F010@DIP32.BIN ..\..\..\..\..\fonts 161 32 230 2 b
 
 EXPORT ..\..\..\..\..\data\P28F010@DIP32.BIN ..\..\..\..\..\fonts 162 32 225 2 bus
 
-EXPORT ..\..\..\..\..\data\P28F010@DIP32.BIN ..\..\..\..\..\fonts 163 32 225 1 bus 
+EXPORT ..\..\..\..\..\data\P28F010@DIP32.BIN ..\..\..\..\..\fonts 163 32 225 2 bus 
 
 EXPORT ..\..\..\..\..\data\P28F010@DIP32.BIN ..\..\..\..\..\fonts 164 32 225 1 bus 
 

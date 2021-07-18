@@ -138,7 +138,8 @@ namespace FontExporter
                     var glStr = String.Join(", ", glyph.ConvertAll(x => x.ToString()).Skip(1));
                     sr.WriteLine($"\t{{ {glStr} }}, \t // 0x{glyph[0]:X2}");
                 }
-                sr.WriteLine("}");
+                sr.WriteLine("};");
+                sr.WriteLine();
 
                 var lineHeight = height + 1;
                 if (maxHeight > lineHeight)

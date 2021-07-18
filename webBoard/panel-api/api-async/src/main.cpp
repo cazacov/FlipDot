@@ -144,6 +144,7 @@ void setup() {
   delay(500);
 
   // Initialize WiFi connection
+  display.setCursor(5,2);
   display.print("Connecting WiFi...");
   display.update();
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
@@ -162,9 +163,9 @@ void setup() {
   Serial.print("Got IP: ");
   Serial.println(WiFi.localIP());  //Show ESP32 IP on serial
   display.cls();
-  display.setCursor(0,0);
+  display.setCursor(5,1);
   display.print("Online");
-  display.setCursor(0,8);
+  display.setCursor(5,10);
   display.print("IP:");
   display.print(WiFi.localIP());
   display.update(); 
