@@ -50,7 +50,7 @@ POST http://192.168.178.61/textBig
 content-type: application/json
 
 {
-  text: "     Victor++"
+  text: "01234567890123"
 }
 
 ### POST small text

@@ -12,14 +12,18 @@
 #include "secrets.h"
 #include "base64.h"
 
+#include "fonts/bus_163_8x15.h"
+#include "fonts/bus_169_6x7.h"
+
 #include <string>
 
 #include "AsyncJson.h"
 #define ARDUINOJSON_ENABLE_STD_STRING 1
 #include <ArduinoJson.h>
 
-#include <Fonts/FreeSans9pt7b.h>
-#define BIG_FONT FreeSans9pt7b
+//#include <Fonts/FreeSans9pt7b.h>
+#define BIG_FONT bus_163_8x15
+#define SMALL_FONT bus_169_6x7
 
 
 const uint8_t PIN_SCL = 21;
@@ -82,11 +86,13 @@ AsyncCallbackJsonWebHandler* postTextSmallHandler = new AsyncCallbackJsonWebHand
   Serial.println(line2.c_str());
 
   display.cls();
-  display.setCursor(0,2);
+  display.setFont(&SMALL_FONT);
+  display.setCursor(0,8);
   display.print(line1.c_str());
-  display.setCursor(0,11);
+  display.setCursor(0,17);
   display.print(line2.c_str());
   display.update();
+  display.setFont();
 
   request->send(200, "application/json", "{ \"accepted\": true }");
 });
@@ -108,7 +114,7 @@ AsyncCallbackJsonWebHandler* postTextBigHandler = new AsyncCallbackJsonWebHandle
 
   display.cls();
   display.setFont(&BIG_FONT);
-  display.setCursor(0,15);
+  display.setCursor(0,17);
   display.print(text.c_str());
   display.update();
   display.setFont();
