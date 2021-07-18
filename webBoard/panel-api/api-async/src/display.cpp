@@ -4,6 +4,10 @@
 
 XantoI2C* xi2c;
 
+#define DISPLAY_WIDTH 140
+#define DISPLAY_HEIGHT 19
+#define FLIP_TIME 500
+
 void i2cWriteByteSoftware(uint8_t addr, uint8_t data) {
     xi2c->start();
     xi2c->writeByte(addr);
@@ -14,7 +18,7 @@ void i2cWriteByteSoftware(uint8_t addr, uint8_t data) {
 }
 
 Display::Display(uint8_t sda_pin, uint8_t scl_pin, uint8_t power_pin, uint8_t lamp_pin) : 
-    VM_IIC(112, 16, 500, i2cWriteByteSoftware),
+    VM_IIC(DISPLAY_WIDTH, DISPLAY_HEIGHT, FLIP_TIME, i2cWriteByteSoftware),
     display_pin(power_pin), 
     backlight_pin(lamp_pin), 
     i2c(scl_pin, sda_pin, 0),
@@ -25,7 +29,7 @@ Display::Display(uint8_t sda_pin, uint8_t scl_pin, uint8_t power_pin, uint8_t la
   setDisplayPower(false);
   setBacklightPower(false);
   xi2c = &i2c;
-  setModuleMapping(1,2,3,4);
+  setModuleMapping(1,2,3,4,5);
 }
 
 void Display::setDisplayPower(bool new_value) {
@@ -61,3 +65,10 @@ void Display::cls() {
   memset(frameBuffer, 0, frameBufferSize);
 }
 
+void Display::test() {
+  memset(frameBuffer, 0xFF, frameBufferSize);
+  update();
+  delay(1000);
+  memset(frameBuffer, 0, frameBufferSize);
+  update();
+}

@@ -23,4 +23,5 @@ public:
     std::vector<uint8_t> getPixels();
     void setPixels(std::vector<uint8_t> &newFrameBuffer);
     void cls(); // clear screen
+    void test(); // test all pixels
 };

@@ -42,5 +42,20 @@ POST http://192.168.178.61/textBig
 content-type: application/json
 
 {
-  text: "Hallo Welt!"
+  text: "  Hello World!"
+}
+
+### POST small text
+POST http://192.168.178.61/textBig
+content-type: application/json
+
+{
+  text: "     Victor++"
+}
+
+### POST small text
+POST http://192.168.178.61/test
+content-type: application/json
+
+{
 }

@@ -20,9 +20,6 @@
 
 #include <Fonts/FreeSans9pt7b.h>
 #define BIG_FONT FreeSans9pt7b
-//#include <FreeSans10pt7b.h>
-//#define BIG_FONT FreeSans10pt7b
-
 
 
 const uint8_t PIN_SCL = 21;
@@ -85,9 +82,9 @@ AsyncCallbackJsonWebHandler* postTextSmallHandler = new AsyncCallbackJsonWebHand
   Serial.println(line2.c_str());
 
   display.cls();
-  display.setCursor(0,0);
+  display.setCursor(0,2);
   display.print(line1.c_str());
-  display.setCursor(0,8);
+  display.setCursor(0,11);
   display.print(line2.c_str());
   display.update();
 
@@ -111,7 +108,7 @@ AsyncCallbackJsonWebHandler* postTextBigHandler = new AsyncCallbackJsonWebHandle
 
   display.cls();
   display.setFont(&BIG_FONT);
-  display.setCursor(0,14);
+  display.setCursor(0,15);
   display.print(text.c_str());
   display.update();
   display.setFont();
@@ -119,6 +116,11 @@ AsyncCallbackJsonWebHandler* postTextBigHandler = new AsyncCallbackJsonWebHandle
   request->send(200, "application/json", "{ \"accepted\": true }");
 });
 
+AsyncCallbackJsonWebHandler* postTestHandler = new AsyncCallbackJsonWebHandler("/test", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  Serial.println("Test");
+  display.test();
+  request->send(200, "application/json", "{ \"accepted\": true }");
+});
 
 void setup() {
   Serial.begin(115200);
@@ -195,6 +197,7 @@ void setup() {
   server.addHandler(postDataHandler);
   server.addHandler(postTextSmallHandler);
   server.addHandler(postTextBigHandler);
+  server.addHandler(postTestHandler);
 
   // attach filesystem root at URL /
   server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
