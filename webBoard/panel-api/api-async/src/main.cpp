@@ -114,7 +114,7 @@ AsyncCallbackJsonWebHandler* postTextBigHandler = new AsyncCallbackJsonWebHandle
 
   display.cls();
   display.setFont(&BIG_FONT);
-  display.setCursor(0,17);
+  display.setCursor(0,16);
   display.print(text.c_str());
   display.update();
   display.setFont();

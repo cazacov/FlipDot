@@ -390,7 +390,8 @@ const GFXglyph bus_170_4x7Glyphs[] PROGMEM = {
 	{ 419, 4, 1, 5, 0, 0 }, 	 // 0x00
 	{ 420, 4, 1, 5, 0, 0 }, 	 // 0x00
 	{ 421, 4, 7, 5, 0, -6 }, 	 // 0xE1
-}
+};
+
 const GFXfont bus_170_4x7 PROGMEM = {(uint8_t*)bus_170_4x7Bitmaps,
 	(GFXglyph *)bus_170_4x7Glyphs,
 	 0x20,0xE1,8}; 
