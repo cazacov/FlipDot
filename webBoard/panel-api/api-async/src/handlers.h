@@ -8,4 +8,7 @@ extern AsyncCallbackJsonWebHandler* postDataHandler;
 extern AsyncCallbackJsonWebHandler* postTextSmallHandler;
 extern AsyncCallbackJsonWebHandler* postTextBigHandler;
 extern AsyncCallbackJsonWebHandler* postTestHandler;
+extern AsyncCallbackJsonWebHandler* postStartAutomaton;
+
 void getStatusHandler(AsyncWebServerRequest* request);
+void notFoundHandler(AsyncWebServerRequest* request);

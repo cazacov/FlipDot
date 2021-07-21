@@ -9,26 +9,26 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <SPIFFS.h>
+#include <neotimer.h>
 
 #include "handlers.h"
 #include "secrets.h"
+#include "CellAutomaton.h"
 
 const uint8_t PIN_SCL = 21;
 const uint8_t PIN_SDA = 5;
 const uint8_t PIN_LAMP = 22;
 const uint8_t PIN_DISPLAY = 23;
 
-void onRequest(AsyncWebServerRequest *request){
-  //Handle Unknown Request
-  request->send(404);
-}
-
 //flag to use from web update to reboot the ESP
 bool shouldReboot = false;
 
 Display display(PIN_SDA, PIN_SCL, PIN_DISPLAY, PIN_LAMP);
+CellAutomaton automaton;
 
 AsyncWebServer server(80); 
+
+Neotimer mytimer = Neotimer(500);
 
 void setup() {
   Serial.begin(115200);
@@ -37,14 +37,9 @@ void setup() {
     Serial.println("An Error has occurred while mounting SPIFFS");
     return;
   }
-
-  delay(100);
-
   display.setDisplayPower(true);
   delay(200);
   display.clearDisplay();
-  delay(500);
-
   // Initialize WiFi connection
   display.setCursor(5,2);
   display.print("Connecting WiFi...");
@@ -57,11 +52,10 @@ void setup() {
       break;
     }
     Serial.println(status);
-    delay(1000);
+    delay(500);
   } while(true);
 
   Serial.println("");
-  Serial.println("WiFi connected successfully");
   Serial.print("Got IP: ");
   Serial.println(WiFi.localIP());  //Show ESP32 IP on serial
   display.cls();
@@ -97,6 +91,7 @@ void setup() {
   server.addHandler(postTextSmallHandler);
   server.addHandler(postTextBigHandler);
   server.addHandler(postTestHandler);
+  server.addHandler(postStartAutomaton);
 
   // attach filesystem root at URL /
   server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
@@ -104,18 +99,14 @@ void setup() {
   // Catch-All Handlers
   // Any request that can not find a Handler that canHandle it
   // ends in the callbacks below.
-  server.onNotFound([](AsyncWebServerRequest *request) {
-    if (request->method() == HTTP_OPTIONS) {
-      request->send(200);
-    } else {
-      request->send(404);
-    }
-  });
+  server.onNotFound(notFoundHandler);
 
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
   server.begin();
   Serial.println("HTTP server started");
   delay(100); 
+
+  mytimer.start();
 }
 
 void loop() {
@@ -123,6 +114,12 @@ void loop() {
     Serial.println("Rebooting...");
     delay(100);
     ESP.restart();
+  }
+
+  if(mytimer.repeat()){
+    if (automaton.isActive) {
+      automaton.nextStep(display); 
+    }
   }
 }
 

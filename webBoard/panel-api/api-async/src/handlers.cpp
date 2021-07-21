@@ -1,7 +1,9 @@
 #include "handlers.h"
 #include "base64.h"
 #include "display.h"
+#include "CellAutomaton.h"
 extern Display display;
+extern CellAutomaton automaton;
 
 #include "fonts/bus_163_8x15.h"
 #include "fonts/bus_169_6x7.h"
@@ -21,6 +23,7 @@ AsyncCallbackJsonWebHandler* postDataHandler = new AsyncCallbackJsonWebHandler("
   }
   const char* data64 = jsonDoc["frameBuffer"];
 
+  automaton.end(display);
   if (data64) {
     Serial.print("Got new frameBuffer: ");
     Serial.print(data64);
@@ -51,6 +54,7 @@ AsyncCallbackJsonWebHandler* postTextSmallHandler = new AsyncCallbackJsonWebHand
   Serial.println(line1.c_str());
   Serial.println(line2.c_str());
 
+  automaton.end(display);
   display.cls();
   display.setFont(&SMALL_FONT);
   display.setCursor(0,8);
@@ -78,6 +82,7 @@ AsyncCallbackJsonWebHandler* postTextBigHandler = new AsyncCallbackJsonWebHandle
   Serial.println("Text BIG");
   Serial.println(text.c_str());
 
+  automaton.end(display);
   display.cls();
   display.setFont(&BIG_FONT);
   display.setCursor(0,16);
@@ -89,6 +94,7 @@ AsyncCallbackJsonWebHandler* postTextBigHandler = new AsyncCallbackJsonWebHandle
 });
 
 AsyncCallbackJsonWebHandler* postTestHandler = new AsyncCallbackJsonWebHandler("/test", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  automaton.end(display);
   Serial.println("Test");
   display.test();
   request->send(200, "application/json", "{ \"accepted\": true }");
@@ -104,3 +110,17 @@ void getStatusHandler(AsyncWebServerRequest* request) {
     serializeJson(data, response);
     request->send(200, "application/json", response);
 };
+
+void notFoundHandler(AsyncWebServerRequest* request) {
+    if (request->method() == HTTP_OPTIONS) {
+      request->send(200);
+    } else {
+      request->send(404);
+    }
+};
+
+AsyncCallbackJsonWebHandler* postStartAutomaton = new AsyncCallbackJsonWebHandler("/automaton", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  Serial.println("Start automaton");
+  automaton.begin(display);
+  request->send(200, "application/json", "{ \"accepted\": true }");
+});

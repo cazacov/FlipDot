@@ -54,7 +54,7 @@ content-type: application/json
 }
 
 ### POST small text
-POST http://192.168.178.61/test
+POST http://192.168.178.61/automaton
 content-type: application/json
 
 {
