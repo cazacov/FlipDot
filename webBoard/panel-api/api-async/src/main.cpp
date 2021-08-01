@@ -90,6 +90,7 @@ void setup() {
   server.addHandler(postDataHandler);
   server.addHandler(postTextSmallHandler);
   server.addHandler(postTextBigHandler);
+  server.addHandler(postClsHandler);
   server.addHandler(postTestHandler);
   server.addHandler(postStartAutomaton);
 

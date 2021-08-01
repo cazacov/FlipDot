@@ -68,7 +68,4 @@ void Display::cls() {
 void Display::test() {
   memset(frameBuffer, 0xFF, frameBufferSize);
   update();
-  delay(1000);
-  memset(frameBuffer, 0, frameBufferSize);
-  update();
 }

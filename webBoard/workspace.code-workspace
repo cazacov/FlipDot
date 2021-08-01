@@ -17,7 +17,9 @@
 	"settings": {
 		"files.associations": {
 			"xlocale": "cpp",
-			"vector": "cpp"
+			"vector": "cpp",
+			"atomic": "cpp",
+			"bitset": "cpp"
 		}
 	}
 }

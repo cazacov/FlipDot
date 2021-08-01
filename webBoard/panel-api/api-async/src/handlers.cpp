@@ -124,3 +124,11 @@ AsyncCallbackJsonWebHandler* postStartAutomaton = new AsyncCallbackJsonWebHandle
   automaton.begin(display);
   request->send(200, "application/json", "{ \"accepted\": true }");
 });
+
+AsyncCallbackJsonWebHandler* postClsHandler = new AsyncCallbackJsonWebHandler("/cls", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  automaton.end(display);
+  Serial.println("CLS");
+  display.cls();
+  display.update();
+  request->send(200, "application/json", "{ \"accepted\": true }");
+});
