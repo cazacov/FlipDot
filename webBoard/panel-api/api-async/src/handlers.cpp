@@ -120,8 +120,19 @@ void notFoundHandler(AsyncWebServerRequest* request) {
 };
 
 AsyncCallbackJsonWebHandler* postStartAutomaton = new AsyncCallbackJsonWebHandler("/automaton", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  StaticJsonDocument<500> jsonDoc;
+  if (json.is<JsonArray>())
+  {
+    jsonDoc = json.as<JsonArray>();
+  }
+  else if (json.is<JsonObject>())
+  {
+    jsonDoc = json.as<JsonObject>();
+  }
+  std::string text = jsonDoc["closed"];
+  boolean isClosed = (text == "true");
   Serial.println("Start automaton");
-  automaton.begin(display);
+  automaton.begin(display, isClosed);
   request->send(200, "application/json", "{ \"accepted\": true }");
 });
 

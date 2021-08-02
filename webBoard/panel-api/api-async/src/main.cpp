@@ -28,7 +28,7 @@ CellAutomaton automaton;
 
 AsyncWebServer server(80); 
 
-Neotimer mytimer = Neotimer(500);
+Neotimer mytimer = Neotimer(250);
 
 void setup() {
   Serial.begin(115200);
