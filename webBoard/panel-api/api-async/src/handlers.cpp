@@ -4,6 +4,7 @@
 #include "CellAutomaton.h"
 extern Display display;
 extern CellAutomaton automaton;
+#include "utf2ascii.h"
 
 #include "fonts/bus_163_8x15.h"
 #include "fonts/bus_169_6x7.h"
@@ -46,8 +47,8 @@ AsyncCallbackJsonWebHandler* postTextSmallHandler = new AsyncCallbackJsonWebHand
   {
     jsonDoc = json.as<JsonObject>();
   }
-  std::string line1 = jsonDoc["line1"];
-  std::string line2 = jsonDoc["line2"];
+  String line1 = utf8ascii(jsonDoc["line1"]);
+  String line2 = utf8ascii(jsonDoc["line2"]);
 
 
   Serial.println("Text SMALL");
@@ -57,7 +58,7 @@ AsyncCallbackJsonWebHandler* postTextSmallHandler = new AsyncCallbackJsonWebHand
   automaton.end(display);
   display.cls();
   display.setFont(&SMALL_FONT);
-  display.setCursor(0,8);
+  display.setCursor(0,7);
   display.print(line1.c_str());
   display.setCursor(0,17);
   display.print(line2.c_str());
@@ -77,7 +78,8 @@ AsyncCallbackJsonWebHandler* postTextBigHandler = new AsyncCallbackJsonWebHandle
   {
     jsonDoc = json.as<JsonObject>();
   }
-  std::string text = jsonDoc["text"];
+  String text = utf8ascii(jsonDoc["text"]);
+  //text = utf8ascii(text);
 
   Serial.println("Text BIG");
   Serial.println(text.c_str());
