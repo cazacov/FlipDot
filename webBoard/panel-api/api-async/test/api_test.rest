@@ -34,7 +34,7 @@ content-type: application/json
 
 {
   line1: "Käsesoßenrührlöffel",
-  line2: "Rückvergrößerungsgerät"
+  line2: "ЗДРАВСТВУЙ МИР!"
 }
 
 ### POST small text
