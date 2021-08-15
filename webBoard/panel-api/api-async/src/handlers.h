@@ -7,6 +7,7 @@
 extern AsyncCallbackJsonWebHandler* postDataHandler;
 extern AsyncCallbackJsonWebHandler* postTextSmallHandler;
 extern AsyncCallbackJsonWebHandler* postTextBigHandler;
+extern AsyncCallbackJsonWebHandler* postBusHandler;
 extern AsyncCallbackJsonWebHandler* postClsHandler;
 extern AsyncCallbackJsonWebHandler* postTestHandler;
 extern AsyncCallbackJsonWebHandler* postStartAutomaton;

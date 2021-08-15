@@ -14,13 +14,11 @@ GET http://192.168.178.61/displayoff
 ### Get current picture
 GET http://192.168.178.61/status
 
-
-
 ### Get current picture
 GET http://192.168.178.61/data
 
 
-### Post new pixels
+### set picture (base64 encoded)
 POST http://192.168.178.61/data
 content-type: application/json
 
@@ -28,7 +26,16 @@ content-type: application/json
   "frameBuffer": "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++AA="
 }
 
-### POST small text
+### small text
+POST http://192.168.178.61/textSmall
+content-type: application/json
+
+{
+  line1: " Weeks of coding can save",
+  line2: "  you hours of planning"
+}
+
+### small text with regional characters
 POST http://192.168.178.61/textSmall
 content-type: application/json
 
@@ -37,7 +44,8 @@ content-type: application/json
   line2: "ЗДРАВСТВУЙ МИР!"
 }
 
-### POST small text
+
+### big text
 POST http://192.168.178.61/textBig
 content-type: application/json
 
@@ -45,23 +53,28 @@ content-type: application/json
   text: "  Hello World!"
 }
 
-### POST small text
-POST http://192.168.178.61/textBig
+### bus with route number
+POST http://192.168.178.61/bus
 content-type: application/json
 
 {
-  text: "  Guten Morgen"
+  route: 130,
+  line1: "S P A N D A U",
+  line2: "Nervenklinik"
 }
 
-### POST small text
-POST http://192.168.178.61/textBig
+### bus with glyph
+POST http://192.168.178.61/bus
 content-type: application/json
 
 {
-  text: "Süßölgefäß"
+  glyph: "tram",
+  line1: "ich verstehe immer",
+  line2: "nur Bahnhof"
 }
 
-### POST small text
+
+### long text
 POST http://192.168.178.61/textBig
 content-type: application/json
 
@@ -69,21 +82,21 @@ content-type: application/json
   text: "012345678901234"
 }
 
-### POST small text
+### POST game of life
 POST http://192.168.178.61/automaton
 content-type: application/json
 
 {
 }
 
-### POST Clear screen
+### clear screen
 POST http://192.168.178.61/cls
 content-type: application/json
 
 {
 }
 
-### POST test
+###  set all pixels
 POST http://192.168.178.61/test
 content-type: application/json
 
