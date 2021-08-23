@@ -13,7 +13,7 @@
 
 #include "handlers.h"
 #include "secrets.h"
-#include "CellAutomaton.h"
+#include "BaseAnimation.h"
 
 const uint8_t PIN_SCL = 21;
 const uint8_t PIN_SDA = 5;
@@ -24,7 +24,7 @@ const uint8_t PIN_DISPLAY = 23;
 bool shouldReboot = false;
 
 Display display(PIN_SDA, PIN_SCL, PIN_DISPLAY, PIN_LAMP);
-CellAutomaton automaton;
+BaseAnimation* animation = new BaseAnimation();
 
 AsyncWebServer server(80); 
 
@@ -93,7 +93,7 @@ void setup() {
   server.addHandler(postBusHandler);
   server.addHandler(postClsHandler);
   server.addHandler(postTestHandler);
-  server.addHandler(postStartAutomaton);
+  server.addHandler(postStartGameOfLife);
 
   // attach filesystem root at URL /
   server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
@@ -118,9 +118,9 @@ void loop() {
     ESP.restart();
   }
 
-  if(mytimer.repeat()){
-    if (automaton.isActive) {
-      automaton.nextStep(display); 
+  if(mytimer.repeat() && animation != NULL){
+    if (animation->isActive) {
+      animation->nextStep(display); 
     }
   }
 }

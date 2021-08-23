@@ -1,11 +1,13 @@
 #include "CellAutomaton.h"
 
-CellAutomaton::CellAutomaton() {
-    isActive = false;
-}
+CellAutomaton::~CellAutomaton() { }  
 
-void CellAutomaton::begin(Display &display, bool isClosed) {
-    this->isClosed = isClosed;
+void CellAutomaton::begin(Display &display...) {
+
+    va_list args;
+    va_start(args, display);
+
+    this->isClosed = false;// va_arg(args, bool);
     display.cls();
     //put_spaceship();
     put_gun(display, 25, -1);
@@ -17,11 +19,15 @@ void CellAutomaton::begin(Display &display, bool isClosed) {
     buffer = (bool*)malloc(bufferSize * sizeof(bool));
 
     isActive = true;
+
+    va_end(args);
 }
 
 void CellAutomaton::end(Display &display) {
     isActive = false;
-    free(buffer);
+    if (isActive) {
+        free(buffer);
+    }
 }
 
 void CellAutomaton::nextStep(Display &display) {

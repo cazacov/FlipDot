@@ -3,7 +3,7 @@
 #include "display.h"
 #include "CellAutomaton.h"
 extern Display display;
-extern CellAutomaton automaton;
+extern BaseAnimation* animation;
 #include "utf2ascii.h"
 
 #include "fonts/bus_163_8x15.h"
@@ -30,7 +30,7 @@ AsyncCallbackJsonWebHandler* postDataHandler = new AsyncCallbackJsonWebHandler("
   }
   const char* data64 = jsonDoc["frameBuffer"];
 
-  automaton.end(display);
+  animation->end(display);
   if (data64) {
     Serial.print("Got new frameBuffer: ");
     Serial.print(data64);
@@ -61,7 +61,7 @@ AsyncCallbackJsonWebHandler* postTextSmallHandler = new AsyncCallbackJsonWebHand
   Serial.println(line1.c_str());
   Serial.println(line2.c_str());
 
-  automaton.end(display);
+  animation->end(display);
   display.cls();
   display.setFont(&SMALL_FONT);
   display.setCursor(0,7);
@@ -90,7 +90,7 @@ AsyncCallbackJsonWebHandler* postTextBigHandler = new AsyncCallbackJsonWebHandle
   Serial.println("Text BIG");
   Serial.println(text.c_str());
 
-  automaton.end(display);
+  animation->end(display);
   display.cls();
   display.setFont(&BIG_FONT);
   display.setCursor(0,16);
@@ -102,7 +102,7 @@ AsyncCallbackJsonWebHandler* postTextBigHandler = new AsyncCallbackJsonWebHandle
 });
 
 AsyncCallbackJsonWebHandler* postTestHandler = new AsyncCallbackJsonWebHandler("/test", [](AsyncWebServerRequest *request, JsonVariant &json) {
-  automaton.end(display);
+  animation->end(display);
   Serial.println("Test");
   display.test();
   request->send(200, "application/json", "{ \"accepted\": true }");
@@ -127,7 +127,7 @@ void notFoundHandler(AsyncWebServerRequest* request) {
     }
 };
 
-AsyncCallbackJsonWebHandler* postStartAutomaton = new AsyncCallbackJsonWebHandler("/automaton", [](AsyncWebServerRequest *request, JsonVariant &json) {
+AsyncCallbackJsonWebHandler* postStartGameOfLife = new AsyncCallbackJsonWebHandler("/gameoflife", [](AsyncWebServerRequest *request, JsonVariant &json) {
   StaticJsonDocument<500> jsonDoc;
   if (json.is<JsonArray>())
   {
@@ -139,13 +139,20 @@ AsyncCallbackJsonWebHandler* postStartAutomaton = new AsyncCallbackJsonWebHandle
   }
   std::string text = jsonDoc["closed"];
   boolean isClosed = (text == "true");
-  Serial.println("Start automaton");
-  automaton.begin(display, isClosed);
+  Serial.println("Start animation");
+  
+  if (animation != NULL) {
+    delete animation;
+  }
+
+  animation = new CellAutomaton();
+  animation->begin(display, isClosed);
+ 
   request->send(200, "application/json", "{ \"accepted\": true }");
 });
 
 AsyncCallbackJsonWebHandler* postClsHandler = new AsyncCallbackJsonWebHandler("/cls", [](AsyncWebServerRequest *request, JsonVariant &json) {
-  automaton.end(display);
+  animation->end(display);
   Serial.println("CLS");
   display.cls();
   display.update();
@@ -167,7 +174,7 @@ AsyncCallbackJsonWebHandler* postBusHandler = new AsyncCallbackJsonWebHandler("/
   String line1 = utf8ascii(jsonDoc["line1"].as<String>());
   String line2 = utf8ascii(jsonDoc["line2"].as<String>());
 
-  automaton.end(display);
+  animation->end(display);
   display.cls();
 
   if (glyph != "null") {

@@ -10,7 +10,7 @@ extern AsyncCallbackJsonWebHandler* postTextBigHandler;
 extern AsyncCallbackJsonWebHandler* postBusHandler;
 extern AsyncCallbackJsonWebHandler* postClsHandler;
 extern AsyncCallbackJsonWebHandler* postTestHandler;
-extern AsyncCallbackJsonWebHandler* postStartAutomaton;
+extern AsyncCallbackJsonWebHandler* postStartGameOfLife;
 
 void getStatusHandler(AsyncWebServerRequest* request);
 void notFoundHandler(AsyncWebServerRequest* request);

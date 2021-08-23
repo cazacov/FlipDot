@@ -44,6 +44,24 @@ content-type: application/json
   line2: "ЗДРАВСТВУЙ МИР!"
 }
 
+### small text
+POST http://192.168.178.61/textSmall
+content-type: application/json
+
+{
+  line1: "I HAVE A FEELING WE'RE",
+  line2: "NOT IN KANSAS ANYMORE"
+}
+
+### small text
+POST http://192.168.178.61/textSmall
+content-type: application/json
+
+{
+  line1: "I'm sorry Dave,",
+  line2: "I'm afraid I can't do that"
+}
+
 
 ### big text
 POST http://192.168.178.61/textBig
@@ -83,7 +101,7 @@ content-type: application/json
 }
 
 ### POST game of life
-POST http://192.168.178.61/automaton
+POST http://192.168.178.61/gameoflife
 content-type: application/json
 
 {

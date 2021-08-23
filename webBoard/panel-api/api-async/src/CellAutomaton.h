@@ -1,15 +1,14 @@
 #pragma once
 
-#include "display.h"
+#include "BaseAnimation.h"
 
-class CellAutomaton {
+class CellAutomaton : public BaseAnimation {
 public:
-    bool isActive;
     bool isClosed;
-    CellAutomaton();
-    void begin(Display &display, bool isClosed = true);
+    void begin(Display &display...);
     void end(Display &display);
     void nextStep(Display &display);
+    ~CellAutomaton();
 private:
     bool* buffer;    
     int width;
