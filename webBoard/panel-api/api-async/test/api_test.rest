@@ -107,6 +107,14 @@ content-type: application/json
 {
 }
 
+### POST run pacman
+POST http://192.168.178.61/pacman
+content-type: application/json
+
+{
+}
+
+
 ### clear screen
 POST http://192.168.178.61/cls
 content-type: application/json

@@ -2,6 +2,7 @@
 #include "base64.h"
 #include "display.h"
 #include "CellAutomaton.h"
+#include "pacman.h"
 extern Display display;
 extern BaseAnimation* animation;
 #include "utf2ascii.h"
@@ -147,6 +148,29 @@ AsyncCallbackJsonWebHandler* postStartGameOfLife = new AsyncCallbackJsonWebHandl
 
   animation = new CellAutomaton();
   animation->begin(display, isClosed);
+ 
+  request->send(200, "application/json", "{ \"accepted\": true }");
+});
+
+AsyncCallbackJsonWebHandler* postRunPacman = new AsyncCallbackJsonWebHandler("/pacman", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  StaticJsonDocument<500> jsonDoc;
+  if (json.is<JsonArray>())
+  {
+    jsonDoc = json.as<JsonArray>();
+  }
+  else if (json.is<JsonObject>())
+  {
+    jsonDoc = json.as<JsonObject>();
+  }
+  
+  Serial.println("Run pacman");
+  
+  if (animation != NULL) {
+    delete animation;
+  }
+
+  animation = new Pacman();
+  animation->begin(display);
  
   request->send(200, "application/json", "{ \"accepted\": true }");
 });

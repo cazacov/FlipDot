@@ -28,7 +28,7 @@ BaseAnimation* animation = new BaseAnimation();
 
 AsyncWebServer server(80); 
 
-Neotimer mytimer = Neotimer(250);
+Neotimer mytimer = Neotimer(10);
 
 void setup() {
   Serial.begin(115200);
@@ -94,6 +94,7 @@ void setup() {
   server.addHandler(postClsHandler);
   server.addHandler(postTestHandler);
   server.addHandler(postStartGameOfLife);
+  server.addHandler(postRunPacman);
 
   // attach filesystem root at URL /
   server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
