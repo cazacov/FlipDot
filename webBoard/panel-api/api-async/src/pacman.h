@@ -5,7 +5,7 @@
 class Pacman : public BaseAnimation {
 public:
     bool isClosed;
-    void begin(Display &display...);
+    void begin(Display &display);
     void end(Display &display);
     void nextStep(Display &display);
     ~Pacman();

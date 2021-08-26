@@ -2,12 +2,10 @@
 
 CellAutomaton::~CellAutomaton() { }  
 
-void CellAutomaton::begin(Display &display...) {
+void CellAutomaton::begin(Display &display, bool isClosed) {
+    BaseAnimation::begin(display);
 
-    va_list args;
-    va_start(args, display);
-
-    this->isClosed = false;// va_arg(args, bool);
+    this->isClosed = isClosed;// va_arg(args, bool);
     display.cls();
     //put_spaceship();
     put_gun(display, 25, -1);
@@ -17,10 +15,6 @@ void CellAutomaton::begin(Display &display...) {
 
     int bufferSize = width * height;
     buffer = (bool*)malloc(bufferSize * sizeof(bool));
-
-    isActive = true;
-
-    va_end(args);
 }
 
 void CellAutomaton::end(Display &display) {

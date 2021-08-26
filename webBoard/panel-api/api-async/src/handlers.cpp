@@ -146,8 +146,9 @@ AsyncCallbackJsonWebHandler* postStartGameOfLife = new AsyncCallbackJsonWebHandl
     delete animation;
   }
 
-  animation = new CellAutomaton();
-  animation->begin(display, isClosed);
+  auto cellAnimation = new CellAutomaton();
+  animation = cellAnimation;
+  cellAnimation->begin(display, isClosed);
  
   request->send(200, "application/json", "{ \"accepted\": true }");
 });

@@ -2,18 +2,14 @@
 
 Pacman::~Pacman() { }  
 
-void Pacman::begin(Display &display...) {
-
-    va_list args;
-    va_start(args, display);
+void Pacman::begin(Display &display) {
+    BaseAnimation::begin(display);
 
     width = display.width();
     height = display.height();
 
     radius = height/2;
     pos = -radius;
-    isActive = true;
-    va_end(args);
 }
 
 void Pacman::end(Display &display) {
