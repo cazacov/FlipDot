@@ -3,6 +3,7 @@
 #include "display.h"
 #include "CellAutomaton.h"
 #include "pacman.h"
+#include "CounterAnimation.h"
 extern Display display;
 extern BaseAnimation* animation;
 #include "utf2ascii.h"
@@ -172,6 +173,34 @@ AsyncCallbackJsonWebHandler* postRunPacman = new AsyncCallbackJsonWebHandler("/p
 
   animation = new Pacman();
   animation->begin(display);
+ 
+  request->send(200, "application/json", "{ \"accepted\": true }");
+});
+
+AsyncCallbackJsonWebHandler* postStartCounter = new AsyncCallbackJsonWebHandler("/counter", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  StaticJsonDocument<500> jsonDoc;
+  if (json.is<JsonArray>())
+  {
+    jsonDoc = json.as<JsonArray>();
+  }
+  else if (json.is<JsonObject>())
+  {
+    jsonDoc = json.as<JsonObject>();
+  }
+  
+  Serial.println("Start Counter");
+  
+  if (animation != NULL) {
+
+    delete animation;
+  }
+  auto counterAnimation = new CounterAnimation();
+  animation = counterAnimation;
+  display.cls();
+  display.setFont(&BIG_FONT);
+  display.setCursor(0,16);
+  display.print("K8s costs");
+  counterAnimation->begin(display, 138, 123456);
  
   request->send(200, "application/json", "{ \"accepted\": true }");
 });

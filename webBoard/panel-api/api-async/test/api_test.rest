@@ -114,6 +114,13 @@ content-type: application/json
 {
 }
 
+### POST start counter
+POST http://192.168.178.61/counter
+content-type: application/json
+
+{
+}
+
 
 ### clear screen
 POST http://192.168.178.61/cls

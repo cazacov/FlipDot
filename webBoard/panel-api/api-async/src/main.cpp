@@ -95,6 +95,7 @@ void setup() {
   server.addHandler(postTestHandler);
   server.addHandler(postStartGameOfLife);
   server.addHandler(postRunPacman);
+  server.addHandler(postStartCounter);
 
   // attach filesystem root at URL /
   server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
