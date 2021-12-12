@@ -9,8 +9,8 @@ void NewYear::begin(Display &display) {
     height = display.height();
 
     for (int i = 0; i < SNOWFLAKES_COUNT; i++) {
-        snowflakes[i][0] = i*14 + random(9);
-        snowflakes[i][1] = 20 - random(19);
+        snowflakes[i][0] = display.width() / SNOWFLAKES_COUNT * i + 3 + random(7);
+        snowflakes[i][1] = -4 - random(28);
     }
     display.cls();
     display.update();
@@ -29,6 +29,7 @@ void NewYear::nextStep(Display &display) {
         snowflakes[i][1] += 1;
         int x = snowflakes[i][0];
         int y = snowflakes[i][1];
+        /*
         display.setDot(x-2, y+2, true);
         display.setDot(x-2, y-2, true);
         display.setDot(x-2, y+1, false);
@@ -43,17 +44,51 @@ void NewYear::nextStep(Display &display) {
         display.setDot(x+2, y-2, true);
         display.setDot(x+2, y+1, false);
         display.setDot(x+2, y-3, false);
+        */
 
-        if (y > display.height() + 2) {
+        display.setDot(x-3, y+3, true);
+        display.setDot(x-3, y-3, true);
+        display.setDot(x-3, y+2, false);
+        display.setDot(x-3, y-4, false);
+
+        display.setDot(x-2, y+2, true);
+        display.setDot(x-2, y-2, true);
+        display.setDot(x-2, y+1, false);
+        display.setDot(x-2, y-3, false);
+        
+        display.setDot(x-1, y+1, true);
+        display.setDot(x-1, y, false);
+        display.setDot(x-1, y-1, true);
+        display.setDot(x-1, y-2, false);
+
+        display.setDot(x,   y+4, true);
+        display.setDot(x,   y-5, false);
+
+        display.setDot(x+1, y+1, true);
+        display.setDot(x+1, y, false);
+        display.setDot(x+1, y-1, true);
+        display.setDot(x+1, y-2, false);
+        
+        display.setDot(x+2, y+2, true);
+        display.setDot(x+2, y-2, true);
+        display.setDot(x+2, y+1, false);
+        display.setDot(x+2, y-3, false);
+
+        display.setDot(x+3, y+3, true);
+        display.setDot(x+3, y-3, true);
+        display.setDot(x+3, y+2, false);
+        display.setDot(x+3, y-4, false);
+
+        if (y > display.height() + 3) {
             bool isValid = true;
             do {
                 isValid = true;
-                x = random(display.width());
+                x = 3 + random(display.width() - 9);
                 for (int j = 0; j < SNOWFLAKES_COUNT; j++) {
                     int sx = snowflakes[j][0];
                     int sy = snowflakes[j][1];
-                    if (abs(sx-x)<5) {
-                        if (abs(sy + 3) < 7)
+                    if (abs(sx-x)<8) {
+                        if (abs(sy + 3) < 9)
                         {
                             isValid = false;
                             break;
@@ -62,7 +97,7 @@ void NewYear::nextStep(Display &display) {
                 }
             } while (!isValid);
             snowflakes[i][0] = x;
-            snowflakes[i][1] = -3;
+            snowflakes[i][1] = -6 + random(3);
         }
     }
     display.update();

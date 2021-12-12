@@ -2,7 +2,7 @@
 
 #include "BaseAnimation.h"
 
-#define SNOWFLAKES_COUNT 10
+#define SNOWFLAKES_COUNT 7
 
 class NewYear : public BaseAnimation {
 public:
