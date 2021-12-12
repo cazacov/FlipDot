@@ -68,7 +68,7 @@ POST http://192.168.178.61/textBig
 content-type: application/json
 
 {
-  text: "  Hello World!"
+  text: " Gute Besserung!"
 }
 
 ### bus with route number
@@ -131,6 +131,13 @@ content-type: application/json
 
 ###  set all pixels
 POST http://192.168.178.61/test
+content-type: application/json
+
+{
+}
+
+###  Let it snow
+POST http://192.168.178.61/newyear
 content-type: application/json
 
 {

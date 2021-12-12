@@ -4,6 +4,7 @@
 #include "CellAutomaton.h"
 #include "pacman.h"
 #include "CounterAnimation.h"
+#include "newyearanimation.h"
 extern Display display;
 extern BaseAnimation* animation;
 #include "utf2ascii.h"
@@ -278,5 +279,28 @@ AsyncCallbackJsonWebHandler* postBusHandler = new AsyncCallbackJsonWebHandler("/
   display.update();
   display.setFont();
 
+  request->send(200, "application/json", "{ \"accepted\": true }");
+});
+
+AsyncCallbackJsonWebHandler* postStartNewYear = new AsyncCallbackJsonWebHandler("/newyear", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  StaticJsonDocument<500> jsonDoc;
+  if (json.is<JsonArray>())
+  {
+    jsonDoc = json.as<JsonArray>();
+  }
+  else if (json.is<JsonObject>())
+  {
+    jsonDoc = json.as<JsonObject>();
+  }
+  
+  Serial.println("Let it snow!");
+  
+  if (animation != NULL) {
+    delete animation;
+  }
+
+  animation = new NewYear();
+  animation->begin(display);
+ 
   request->send(200, "application/json", "{ \"accepted\": true }");
 });
