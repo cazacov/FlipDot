@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SnakeRunnerApp
@@ -72,12 +73,31 @@ namespace SnakeRunnerApp
         private void ShowWall()
         {
             Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("░░░");
+        }
+
+        private void ShowHit()
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("XXX");
         }
 
         public void Dispose()
         {
             Console.ResetColor();
+        }
+
+        public void ShowGameOver(List<Pos> snake)
+        {
+            var head = snake.Last();
+            Console.SetCursorPosition((head.X + 1) * 3, head.Y + 1);
+            ShowHit();
+        }
+
+
+        public void ShowGameWon(List<Pos> snake)
+        {
+            throw new NotImplementedException();
         }
     }
 }
