@@ -17,6 +17,7 @@ namespace SnakeRunnerApp
         public Direction snakeDirection;
 
         private Field field = new Field(width, height);
+        private PathFinder pathFinder = new PathFinder(width, height);
 
         public SnakeGame()
         {
@@ -132,7 +133,80 @@ namespace SnakeRunnerApp
 
         private Direction ChooseDirection()
         {
-            return Direction.Right;
+            var head = snake.Last();
+            //return Direction.Right;
+            var routeToApple = pathFinder.FindRoute(head, apple, snake);
+
+            if (routeToApple != null)
+            {
+                var newSnake = new List<Pos>(snake).Union(routeToApple).Skip(snake.Count).ToList();
+                var newTail = newSnake.First();
+                var routeToTail = pathFinder.FindRoute(apple, newTail, newSnake);
+                if (routeToTail != null)
+                {
+                    return DirectionTo(head, routeToApple.First());
+                }
+            }
+            var tail = snake.First();
+            var tailRoute = pathFinder.FindRoute(head, tail, snake);
+            if (tailRoute == null)
+            {
+                return FillArea(head);
+            }
+            else
+            {
+                return DirectionTo(head, tailRoute.First());
+            }
+        }
+
+        private Direction DirectionTo(Pos head, Pos next)
+        {
+            var allDirections = new List<Direction> { Direction.Down, Direction.Up, Direction.Left, Direction.Right };
+            foreach (var dir  in allDirections)
+            {
+                if (head.GoTo(dir) == next)
+                {
+                    return dir;
+                }
+            }
+            return Direction.Down;
+        }
+
+        private Direction FillArea(Pos head)
+        {
+            var allDirections = new List<Direction> { Direction.Down, Direction.Up, Direction.Left, Direction.Right };
+            allDirections.Remove(Opposite(this.snakeDirection));
+            var candidates = new List<Direction>(allDirections);
+            foreach (var dir in allDirections)
+            {
+                if (this.snake.Contains(head.GoTo(dir)))
+                {
+                    candidates.Remove(dir);
+                }
+            }
+
+            if (!candidates.Any())
+            {
+                return allDirections[random.Next(allDirections.Count)];
+            }
+            else
+            {
+                return candidates[random.Next(candidates.Count)];
+            }
+        }
+
+
+
+        private Direction Opposite(Direction direction)
+        {
+            return direction switch
+            {
+                Direction.Down => Direction.Up,
+                Direction.Up => Direction.Down,
+                Direction.Left => Direction.Right,
+                Direction.Right => Direction.Left,
+                _ => Direction.Down
+            };
         }
     }
 }
