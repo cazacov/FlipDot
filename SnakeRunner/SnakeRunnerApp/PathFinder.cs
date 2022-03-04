@@ -28,8 +28,8 @@ namespace SnakeRunnerApp
 
             while (active.Any())
             {
-                var current = active.OrderBy(x => x.CostDistance).First();
-                if (current == target)
+                var current = active.OrderBy(x => x.CostDistance).ThenBy(x => x.Distance).First();
+                if (Equals(current, finish))
                 {
                     var result = new List<PathPos>();
                     while (current.Parent != null)
@@ -37,6 +37,7 @@ namespace SnakeRunnerApp
                         result.Add(current);
                         current = current.Parent;
                     }
+                    result.Reverse();
                     return result.ConvertAll(x => x as Pos).ToList();
                 }
                 visited.Add(current);
@@ -49,7 +50,7 @@ namespace SnakeRunnerApp
                         continue;
                     }
 
-                    var act = active.FirstOrDefault(a => a == walkable);
+                    var act = active.FirstOrDefault(a => a.Equals(walkable));
                     if (act != null)
                     {
                         if (act.CostDistance > current.CostDistance)

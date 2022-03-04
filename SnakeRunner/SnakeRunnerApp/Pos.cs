@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace SnakeRunnerApp
 {
+    [DebuggerDisplay("{X},{Y}")]
     public class Pos
     {
         public int Y { get; set; }
@@ -49,6 +51,7 @@ namespace SnakeRunnerApp
         }
     }
 
+    [DebuggerDisplay("{X},{Y} - {CostDistance}")]
     public class PathPos: Pos
     {
         public PathPos(int X, int Y) : base(X, Y) {}
