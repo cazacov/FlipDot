@@ -65,7 +65,7 @@ namespace SnakeRunnerApp
                     }
                 }
             }
-            return new List<Pos>();
+            return null;
         }
 
         private List<PathPos> GetWalkableTiles(PathPos current, PathPos target, List<Pos> blocked)

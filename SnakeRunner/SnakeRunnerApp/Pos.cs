@@ -41,8 +41,8 @@ namespace SnakeRunnerApp
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((Pos)obj);
+            if (obj is not Pos pos) return false;
+            return Equals(pos);
         }
 
         public override int GetHashCode()
@@ -74,8 +74,8 @@ namespace SnakeRunnerApp
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((PathPos)obj);
+            if (obj is not Pos pos) return false;
+            return Equals(pos);
         }
 
         public override int GetHashCode()

@@ -47,7 +47,8 @@ namespace SnakeRunnerApp
             {
                 try
                 {
-                    var nextDir = ChooseDirection();
+                    field.SetPath(null);
+                     var nextDir = ChooseDirection();
                     MakeMove(nextDir);
                     if (GameIsLost())
                     {
@@ -59,7 +60,7 @@ namespace SnakeRunnerApp
                         break;
                     }
                     field.Show(snake, apple);
-                    await Task.Delay(1000, cancellationToken);
+                    await Task.Delay(100, cancellationToken);
                 }
                 catch (OperationCanceledException)
                 {
@@ -113,8 +114,9 @@ namespace SnakeRunnerApp
         {
             var head = snake.Last();
             var nextPos = head.GoTo(nextDir);
+            this.snakeDirection = nextDir;
             snake.Add(nextPos);
-            if (nextPos == apple)
+            if (nextPos.Equals(apple))
             {
                 if (snake.Count == width * height)
                 {
@@ -139,22 +141,25 @@ namespace SnakeRunnerApp
 
             if (routeToApple != null)
             {
-                var newSnake = new List<Pos>(snake).Union(routeToApple).Skip(snake.Count).ToList();
+                var newSnake = new List<Pos>(snake).Union(routeToApple).Skip(routeToApple.Count-1).ToList();
                 var newTail = newSnake.First();
+                newSnake.RemoveAt(0);
                 var routeToTail = pathFinder.FindRoute(apple, newTail, newSnake);
                 if (routeToTail != null)
                 {
+                    field.SetPath(routeToApple);
                     return DirectionTo(head, routeToApple.First());
                 }
             }
             var tail = snake.First();
-            var tailRoute = pathFinder.FindRoute(head, tail, snake);
+            var tailRoute = pathFinder.FindRoute(head, tail, snake.Skip(1).ToList());
             if (tailRoute == null)
             {
                 return FillArea(head);
             }
             else
             {
+                field.SetPath(tailRoute);
                 return DirectionTo(head, tailRoute.First());
             }
         }
@@ -164,7 +169,7 @@ namespace SnakeRunnerApp
             var allDirections = new List<Direction> { Direction.Down, Direction.Up, Direction.Left, Direction.Right };
             foreach (var dir  in allDirections)
             {
-                if (head.GoTo(dir) == next)
+                if (head.GoTo(dir).Equals(next))
                 {
                     return dir;
                 }
