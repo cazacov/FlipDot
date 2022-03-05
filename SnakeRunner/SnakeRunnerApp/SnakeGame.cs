@@ -18,6 +18,8 @@ namespace SnakeRunnerApp
 
         private Field field = new Field(width, height);
         private PathFinder pathFinder = new PathFinder(width, height);
+        private int score;
+        private int penalty;
 
         public SnakeGame()
         {
@@ -27,6 +29,7 @@ namespace SnakeRunnerApp
             };
             this.apple = PlaceApple(snake);
             snakeDirection = snake[0].Y > height / 2 ? Direction.Up : Direction.Down;
+            score = penalty = 0;
         }
 
         private Pos PlaceApple(List<Pos> snake)
@@ -126,10 +129,14 @@ namespace SnakeRunnerApp
                 {
                     apple = PlaceApple(snake);
                 }
+                score += 100 - penalty;
+                penalty = 0;
+                field.ShowScore(score);
             }
             else
             {
                 snake.RemoveAt(0);
+                penalty++;
             }
         }
 

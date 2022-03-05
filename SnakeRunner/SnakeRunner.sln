@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeRunnerApp", "SnakeRunnerApp\SnakeRunnerApp.csproj", "{7BFDB165-E004-493E-8208-E6B9859FAE5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SnakeRunnerApp", "SnakeRunnerApp\SnakeRunnerApp.csproj", "{7BFDB165-E004-493E-8208-E6B9859FAE5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{FE312732-FF21-46BF-8C49-BB79F23804D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7BFDB165-E004-493E-8208-E6B9859FAE5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BFDB165-E004-493E-8208-E6B9859FAE5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BFDB165-E004-493E-8208-E6B9859FAE5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE312732-FF21-46BF-8C49-BB79F23804D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE312732-FF21-46BF-8C49-BB79F23804D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE312732-FF21-46BF-8C49-BB79F23804D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE312732-FF21-46BF-8C49-BB79F23804D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

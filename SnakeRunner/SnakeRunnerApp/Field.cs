@@ -10,111 +10,76 @@ namespace SnakeRunnerApp
         private int width;
         private int height;
         private List<Pos> path = new List<Pos>();
+        private ConsoleRenderer renderer;
 
         public Field(int width, int height)
         {
             this.width = width;
             this.height = height;
+            this.renderer = new ConsoleRenderer(width+2, height+2);
         }
 
         public void Show(List<Pos> snake, Pos apple)
         {
-            Console.Clear();
-            Console.OutputEncoding = Encoding.UTF8; // System.Text.Encoding.GetEncoding(28591);
+            renderer.Begin();
+            var snakeHead = snake.Last();
             for (var i = 0; i < width + 2; i++)
             {
-                Console.SetCursorPosition(i * 3, 0);
-                ShowWall();
-                Console.SetCursorPosition(i * 3, height +1);
-                ShowWall();
+                renderer.Draw(i, 0, SnakeObject.Wall);
+                renderer.Draw(i, height+1, SnakeObject.Wall);
             }
             for (var y = 0; y < height; y++)
             {
-                Console.SetCursorPosition(0, y + 1);
-                ShowWall();
+                renderer.Draw(0, y+1, SnakeObject.Wall);
                 for (var x = 0; x < width; x++)
                 {
-                    GoTo(x, y);
-                    if (snake.Contains(new Pos(x, y)))
+                    var pos = new Pos(x, y);
+                    if (pos.Equals(snakeHead))
                     {
-                        ShowSnake();
+                        renderer.Draw(x + 1, y + 1, SnakeObject.SnakeHead);
                     }
-                    else if (path.Contains(new Pos(x,y)))
+                    else if (snake.Contains(pos))
                     {
-                        ShowPath();
+                        renderer.Draw(x+1, y+1, SnakeObject.SnakeBody);
                     }
-                    else if (apple.X == x && apple.Y == y)
+                    else if (path.Contains(pos))
                     {
-                        GoTo(x, y);
-                        ShowApple();
+                        renderer.Draw(x + 1, y + 1, SnakeObject.Path);
+                    }
+                    else if (pos.Equals(apple))
+                    {
+                        renderer.Draw(x + 1, y + 1, SnakeObject.Apple);
                     }
                     else
                     {
-                        ShowEmpty();
+                        renderer.Draw(x + 1, y + 1, SnakeObject.Empty);
                     }
                 }
-                Console.SetCursorPosition((width + 1) * 3, y + 1);
-                ShowWall();
+                renderer.Draw(width+1, y + 1, SnakeObject.Wall);
             }
-        }
-
-        private void GoTo(int x, int y)
-        {
-            Console.SetCursorPosition(x * 3 + 3, y + 1);
-        }
-
-        private void ShowEmpty()
-        {
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write(" . ");
-        }
-
-        private void ShowApple()
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("(o)");
-        }
-
-        private void ShowSnake()
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("▓▓▓");
-        }
-
-        private void ShowWall()
-        {
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write("░░░");
-        }
-
-        private void ShowHit()
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("XXX");
-        }
-
-        private void ShowPath()
-        {
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.Write("─┼─");
+            renderer.End();
         }
 
         public void Dispose()
         {
-            Console.ResetColor();
+            if (renderer != null)
+            {
+                renderer.Dispose();
+            }
+            this.renderer = null;
+            
         }
 
         public void ShowGameOver(List<Pos> snake)
         {
             var head = snake.Last();
-            Console.SetCursorPosition((head.X + 1) * 3, head.Y + 1);
-            ShowHit();
+            renderer.GameOver(head.X+1, head.Y+1);
         }
 
 
         public void ShowGameWon(List<Pos> snake)
         {
-            throw new NotImplementedException();
+            renderer.GameWon();
         }
 
         public void SetPath(List<Pos> newPath)
@@ -124,6 +89,11 @@ namespace SnakeRunnerApp
             {
                 this.path.AddRange(newPath.Take(newPath.Count - 1));
             }
+        }
+
+        public void ShowScore(int score)
+        {
+            renderer.ShowScore(score);
         }
     }
 }
