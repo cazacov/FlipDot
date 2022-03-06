@@ -36,8 +36,10 @@ AsyncCallbackJsonWebHandler* postDataHandler = new AsyncCallbackJsonWebHandler("
   animation->end(display);
   if (data64) {
     Serial.print("Got new frameBuffer: ");
-    Serial.print(data64);
+    Serial.println(data64);
     std::vector<uint8_t> frameBuffer = base64decode(data64);
+    Serial.print("Buffer size: ");
+    Serial.println(frameBuffer.size());
     display.setPixels(frameBuffer);
     request->send(200, "application/json", "{ \"accepted\": true }");
   }
@@ -78,7 +80,7 @@ AsyncCallbackJsonWebHandler* postTextSmallHandler = new AsyncCallbackJsonWebHand
 });
 
 AsyncCallbackJsonWebHandler* postTextBigHandler = new AsyncCallbackJsonWebHandler("/textBig", [](AsyncWebServerRequest *request, JsonVariant &json) {
-  StaticJsonDocument<500> jsonDoc;
+  StaticJsonDocument<600> jsonDoc;
   if (json.is<JsonArray>())
   {
     jsonDoc = json.as<JsonArray>();

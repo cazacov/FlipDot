@@ -23,7 +23,7 @@ POST http://192.168.178.61/data
 content-type: application/json
 
 {
-  "frameBuffer": "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++AA="
+  "frameBuffer": "AAAAAAAA///8AAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgCAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAUAAAAAAAAAAAAAAAAAAAA///8AAAAAAAAAAAA"
 }
 
 ### small text
@@ -61,7 +61,6 @@ content-type: application/json
   line1: "I'm sorry Dave,",
   line2: "I'm afraid I can't do that"
 }
-
 
 ### big text
 POST http://192.168.178.61/textBig

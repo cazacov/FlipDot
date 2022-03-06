@@ -59,6 +59,13 @@ void Display::setPixels(std::vector<uint8_t> &newFrameBuffer) {
     memcpy(frameBuffer, newFrameBuffer.data(), frameBufferSize);
     update();
   }
+  else {
+    Serial.println("Wrong buffer size");
+    Serial.print("Expected: ");
+    Serial.println(frameBufferSize);
+    Serial.print("Actual: ");
+    Serial.println(newFrameBuffer.size());
+  }
 }
 
 void Display::cls() {
