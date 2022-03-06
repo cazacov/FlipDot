@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace SnakeRunnerApp
 {
@@ -6,9 +7,10 @@ namespace SnakeRunnerApp
     {
         void Begin();
         void Draw(int x, int y, SnakeObject obj);
-        void End();
-        void GameOver(int x, int y);
-        void GameWon();
-        void ShowScore(int score);
+        Task End();
+        Task GameOver(int x, int y);
+        Task GameWon();
+        Task ShowScore(int score);
+        Task Clear();
     }
 }

@@ -16,13 +16,16 @@ namespace SnakeRunnerApp
         public Pos apple;
         public Direction snakeDirection;
 
-        private Field field = new Field(width, height);
+        private Field field;
         private PathFinder pathFinder = new PathFinder(width, height);
         private int score;
         private int penalty;
+        private readonly FlipDotRenderer renderer;
 
         public SnakeGame()
         {
+            this.renderer = new FlipDotRenderer(width + 2, height + 2, 140, 19, "http://192.168.178.61/");
+            field =  new Field(width, height, renderer);
             this.snake = new List<Pos>()
             {
                 new Pos(random.Next(width),random.Next(height))
@@ -45,6 +48,7 @@ namespace SnakeRunnerApp
 
         protected override async Task DoWorkAsync(CancellationToken cancellationToken)
         {
+            await renderer.Clear();
             bool isLost = false;
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -52,7 +56,7 @@ namespace SnakeRunnerApp
                 {
                     field.SetPath(null);
                      var nextDir = ChooseDirection();
-                    MakeMove(nextDir);
+                    await MakeMove(nextDir);
                     if (GameIsLost())
                     {
                         isLost = true;
@@ -62,7 +66,7 @@ namespace SnakeRunnerApp
                     {
                         break;
                     }
-                    field.Show(snake, apple);
+                    await field.Show(snake, apple);
                     await Task.Delay(100, cancellationToken);
                 }
                 catch (OperationCanceledException)
@@ -71,14 +75,15 @@ namespace SnakeRunnerApp
                 }
             }
 
-            field.Show(snake, apple);
+            await field.Show(snake, apple);
             if (isLost)
             {
-                field.ShowGameOver(snake);
+                var head = snake.Last();
+                await renderer.GameOver(head.X + 1, head.Y + 1);
             }
             else
             {
-                field.ShowGameWon(snake);
+                await renderer.GameWon();
             }
 
             while (!cancellationToken.IsCancellationRequested)
@@ -113,7 +118,7 @@ namespace SnakeRunnerApp
                 && pos.Y is >= 0 and < height;
         }
 
-        private void MakeMove(Direction nextDir)
+        private async Task MakeMove(Direction nextDir)
         {
             var head = snake.Last();
             var nextPos = head.GoTo(nextDir);
@@ -131,7 +136,7 @@ namespace SnakeRunnerApp
                 }
                 score += 100 - penalty;
                 penalty = 0;
-                field.ShowScore(score);
+                await this.renderer.ShowScore(score);
             }
             else
             {

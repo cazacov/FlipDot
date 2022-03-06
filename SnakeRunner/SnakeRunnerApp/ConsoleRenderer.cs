@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SnakeRunnerApp
 {
@@ -12,8 +13,6 @@ namespace SnakeRunnerApp
         {
             this.width = width;
             this.height = height;
-            Console.Clear();
-            Console.OutputEncoding = Encoding.UTF8; // System.Text.Encoding.GetEncoding(28591);
         }
 
         public void Begin()
@@ -57,7 +56,7 @@ namespace SnakeRunnerApp
             }
         }
 
-        public void End()
+        public async Task End()
         {
             
         }
@@ -67,23 +66,29 @@ namespace SnakeRunnerApp
             Console.ResetColor();
         }
 
-        public void GameOver(int x, int y)
+        public async Task GameOver(int x, int y)
         {
             Draw(x, y, SnakeObject.Hit);
             Console.SetCursorPosition(0, height);
             Console.WriteLine("GAME OVER");
         }
 
-        public void GameWon()
+        public async Task GameWon()
         {
             Console.SetCursorPosition(0, height);
             Console.WriteLine("YOU ARE WINNER!");
         }
 
-        public void ShowScore(int score)
+        public async Task ShowScore(int score)
         {
             Console.SetCursorPosition(width * 3 + 3, height/2);
             Console.Write($"Score {score}");
+        }
+
+        public async Task Clear()
+        {
+            Console.Clear();
+            Console.OutputEncoding = Encoding.UTF8; // System.Text.Encoding.GetEncoding(28591);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace SnakeRunnerApp
 {
@@ -10,16 +10,16 @@ namespace SnakeRunnerApp
         private int width;
         private int height;
         private List<Pos> path = new List<Pos>();
-        private ConsoleRenderer renderer;
+        private IRenderer renderer;
 
-        public Field(int width, int height)
+        public Field(int width, int height, IRenderer renderer)
         {
             this.width = width;
             this.height = height;
-            this.renderer = new ConsoleRenderer(width+2, height+2);
+            this.renderer = renderer;
         }
 
-        public void Show(List<Pos> snake, Pos apple)
+        public async Task Show(List<Pos> snake, Pos apple)
         {
             renderer.Begin();
             var snakeHead = snake.Last();
@@ -57,7 +57,7 @@ namespace SnakeRunnerApp
                 }
                 renderer.Draw(width+1, y + 1, SnakeObject.Wall);
             }
-            renderer.End();
+            await renderer.End();
         }
 
         public void Dispose()
@@ -70,18 +70,6 @@ namespace SnakeRunnerApp
             
         }
 
-        public void ShowGameOver(List<Pos> snake)
-        {
-            var head = snake.Last();
-            renderer.GameOver(head.X+1, head.Y+1);
-        }
-
-
-        public void ShowGameWon(List<Pos> snake)
-        {
-            renderer.GameWon();
-        }
-
         public void SetPath(List<Pos> newPath)
         {
             this.path.Clear();
@@ -89,11 +77,6 @@ namespace SnakeRunnerApp
             {
                 this.path.AddRange(newPath.Take(newPath.Count - 1));
             }
-        }
-
-        public void ShowScore(int score)
-        {
-            renderer.ShowScore(score);
         }
     }
 }
