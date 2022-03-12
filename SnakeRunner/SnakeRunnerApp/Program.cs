@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace SnakeRunnerApp
 {
@@ -19,6 +20,10 @@ namespace SnakeRunnerApp
                 .ConfigureServices((b, c) =>
                 {
                     c.AddHostedService<SnakeGame>();
+                })
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
                 });
             return hostBuilder;
         }

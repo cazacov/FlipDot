@@ -48,7 +48,7 @@ namespace SnakeRunnerApp
             this.bits = new byte[matrixHeight * bytesInRow];
         }
 
-        public void Draw(int x, int y, SnakeObject obj)
+        public void Draw(int x, int y, SnakeObject obj, Direction inDir, Direction outDir)
         {
             var xx = (this.matrixWidth - 2*this.fieldWidth) / 2 + x;
             var pos = bytesInRow * y + xx / 8;
@@ -91,6 +91,16 @@ namespace SnakeRunnerApp
         public async Task ShowScore(int score)
         {
             //
+        }
+
+        public int GetWidth()
+        {
+            return fieldWidth;
+        }
+
+        public int GetHeight()
+        {
+            return fieldHeight;
         }
     }
 }

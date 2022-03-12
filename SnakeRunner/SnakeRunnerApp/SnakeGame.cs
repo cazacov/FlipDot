@@ -8,24 +8,27 @@ namespace SnakeRunnerApp
 {
     internal class SnakeGame : BaseService
     {
-        private const int width = 20;
-        private const int height = 17;
+        private int width;
+        private int height;
         private readonly Random random = new Random();
 
         public List<Pos> snake;
         public Pos apple;
         public Direction snakeDirection;
 
-        private Field field;
-        private PathFinder pathFinder = new PathFinder(width, height);
+        private readonly Field field;
+        private readonly PathFinder pathFinder;
         private int score;
         private int penalty;
-        private readonly FlipDotRenderer renderer;
+        private readonly IRenderer renderer;
 
         public SnakeGame()
         {
-            this.renderer = new FlipDotRenderer(width + 2, height + 2, 140, 19, "http://192.168.178.61/");
-            field =  new Field(width, height, renderer);
+            this.renderer = new ConsoleRenderer(22, 19);
+            field =  new Field(renderer, true);
+            this.width = field.Width;
+            this.height = field.Height;
+            this.pathFinder = new PathFinder(this.width, this.height);
             this.snake = new List<Pos>()
             {
                 new Pos(random.Next(width),random.Next(height))
@@ -114,8 +117,8 @@ namespace SnakeRunnerApp
         private bool InField(Pos pos)
         {
             return 
-                pos.X is >= 0 and < width 
-                && pos.Y is >= 0 and < height;
+                pos.X >= 0 && pos.X < width 
+                && pos.Y >= 0 && pos.Y < height;
         }
 
         private async Task MakeMove(Direction nextDir)
@@ -160,7 +163,7 @@ namespace SnakeRunnerApp
                 if (routeToTail != null)
                 {
                     field.SetPath(routeToApple);
-                    return DirectionTo(head, routeToApple.First());
+                    return head.DirectionTo(routeToApple.First());
                 }
             }
             var tail = snake.First();
@@ -172,22 +175,11 @@ namespace SnakeRunnerApp
             else
             {
                 field.SetPath(tailRoute);
-                return DirectionTo(head, tailRoute.First());
+                return head.DirectionTo(tailRoute.First());
             }
         }
 
-        private Direction DirectionTo(Pos head, Pos next)
-        {
-            var allDirections = new List<Direction> { Direction.Down, Direction.Up, Direction.Left, Direction.Right };
-            foreach (var dir  in allDirections)
-            {
-                if (head.GoTo(dir).Equals(next))
-                {
-                    return dir;
-                }
-            }
-            return Direction.Down;
-        }
+        
 
         private Direction FillArea(Pos head)
         {

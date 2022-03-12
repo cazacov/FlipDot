@@ -15,12 +15,14 @@ namespace SnakeRunnerApp
             this.height = height;
         }
 
+        
+
         public void Begin()
         {
             
         }
 
-        public void Draw(int x, int y, SnakeObject obj)
+        public void Draw(int x, int y, SnakeObject obj, Direction inDir, Direction outDir)
         {
             Console.SetCursorPosition(x * 3, y);
             switch (obj)
@@ -61,6 +63,16 @@ namespace SnakeRunnerApp
             
         }
 
+        public int GetWidth()
+        {
+            return width;
+        }
+
+        public int GetHeight()
+        {
+            return height;
+        }
+
         public void Dispose()
         {
             Console.ResetColor();
@@ -68,7 +80,7 @@ namespace SnakeRunnerApp
 
         public async Task GameOver(int x, int y)
         {
-            Draw(x, y, SnakeObject.Hit);
+            Draw(x, y, SnakeObject.Hit, Direction.None, Direction.None);
             Console.SetCursorPosition(0, height);
             Console.WriteLine("GAME OVER");
         }

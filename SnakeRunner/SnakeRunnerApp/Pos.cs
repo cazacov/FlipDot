@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace SnakeRunnerApp
@@ -49,6 +50,20 @@ namespace SnakeRunnerApp
         {
             return HashCode.Combine(Y, X);
         }
+
+        public Direction DirectionTo(Pos other)
+        {
+            var allDirections = new List<Direction> { Direction.Down, Direction.Up, Direction.Left, Direction.Right };
+            foreach (var dir in allDirections)
+            {
+                if (this.GoTo(dir).Equals(other))
+                {
+                    return dir;
+                }
+            }
+            return Direction.None;
+        }
+
     }
 
     [DebuggerDisplay("{X},{Y} - {CostDistance}")]
