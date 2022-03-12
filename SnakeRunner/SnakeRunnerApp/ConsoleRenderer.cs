@@ -39,13 +39,65 @@ namespace SnakeRunnerApp
                     Console.ForegroundColor = ConsoleColor.Gray;
                     Console.Write(" . ");
                     break;
-                case SnakeObject.SnakeBody:
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write("▓▓▓");
-                    break;
                 case SnakeObject.SnakeHead:
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write("▓▓▓");
+                case SnakeObject.SnakeBody:
+                    if (obj == SnakeObject.SnakeHead)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                    }
+                    if (inDir == Direction.Down && outDir == Direction.Up ||
+                        inDir == Direction.Up && outDir == Direction.Down ||
+                        inDir == Direction.Up && outDir == Direction.None ||
+                        inDir == Direction.None && outDir == Direction.Up ||
+                        inDir == Direction.Down && outDir == Direction.None ||
+                        inDir == Direction.None && outDir == Direction.Down)
+                    {
+                        Console.Write(" ║ ");
+                    }
+                    else if (inDir == Direction.Left && outDir == Direction.Right ||
+                             inDir == Direction.Right && outDir == Direction.Left)
+                    {
+                        Console.Write("═══");
+                    }
+                    else if (inDir == Direction.Left && outDir == Direction.None ||
+                             inDir == Direction.None && outDir == Direction.Left)
+                    {
+                        Console.Write("══ ");
+                    }
+                    else if (
+                        inDir == Direction.Right && outDir == Direction.None ||
+                        inDir == Direction.None && outDir == Direction.Right)
+                    {
+                        Console.Write(" ══");
+                    }
+                    else if (inDir == Direction.Down && outDir == Direction.Right ||
+                             inDir == Direction.Right && outDir == Direction.Down)
+                    {
+                        Console.Write(" ╔═");
+                    }
+                    else if (inDir == Direction.Down && outDir == Direction.Left ||
+                             inDir == Direction.Left && outDir == Direction.Down)
+                    {
+                        Console.Write("═╗ ");
+                    }
+                    else if (inDir == Direction.Up && outDir == Direction.Right ||
+                             inDir == Direction.Right && outDir == Direction.Up)
+                    {
+                        Console.Write(" ╚═");
+                    }
+                    else if (inDir == Direction.Up && outDir == Direction.Left ||
+                             inDir == Direction.Left && outDir == Direction.Up)
+                    {
+                        Console.Write("═╝ ");
+                    }
+                    else
+                    {
+                        Console.Write(" ╬ ");
+                    }
                     break;
                 case SnakeObject.Hit:
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -53,7 +105,55 @@ namespace SnakeRunnerApp
                     break;
                 case SnakeObject.Path:
                     Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.Write("─┼─");
+                    if (inDir == Direction.Down && outDir == Direction.Up ||
+                        inDir == Direction.Up && outDir == Direction.Down ||
+                        inDir == Direction.Up && outDir == Direction.None ||
+                        inDir == Direction.None && outDir == Direction.Up ||
+                        inDir == Direction.Down && outDir == Direction.None ||
+                        inDir == Direction.None && outDir == Direction.Down)
+                    {
+                        Console.Write(" │ ");
+                    }
+                    else if (inDir == Direction.Left && outDir == Direction.Right ||
+                             inDir == Direction.Right && outDir == Direction.Left)
+                    {
+                        Console.Write("───");
+                    }
+                    else if (inDir == Direction.Left && outDir == Direction.None ||
+                             inDir == Direction.None && outDir == Direction.Left)
+                    {
+                        Console.Write("── ");
+                    }
+                    else if (
+                        inDir == Direction.Right && outDir == Direction.None ||
+                        inDir == Direction.None && outDir == Direction.Right)
+                    {
+                        Console.Write(" ──");
+                    }
+                    else if (inDir == Direction.Down && outDir == Direction.Right ||
+                             inDir == Direction.Right && outDir == Direction.Down)
+                    {
+                        Console.Write(" ┌─");
+                    }
+                    else if (inDir == Direction.Down && outDir == Direction.Left ||
+                             inDir == Direction.Left && outDir == Direction.Down)
+                    {
+                        Console.Write("─┐ ");
+                    }
+                    else if (inDir == Direction.Up && outDir == Direction.Right ||
+                             inDir == Direction.Right && outDir == Direction.Up)
+                    {
+                        Console.Write(" └─");
+                    }
+                    else if (inDir == Direction.Up && outDir == Direction.Left ||
+                             inDir == Direction.Left && outDir == Direction.Up)
+                    {
+                        Console.Write("─┘ ");
+                    }
+                    else
+                    {
+                        Console.Write("─┼─");
+                    }
                     break;
             }
         }
