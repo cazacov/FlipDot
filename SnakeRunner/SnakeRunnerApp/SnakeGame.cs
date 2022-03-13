@@ -24,8 +24,9 @@ namespace SnakeRunnerApp
 
         public SnakeGame()
         {
-            this.renderer = new ConsoleRenderer(22, 19);
-            field =  new Field(renderer, true);
+            //this.renderer = new ConsoleRenderer(12, 12);
+            this.renderer = new FlipDotRenderer2(12, 10, 140, 19, "http://192.168.178.61/");
+            field =  new Field(renderer, false);
             this.width = field.Width;
             this.height = field.Height;
             this.pathFinder = new PathFinder(this.width, this.height);
@@ -175,7 +176,7 @@ namespace SnakeRunnerApp
             else
             {
                 field.SetPath(tailRoute);
-                return head.DirectionTo(tailRoute.First());
+                return head.DirectionTo( tailRoute.First());
             }
         }
 

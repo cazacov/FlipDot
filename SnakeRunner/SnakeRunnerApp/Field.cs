@@ -29,30 +29,42 @@ namespace SnakeRunnerApp
         {
             renderer.Begin();
             var snakeHead = snake.Last();
-            for (var i = 0; i < width + 2; i++)
+
+            if (showFrame)
             {
-                renderer.Draw(i, 0, SnakeObject.Wall);
-                renderer.Draw(i, height+1, SnakeObject.Wall);
+                for (var i = 0; i < width + 2; i++)
+                {
+                    renderer.Draw(i, 0, SnakeObject.Wall);
+                    renderer.Draw(i, height + 1, SnakeObject.Wall);
+                }
             }
+
             for (var y = 0; y < height; y++)
             {
-                renderer.Draw(0, y+1, SnakeObject.Wall);
+                if (showFrame) {
+                   renderer.Draw(0, y+1, SnakeObject.Wall);
+                }
                 for (var x = 0; x < width; x++)
                 {
                     var pos = new Pos(x, y);
+                    var xx = x + (showFrame ? 1 : 0);
+                    var yy = y + (showFrame ? 1 : 0);
                     if (pos.Equals(apple))
                     {
-                        renderer.Draw(x + 1, y + 1, SnakeObject.Apple);
+                        renderer.Draw(xx, yy, SnakeObject.Apple);
                     }
                     else
                     {
                         if (!snake.Contains(pos) && !path.Contains(pos))
                         {
-                            renderer.Draw(x + 1, y + 1, SnakeObject.Empty);
+                            renderer.Draw(xx, yy, SnakeObject.Empty);
                         }
                     }
                 }
-                renderer.Draw(width+1, y + 1, SnakeObject.Wall);
+                if (showFrame)
+                {
+                    renderer.Draw(width + 1, y + 1, SnakeObject.Wall);
+                }
             }
 
             DrawChain(path, false);
@@ -82,13 +94,13 @@ namespace SnakeRunnerApp
 
                 if (isSnake)
                 {
-                    renderer.Draw(pos.X + 1, pos.Y + 1,
+                    renderer.Draw(pos.X + (showFrame ? 1 : 0), pos.Y + (showFrame ? 1 : 0),
                         i == chain.Count - 1 ? SnakeObject.SnakeHead : SnakeObject.SnakeBody, inDir,
                         outDir);
                 }
                 else
                 {
-                    renderer.Draw(pos.X + 1, pos.Y + 1, SnakeObject.Path, inDir,                        outDir);
+                    renderer.Draw(pos.X + (showFrame ? 1 : 0), pos.Y + (showFrame ? 1 : 0), SnakeObject.Path, inDir, outDir);
                 }
             }
         }
