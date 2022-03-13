@@ -93,16 +93,16 @@ namespace SnakeRunnerApp
 
         private void SetPixel(int x, int y, bool set)
         {
-            if (x < 0 || y < 0)
+            var xx = (this.matrixWidth - this.fieldWidth) / 2 + x;
+            if (xx < 0 || x >= matrixWidth)
+            {
+                return;
+            }
+            if (y < 0 || y >= fieldHeight)
             {
                 return;
             }
 
-            if (x >= fieldWidth || y >= fieldHeight)
-            {
-                return;
-            }
-            var xx = (this.matrixWidth - 2 * this.fieldWidth) / 2 + x ;
             var pos = bytesInRow * y + xx / 8;
             if (set)
             {
