@@ -26,6 +26,18 @@ content-type: application/json
   "frameBuffer": "AAAAAAAA///8AAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgCAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAgAAUAAAAAAAAAAAAAAAAAAAA///8AAAAAAAAAAAA"
 }
 
+### set picture block (base64 encoded)
+POST http://192.168.178.61/datablock
+content-type: application/json
+
+{
+  "left": 16,
+  "top": 5,
+  "width": 24,
+  "height": 10,
+  "frameBuffer": "VVVVqqqqVVVVqqqqVVVVqqqqVVVVqqqqVVVVqqqq"
+}
+
 ### small text
 POST http://192.168.178.61/textSmall
 content-type: application/json
@@ -60,6 +72,14 @@ content-type: application/json
 {
   line1: "I'm sorry Dave,",
   line2: "I'm afraid I can't do that"
+}
+
+### big text
+POST http://192.168.178.61/textBig
+content-type: application/json
+
+{
+  text: "       Hello World!"
 }
 
 ### big text

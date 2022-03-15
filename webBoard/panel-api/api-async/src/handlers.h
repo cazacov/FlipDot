@@ -5,6 +5,7 @@
 #include <ArduinoJson.h>
 
 extern AsyncCallbackJsonWebHandler* postDataHandler;
+extern AsyncCallbackJsonWebHandler* postDataBlockHandler;
 extern AsyncCallbackJsonWebHandler* postTextSmallHandler;
 extern AsyncCallbackJsonWebHandler* postTextBigHandler;
 extern AsyncCallbackJsonWebHandler* postBusHandler;

@@ -1,3 +1,5 @@
+#include <cstdio>
+
 #include "handlers.h"
 #include "base64.h"
 #include "display.h"
@@ -41,6 +43,45 @@ AsyncCallbackJsonWebHandler* postDataHandler = new AsyncCallbackJsonWebHandler("
     Serial.print("Buffer size: ");
     Serial.println(frameBuffer.size());
     display.setPixels(frameBuffer);
+    request->send(200, "application/json", "{ \"accepted\": true }");
+  }
+  else {
+    request->send(400, "application/json", "{ \"error\": \"Invalid request\" }");
+  }
+});
+
+AsyncCallbackJsonWebHandler* postDataBlockHandler = new AsyncCallbackJsonWebHandler("/datablock", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  StaticJsonDocument<500> jsonDoc;
+  if (json.is<JsonArray>())
+  {
+    jsonDoc = json.as<JsonArray>();
+  }
+  else if (json.is<JsonObject>())
+  {
+    jsonDoc = json.as<JsonObject>();
+  }
+  
+  uint16_t top = jsonDoc["top"];
+  uint16_t left = jsonDoc["left"];
+  uint16_t width = jsonDoc["width"];
+  uint16_t height = jsonDoc["height"];
+
+  // left and width msut be multiples of 8
+  left &= 0xFFF8;
+  width &= 0xFFF8;
+ 
+  const char* data64 = jsonDoc["frameBuffer"];
+  animation->end(display);
+  if (data64) {
+    Serial.print("Got new frameBuffer: ");
+    Serial.println(data64);
+    std::vector<uint8_t> frameBuffer = base64decode(data64);
+    Serial.print("Buffer size: ");
+    Serial.println(frameBuffer.size());
+    char buf[100];
+    sprintf(buf, "Left: %d,\tTop: %d,\tWidth: %d,\tHeight: %d", left, top, width, height);
+    Serial.println(buf);
+    display.setPixelBlock(left, top, width, height, frameBuffer);
     request->send(200, "application/json", "{ \"accepted\": true }");
   }
   else {

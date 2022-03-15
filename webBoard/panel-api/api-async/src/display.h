@@ -22,6 +22,7 @@ public:
     void setDisplayPower(bool new_value);
     std::vector<uint8_t> getPixels();
     void setPixels(std::vector<uint8_t> &newFrameBuffer);
+    void setPixelBlock(uint16_t left, uint16_t top, uint16_t width, uint16_t height, std::vector<uint8_t> &newFrameBuffer);
     void cls(); // clear screen
     void test(); // test all pixels
 };

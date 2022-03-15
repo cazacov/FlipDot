@@ -68,6 +68,25 @@ void Display::setPixels(std::vector<uint8_t> &newFrameBuffer) {
   }
 }
 
+void Display::setPixelBlock(uint16_t left, uint16_t top, uint16_t width, uint16_t height, std::vector<uint8_t> &newFrameBuffer)
+{
+  // Each framebuffer byte stores 8 pixels
+  left >>= 3;
+  width >>= 3;
+
+  for (uint16_t y = top; y < top + height && y < HEIGHT; y++) {
+    for (uint16_t x = left; x < left + width && x < frameBufferWidth; x++) {
+        long target_index = y * frameBufferWidth + x;
+        long source_index = (y - top) * width + x - left;
+        if (source_index >= newFrameBuffer.size()) {
+          break;
+        }
+        frameBuffer[target_index] = newFrameBuffer[source_index];
+    }   
+  }
+  update();
+}
+
 void Display::cls() {
   memset(frameBuffer, 0, frameBufferSize);
 }

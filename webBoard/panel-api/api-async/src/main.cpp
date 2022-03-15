@@ -88,6 +88,7 @@ void setup() {
 
   server.on("/status", HTTP_GET, getStatusHandler);
   server.addHandler(postDataHandler);
+  server.addHandler(postDataBlockHandler);
   server.addHandler(postTextSmallHandler);
   server.addHandler(postTextBigHandler);
   server.addHandler(postBusHandler);
