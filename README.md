@@ -1,5 +1,7 @@
 # Flip-Dot Display Projects
 
+![Board](./_img/board.jpg?raw=true)
+
 ## Brose_63x19
 
 DIY display with three 21x19 Brose panels. Every panel is controlled by an own Arduino Nano and there is one ESP8266 microcontroller that processes "business logic" and orchestrates the panels. The ESP has WiFi interface and can fetch actual weather data from the Internet.
