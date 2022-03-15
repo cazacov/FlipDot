@@ -91,8 +91,10 @@ void setup() {
   server.addHandler(postDataBlockHandler);
   server.addHandler(postTextSmallHandler);
   server.addHandler(postTextBigHandler);
+  server.addHandler(postTextAddHandler);
   server.addHandler(postBusHandler);
   server.addHandler(postClsHandler);
+  server.addHandler(postSetBlockHandler);
   server.addHandler(postTestHandler);
   server.addHandler(postStartGameOfLife);
   server.addHandler(postRunPacman);

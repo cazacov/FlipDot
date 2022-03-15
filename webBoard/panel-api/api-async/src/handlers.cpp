@@ -147,6 +147,38 @@ AsyncCallbackJsonWebHandler* postTextBigHandler = new AsyncCallbackJsonWebHandle
   request->send(200, "application/json", "{ \"accepted\": true }");
 });
 
+AsyncCallbackJsonWebHandler* postTextAddHandler = new AsyncCallbackJsonWebHandler("/textAdd", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  StaticJsonDocument<600> jsonDoc;
+  if (json.is<JsonArray>())
+  {
+    jsonDoc = json.as<JsonArray>();
+  }
+  else if (json.is<JsonObject>())
+  {
+    jsonDoc = json.as<JsonObject>();
+  }
+  String text = utf8ascii(jsonDoc["text"]);
+  long left = jsonDoc["left"];
+  long bottom = jsonDoc["bottom"];
+  bool isBig = jsonDoc["isBig"];
+  
+  animation->end(display);
+  if (isBig) {
+    Serial.println("textAdd BIG");
+    display.setFont(&BIG_FONT);
+  } else {
+    Serial.println("textAdd SMALL");
+    display.setFont(&SMALL_FONT);
+  }
+  Serial.println(text.c_str());
+  display.setCursor(left, bottom);
+  display.print(text.c_str());
+  display.update();
+  display.setFont();
+
+  request->send(200, "application/json", "{ \"accepted\": true }");
+});
+
 AsyncCallbackJsonWebHandler* postTestHandler = new AsyncCallbackJsonWebHandler("/test", [](AsyncWebServerRequest *request, JsonVariant &json) {
   animation->end(display);
   Serial.println("Test");
@@ -253,6 +285,36 @@ AsyncCallbackJsonWebHandler* postClsHandler = new AsyncCallbackJsonWebHandler("/
   animation->end(display);
   Serial.println("CLS");
   display.cls();
+  display.update();
+  request->send(200, "application/json", "{ \"accepted\": true }");
+});
+
+AsyncCallbackJsonWebHandler* postSetBlockHandler = new AsyncCallbackJsonWebHandler("/setblock", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  StaticJsonDocument<500> jsonDoc;
+  if (json.is<JsonArray>())
+  {
+    jsonDoc = json.as<JsonArray>();
+  }
+  else if (json.is<JsonObject>())
+  {
+    jsonDoc = json.as<JsonObject>();
+  }
+  
+  uint16_t top = jsonDoc["top"];
+  uint16_t left = jsonDoc["left"];
+  uint16_t width = jsonDoc["width"];
+  uint16_t height = jsonDoc["height"];
+  bool on = jsonDoc["on"];
+
+  animation->end(display);
+  char buf[100];
+  sprintf(buf, "Left: %d,\tTop: %d,\tWidth: %d,\tHeight: %d", left, top, width, height);
+  
+  for (uint8_t x = left; x < left + width; x++) {
+    for (uint8_t y = top; y < top + height; y++) {
+      display.setDot(x,y, on);
+    }
+  }
   display.update();
   request->send(200, "application/json", "{ \"accepted\": true }");
 });

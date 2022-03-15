@@ -82,6 +82,17 @@ content-type: application/json
   text: "       Hello World!"
 }
 
+### Add text
+POST http://192.168.178.61/textAdd
+content-type: application/json
+
+{
+  left: 80,
+  bottom: 16,
+  isBig: true,
+  text: "Hello"
+}
+
 ### big text
 POST http://192.168.178.61/textBig
 content-type: application/json
@@ -153,6 +164,30 @@ POST http://192.168.178.61/test
 content-type: application/json
 
 {
+}
+
+### Add text
+POST http://192.168.178.61/setblock
+content-type: application/json
+
+{
+  left: 1,
+  top: 1,
+  width: 138,
+  height: 17,
+  on: false
+}
+
+### Add text
+POST http://192.168.178.61/setblock
+content-type: application/json
+
+{
+  left: 2,
+  top: 2,
+  width: 136,
+  height: 15,
+  on: true
 }
 
 ###  Let it snow
