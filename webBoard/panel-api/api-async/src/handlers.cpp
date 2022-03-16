@@ -161,6 +161,7 @@ AsyncCallbackJsonWebHandler* postTextAddHandler = new AsyncCallbackJsonWebHandle
   long left = jsonDoc["left"];
   long bottom = jsonDoc["bottom"];
   bool isBig = jsonDoc["isBig"];
+  bool update = jsonDoc["update"];
   
   animation->end(display);
   if (isBig) {
@@ -173,7 +174,9 @@ AsyncCallbackJsonWebHandler* postTextAddHandler = new AsyncCallbackJsonWebHandle
   Serial.println(text.c_str());
   display.setCursor(left, bottom);
   display.print(text.c_str());
-  display.update();
+  if (update) {
+    display.update();
+  }
   display.setFont();
 
   request->send(200, "application/json", "{ \"accepted\": true }");
@@ -305,6 +308,7 @@ AsyncCallbackJsonWebHandler* postSetBlockHandler = new AsyncCallbackJsonWebHandl
   uint16_t width = jsonDoc["width"];
   uint16_t height = jsonDoc["height"];
   bool on = jsonDoc["on"];
+  bool update = jsonDoc["update"];
 
   animation->end(display);
   char buf[100];
@@ -315,7 +319,9 @@ AsyncCallbackJsonWebHandler* postSetBlockHandler = new AsyncCallbackJsonWebHandl
       display.setDot(x,y, on);
     }
   }
-  display.update();
+  if (update) {
+    display.update();
+  }
   request->send(200, "application/json", "{ \"accepted\": true }");
 });
 

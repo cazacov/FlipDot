@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SnakeRunnerApp
 {
@@ -117,10 +118,19 @@ namespace SnakeRunnerApp
         public async Task End()
         {
             var base64 = Convert.ToBase64String(bits);
-            var str = $"{{\n   \"frameBuffer\": \"{base64}\"\n}}";
+            var str = JsonConvert.SerializeObject(
+                new
+                {
+                    left = 32,
+                    top = 0,
+                    width = 32,
+                    height = 19,
+                    frameBuffer = base64
+                }
+            );
             var content = new StringContent(str, Encoding.UTF8, "application/json");
             content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
-            var result = await restClient.PostAsync("data", content);
+            var result = await restClient.PostAsync("datablock", content);
         }
 
         public async Task GameOver(int x, int y)
@@ -133,9 +143,48 @@ namespace SnakeRunnerApp
             //
         }
 
+        public async Task ShowText(string text, int left, int bottom, bool update)
+        {
+            var str = JsonConvert.SerializeObject(
+                new
+                {
+                    left = left,
+                    bottom = bottom,
+                    isBig = false,
+                    text = text,
+                    update = update
+                }
+            );
+            var content = new StringContent(str, Encoding.UTF8, "application/json");
+            content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+            var result = await restClient.PostAsync("textAdd", content);
+        }
+
+        public async Task SetBlock(int left, int top, int width, int height, bool on, bool update)
+        {
+            var str = JsonConvert.SerializeObject(
+                new
+                {
+                    left = left,
+                    top = top,
+                    width = width,
+                    height = height,
+                    on = on,
+                    update = update
+                }
+            );
+            var content = new StringContent(str, Encoding.UTF8, "application/json");
+            content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+            var result = await restClient.PostAsync("setblock", content);
+        }
+
         public async Task ShowScore(int score)
         {
-            //
+            await SetBlock(64, 0, 40, 19, false, false);
+
+            await ShowText("SCORE", 64, 9, false);
+
+            await ShowText(score.ToString(), 64, 17, true);
         }
 
         public int GetWidth()

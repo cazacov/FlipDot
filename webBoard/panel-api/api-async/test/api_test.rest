@@ -79,7 +79,7 @@ POST http://192.168.178.61/textBig
 content-type: application/json
 
 {
-  text: "       Hello World!"
+  text: "   Hello World!"
 }
 
 ### Add text
@@ -87,10 +87,11 @@ POST http://192.168.178.61/textAdd
 content-type: application/json
 
 {
-  left: 80,
+  left: 100,
   bottom: 16,
-  isBig: true,
-  text: "Hello"
+  isBig: false,
+  text: "Hello",
+  update: true
 }
 
 ### big text
@@ -175,7 +176,8 @@ content-type: application/json
   top: 1,
   width: 138,
   height: 17,
-  on: false
+  on: false,
+  update: true
 }
 
 ### Add text
@@ -187,7 +189,8 @@ content-type: application/json
   top: 2,
   width: 136,
   height: 15,
-  on: true
+  on: true,
+  update: true
 }
 
 ###  Let it snow

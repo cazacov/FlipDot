@@ -25,7 +25,7 @@ namespace SnakeRunnerApp
         public SnakeGame()
         {
             //this.renderer = new ConsoleRenderer(12, 12);
-            this.renderer = new FlipDotRenderer2(12, 10, 140, 19, "http://192.168.178.61/");
+            this.renderer = new FlipDotRenderer2(12, 10, 32, 19, "http://192.168.178.61/");
             field =  new Field(renderer, false);
             this.width = field.Width;
             this.height = field.Height;
