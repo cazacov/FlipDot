@@ -1,7 +1,8 @@
 {
 	"folders": [
 		{
-			"path": "Test_ESP32-WithFixes"
+			"name": "webBoard",
+			"path": "..\\..\\webBoard\\webBoard"
 		}
 	],
 	"settings": {}

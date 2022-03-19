@@ -1,6 +1,7 @@
 #include <VM_IIC.h>
 
-VM_IIC::VM_IIC(int16_t w, int16_t h, uint16_t flipTime, void (*i2cWriteFunc)(uint8_t, uint8_t)) : Adafruit_GFX(w, h), prevColumnState(0xFF) {
+VM_IIC::VM_IIC(int16_t w, int16_t h, uint16_t flipTime, void (*i2cWriteFunc)(uint8_t, uint8_t)) 
+    : Adafruit_GFX(w, h), prevColumnState(0xFF), prevModuleState(0) {
     _debugSerial = &Serial; // set default debug serial
     _flipTime = flipTime;
 
@@ -8,6 +9,7 @@ VM_IIC::VM_IIC(int16_t w, int16_t h, uint16_t flipTime, void (*i2cWriteFunc)(uin
 
     frameBufferWidth = (w + 7) / 8;
     frameBufferSize = frameBufferWidth * h;
+
 
     frameBuffer = (uint8_t*)malloc(frameBufferSize);
     previousFrameBuffer = (uint8_t*)malloc(frameBufferSize);
@@ -87,11 +89,6 @@ void VM_IIC::generateDataPacket(uint8_t moduleSelect, uint8_t colAddr, bool colD
 
 
 void VM_IIC::writeDot(uint8_t x, uint8_t y, bool state) {
-
-    if(x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) {
-        return;
-    }
-
     // calculate digit (B0/B1) and segment (A0-A2) of adress
     uint8_t colFpDigit = (x % 28) / 7;
     uint8_t colFpSegment = x % 7 + 1;
@@ -111,24 +108,32 @@ void VM_IIC::writeDot(uint8_t x, uint8_t y, bool state) {
 
     // Serial.printf("x=%3d y=%2d state=%d moduleBits=%02X colAddr=%02X rowAddr=%02X buf= %02X %02X %02X\n", x, y, state, moduleBits, colAddr, rowAddr, i2cBuf[0], i2cBuf[1], i2cBuf[2]);
 
-    if (prevColumnState != i2cBuf[1])  {
+    bool xStateChanged =
+        i2cBuf[0] != prevModuleState
+        || (i2cBuf[1] & 0x7E) != prevColumnState;
+    
+    if (xStateChanged)  {
+        // flip module ENABLE back and forth if state of the columns changed
         i2cWriteByte(0x40, 0xFF); // disable all modules
     }
     i2cWriteByte(0x42, i2cBuf[1]);
     i2cWriteByte(0x44, i2cBuf[2]);
-    if (prevColumnState != i2cBuf[1])  {
+    if (xStateChanged)  {
         i2cWriteByte(0x40, i2cBuf[0]);
+        prevModuleState = i2cBuf[0];
+        prevColumnState = i2cBuf[1] & 0x7E;
     }
+
     delayMicroseconds(_flipTime);
 
     i2cBuf[2] &= 0x0F; // only clear row driver enables
     i2cWriteByte(0x44, i2cBuf[2]);
-    //i2cWriteByte(0x40, 0xFF); // disable all modules
-    prevColumnState = i2cBuf[1];
 }
 
 
 void VM_IIC::update() {
+    prevModuleState = 0;
+    prevColumnState = 0xFF;
     for(uint8_t x = 0; x < WIDTH; x++) {
         for(uint8_t y = 0; y < HEIGHT; y++) {
             if(dotChanged(x, y)) {
@@ -137,7 +142,6 @@ void VM_IIC::update() {
         }
     }
     i2cWriteByte(0x40, 0xFF); // disable all modules
-    prevColumnState = 0xFF;
 
     //store previous frame Buffer
     memcpy(previousFrameBuffer, frameBuffer, frameBufferSize);

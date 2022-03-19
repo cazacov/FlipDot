@@ -4,8 +4,8 @@
 
 #include "VM_IIC.h"
 
-#define DISPLAY_WIDTH   112
-#define DISPLAY_HEIGHT  16
+#define DISPLAY_WIDTH   28
+#define DISPLAY_HEIGHT  19
 #define FLIP_TIME       250
 
 const uint8_t PIN_SCL = 21;
@@ -26,31 +26,35 @@ VM_IIC* flipdot;
 
 void setup() {
   Serial.begin(115200);
+  pinMode(23, OUTPUT);
+  digitalWrite(23, LOW);
+  delay(100);
+
+
   flipdot = new VM_IIC(DISPLAY_WIDTH, DISPLAY_HEIGHT, FLIP_TIME, i2cWriteByteSoftware);
-  flipdot->setModuleMapping(1, 2, 3, 4);
+  // put your setup code here, to run once:
+  flipdot->setModuleMapping(1);
+
   delay(100);    
+  // blank display
   flipdot->clearDisplay();
 } 
 
 void loop() {
-  char buf[2] = "0";
-
-  flipdot->fillScreen(0);
-  flipdot->setTextColor(1,0);
-  for (int i = 0; i < 18; i++) {
-    buf[0] = 'A' + i;
-    flipdot->setCursor(1 + i*6, 1 + (i % 8));
-    flipdot->print(buf);
+  for (int x = 0; x < DISPLAY_WIDTH; x++) {
+    for (int y = 0; y < DISPLAY_HEIGHT; y++) {
+      flipdot->setDot(x, y, 1);
+      flipdot->update();
+      delay(1);
+    }
   }
-  flipdot->update();
-  delay(5000);
-  flipdot->fillScreen(1);
-  flipdot->setTextColor(0,1);
-  for (int i = 0; i < 18; i++) {
-    buf[0] = 'A' + i;
-    flipdot->setCursor(1 + i*6, 1 + (i % 8));
-    flipdot->print(buf);
+  delay(1000);
+  for (int x = 0; x < DISPLAY_WIDTH; x++) {
+    for (int y = 0; y < DISPLAY_HEIGHT; y++) {
+      flipdot->setDot(x, y, 0);
+      flipdot->update();
+      delay(1);
+    }
   }
-  flipdot->update();
-  delay(5000);
+  delay(1000);
 }
