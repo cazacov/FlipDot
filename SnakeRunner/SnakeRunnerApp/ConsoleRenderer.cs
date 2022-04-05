@@ -8,22 +8,45 @@ namespace SnakeRunnerApp
     {
         private readonly int width;
         private readonly int height;
+        private readonly bool showFrame;
 
         public ConsoleRenderer(int width, int height)
         {
             this.width = width;
             this.height = height;
+            showFrame = true;
         }
-
-        
 
         public void Begin()
         {
-            
+            if (showFrame)
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                for (var x = 0; x < width + 2; x++)
+                {
+                    Console.SetCursorPosition(x * 3, 0);
+                    Console.Write("░░░");
+                    Console.SetCursorPosition(x * 3, height + 1);
+                    Console.Write("░░░");
+                }
+
+                for (var y = 0; y < height; y++)
+                {
+                    Console.SetCursorPosition(0, y + 1);
+                    Console.Write("░░░");
+                    Console.SetCursorPosition((width + 1) * 3, y+1);
+                    Console.Write("░░░");
+                }
+            }
         }
 
         public void Draw(int x, int y, SnakeObject obj, Direction inDir, Direction outDir)
         {
+            if (showFrame)
+            {
+                x += 1;
+                y += 1;
+            }
             Console.SetCursorPosition(x * 3, y);
             switch (obj)
             {
@@ -193,7 +216,15 @@ namespace SnakeRunnerApp
 
         public async Task ShowScore(int score)
         {
-            Console.SetCursorPosition(width * 3 + 3, height/2);
+            if (showFrame)
+            {
+                Console.SetCursorPosition((width + 2 ) * 3 + 3, height / 2);
+            }
+            else
+            {
+                Console.SetCursorPosition(width * 3 + 3, height / 2);
+            }
+
             Console.Write($"Score {score}");
         }
 

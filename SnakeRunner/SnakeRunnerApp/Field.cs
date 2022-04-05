@@ -10,16 +10,14 @@ namespace SnakeRunnerApp
         private readonly int width;
         private readonly int height;
         private List<Pos> path = new List<Pos>();
-        private IRenderer renderer;
+        private IList<IRenderer> renderers;
         private readonly bool showFrame;
 
-        public Field(IRenderer renderer, bool showFrame)
+        public Field(List<IRenderer> renderers, int width, int height)
         {
-            this.renderer = renderer;
-            this.showFrame = showFrame;
-
-            this.width = renderer.GetWidth() - (showFrame ? 2 : 0);
-            this.height = renderer.GetHeight() - (showFrame ? 2 : 0);
+            this.renderers = renderers;
+            this.width = width;
+            this.height = height;
         }
 
         public int Width => this.width;
@@ -27,23 +25,21 @@ namespace SnakeRunnerApp
 
         public async Task Show(List<Pos> snake, Pos apple)
         {
-            renderer.Begin();
+            RenderersBegin();
+            
             var snakeHead = snake.Last();
 
             if (showFrame)
             {
                 for (var i = 0; i < width + 2; i++)
                 {
-                    renderer.Draw(i, 0, SnakeObject.Wall);
-                    renderer.Draw(i, height + 1, SnakeObject.Wall);
+                    RenderesDraw(i, 0, SnakeObject.Wall);
+                    RenderesDraw(i, height + 1, SnakeObject.Wall);
                 }
             }
 
             for (var y = 0; y < height; y++)
             {
-                if (showFrame) {
-                   renderer.Draw(0, y+1, SnakeObject.Wall);
-                }
                 for (var x = 0; x < width; x++)
                 {
                     var pos = new Pos(x, y);
@@ -51,26 +47,46 @@ namespace SnakeRunnerApp
                     var yy = y + (showFrame ? 1 : 0);
                     if (pos.Equals(apple))
                     {
-                        renderer.Draw(xx, yy, SnakeObject.Apple);
+                        RenderesDraw(xx, yy, SnakeObject.Apple);
                     }
                     else
                     {
                         if (!snake.Contains(pos) && !path.Contains(pos))
                         {
-                            renderer.Draw(xx, yy, SnakeObject.Empty);
+                            RenderesDraw(xx, yy, SnakeObject.Empty);
                         }
                     }
-                }
-                if (showFrame)
-                {
-                    renderer.Draw(width + 1, y + 1, SnakeObject.Wall);
                 }
             }
 
             DrawChain(path, false);
             DrawChain(snake, true);
 
-            await renderer.End();
+            await RenderersEnd();
+        }
+
+        private void RenderesDraw(int x, int y, SnakeObject snakeObject, Direction inDir = Direction.None, Direction outDir = Direction.None)
+        {
+            foreach (var renderer in renderers)
+            {
+                renderer.Draw(x, y, snakeObject, inDir, outDir);
+            }
+        }
+
+        private void RenderersBegin()
+        {
+            foreach (var renderer in renderers)
+            {
+                renderer.Begin();
+            }
+        }
+
+        private async Task RenderersEnd()
+        {
+            foreach (var renderer in renderers)
+            {
+                await renderer.End();
+            }
         }
 
         private void DrawChain(List<Pos> chain, bool isSnake)
@@ -94,25 +110,19 @@ namespace SnakeRunnerApp
 
                 if (isSnake)
                 {
-                    renderer.Draw(pos.X + (showFrame ? 1 : 0), pos.Y + (showFrame ? 1 : 0),
+                    RenderesDraw(pos.X + (showFrame ? 1 : 0), pos.Y + (showFrame ? 1 : 0),
                         i == chain.Count - 1 ? SnakeObject.SnakeHead : SnakeObject.SnakeBody, inDir,
                         outDir);
                 }
                 else
                 {
-                    renderer.Draw(pos.X + (showFrame ? 1 : 0), pos.Y + (showFrame ? 1 : 0), SnakeObject.Path, inDir, outDir);
+                    RenderesDraw(pos.X + (showFrame ? 1 : 0), pos.Y + (showFrame ? 1 : 0), SnakeObject.Path, inDir, outDir);
                 }
             }
         }
 
         public void Dispose()
         {
-            if (renderer != null)
-            {
-                renderer.Dispose();
-            }
-            this.renderer = null;
-            
         }
 
         public void SetPath(List<Pos> newPath)

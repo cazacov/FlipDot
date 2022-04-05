@@ -8,8 +8,8 @@ namespace SnakeRunnerApp
 {
     internal class SnakeGame : BaseService
     {
-        private int width;
-        private int height;
+        private readonly int width;
+        private readonly int height;
         private readonly Random random = new Random();
 
         public List<Pos> snake;
@@ -20,13 +20,16 @@ namespace SnakeRunnerApp
         private readonly PathFinder pathFinder;
         private int score;
         private int penalty;
-        private readonly IRenderer renderer;
+        private readonly List<IRenderer> renderers;
 
         public SnakeGame()
         {
             //this.renderer = new ConsoleRenderer(12, 12);
-            this.renderer = new FlipDotRenderer2(12, 10, 32, 19, "http://192.168.178.61/");
-            field =  new Field(renderer, false);
+            this.renderers = new List<IRenderer>();
+            this.renderers.Add(new FlipDotRenderer2(12, 10, 32, 19, "http://192.168.178.61/"));
+            this.renderers.Add(new ConsoleRenderer(12, 10));
+
+            field =  new Field(renderers, 12, 10);
             this.width = field.Width;
             this.height = field.Height;
             this.pathFinder = new PathFinder(this.width, this.height);
@@ -52,7 +55,7 @@ namespace SnakeRunnerApp
 
         protected override async Task DoWorkAsync(CancellationToken cancellationToken)
         {
-            await renderer.Clear();
+            await RenderClear();
             bool isLost = false;
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -83,16 +86,48 @@ namespace SnakeRunnerApp
             if (isLost)
             {
                 var head = snake.Last();
-                await renderer.GameOver(head.X + 1, head.Y + 1);
+                await  RenderersGameOver(head.X, head.Y);
             }
             else
             {
-                await renderer.GameWon();
+                await RenderersGameWon();
             }
 
             while (!cancellationToken.IsCancellationRequested)
             {
                 await Task.Delay(100, cancellationToken);
+            }
+        }
+
+        private async Task RenderersGameWon()
+        {
+            foreach(var renderer in renderers)
+            {
+                await renderer.GameWon();
+            }
+        }
+
+        private async Task RenderersGameOver(int x, int y)
+        {
+            foreach (var renderer in renderers)
+            {
+                await renderer.GameOver(x, y);
+            }
+        }
+
+        private async Task RenderClear()
+        {
+            foreach (var renderer in renderers)
+            {
+                await renderer.Clear();
+            }
+        }
+
+        private async Task RenderersShowScore(int score)
+        {
+            foreach (var renderer in renderers)
+            {
+                await renderer.ShowScore(score);
             }
         }
 
@@ -140,7 +175,7 @@ namespace SnakeRunnerApp
                 }
                 score += 100 - penalty;
                 penalty = 0;
-                await this.renderer.ShowScore(score);
+                await RenderersShowScore(score);
             }
             else
             {
@@ -148,6 +183,8 @@ namespace SnakeRunnerApp
                 penalty++;
             }
         }
+
+
 
         private Direction ChooseDirection()
         {
