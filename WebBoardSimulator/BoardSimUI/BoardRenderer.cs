@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BoardSimUI
+﻿namespace BoardSimUI
 {
     internal class BoardRenderer
     {
@@ -55,6 +49,22 @@ namespace BoardSimUI
                     (int)(marginX + x * cellWidth), (int)marginY,
                     (int)(marginX + +x * cellWidth), (int)(marginY + cellHeight * board.Height));
             }
+
+            for (var y = 0; y < board.Height; y++)
+            {
+                for (var x = 0; x < board.Width; x++)
+                {
+                    if (board.Pixels[y, x])
+                    {
+                        gt.FillRectangle(Brushes.Yellow,
+                            marginX + x * cellWidth + 1,
+                            marginY + y * cellHeight + 1,
+                            cellWidth - 1,
+                            cellHeight - 1); 
+                    }
+                }
+            }
+
             gt.Dispose();
             pictureBox.Image = result;
         }

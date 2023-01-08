@@ -118,6 +118,7 @@
             this.rtLog.ForeColor = System.Drawing.Color.White;
             this.rtLog.Location = new System.Drawing.Point(18, 20);
             this.rtLog.Name = "rtLog";
+            this.rtLog.ReadOnly = true;
             this.rtLog.Size = new System.Drawing.Size(1400, 347);
             this.rtLog.TabIndex = 14;
             this.rtLog.Text = "";
