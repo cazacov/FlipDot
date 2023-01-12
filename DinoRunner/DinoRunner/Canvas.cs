@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text.Json.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace DinoRunner
 {
@@ -23,6 +20,7 @@ namespace DinoRunner
     {
         public const int Height = 19;
         public const int Width = 140;
+        public const int LeftBorder = 40;
 
         private bool[,] Pixels = new bool[Height, Width];
 
@@ -33,7 +31,7 @@ namespace DinoRunner
 
         public void DrawBaseLine()
         {
-            for (var x = 0; x < Width; x++)
+            for (var x = LeftBorder; x < Width; x++)
             {
                 Pixels[16, x] = true;
             }
@@ -106,6 +104,36 @@ namespace DinoRunner
             Pixels[y + 8, x + 6] = false;
         }
 
+        public void PutDinoBig(int x, int y)
+        {
+            PutBar(x, y + 6, 1, 5 ,false);
+            PutBar(x+1, y + 8, 1, 4 ,false);
+            PutBar(x + 2, y + 9, 1, 4 ,false);
+            PutBar(x + 3, y + 10, 1, 4 ,false);
+            PutBar(x + 4, y + 10, 1, 9 ,false);
+            PutBar(x + 5, y + 10, 1, 7 ,false);
+            PutPixel(x+5, y+18 ,false);
+            PutBar(x + 6, y + 9, 1, 7 ,false);
+            PutBar(x + 7, y + 8, 1, 7 ,false);
+            PutBar(x + 8, y + 7, 1, 9 ,false);
+            PutBar(x + 9, y + 1, 1, 18 ,false);
+            PutBar(x + 10, y + 0, 1, 14 ,false);
+            PutPixel(x + 10, y + 18 ,false);
+            PutPixel(x + 11, y + 0 ,false);
+            PutBar(x + 11, y + 2, 1, 10 ,false);
+            PutBar(x + 12, y + 0, 1, 7 ,false);
+            PutPixel(x + 12, y + 8 ,false);
+            PutBar(x + 13, y + 0, 1, 5 ,false);
+            PutPixel(x + 13, y + 6 ,false);
+            PutPixel(x + 13, y + 9 ,false);
+            PutBar(x + 14, y + 0, 1, 5 ,false);
+            PutPixel(x + 14, y + 6 ,false);
+            PutBar(x + 15, y + 0, 1, 5 ,false);
+            PutPixel(x + 15, y + 6 ,false);
+            PutBar(x + 16, y + 0, 1, 5 ,false);
+            PutBar(x + 17, y + 1, 1, 4 ,false);
+        }
+
         public async Task Display(string url)
         {
             var bytesperRow = (Width + 7) >> 3;
@@ -154,9 +182,10 @@ namespace DinoRunner
             }
         }
 
-        private void PutPixel(int x, int y)
+        private void PutPixel(int x, int y, bool useFrame = true)
         {
-            if (x is >= 0 and < Width && y is >= 0 and < Height)
+            var leftBorder = useFrame ? LeftBorder : 0;
+            if (x >= leftBorder && x < Width && y is >= 0 and < Height)
             {
                 Pixels[y, x] = true;
             }
@@ -189,15 +218,17 @@ namespace DinoRunner
             }
         }
 
-        private void PutBar(int x, int y, int w, int h)
+        private void PutBar(int x, int y, int w, int h, bool useFrame = true)
         {
             for (var xx = x; xx < x + w; xx++)
             {
                 for (var yy = y; yy < y + h; yy++)
                 {
-                    PutPixel(xx,yy);
+                    PutPixel(xx,yy, useFrame);
                 }
             }
         }
+
+
     }
 }

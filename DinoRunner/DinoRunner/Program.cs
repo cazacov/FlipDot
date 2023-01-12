@@ -30,12 +30,14 @@ namespace DinoRunner
             await Task.Delay(3000);
 
             canvas.PutDino(60, 10, State.Step1);
+//            canvas.PutDinoBig(0, 0);
             await canvas.Display(url);
-            await Task.Delay(300);
+            await Task.Delay(500);
 
             do
             {
                 canvas.Cls();
+//                canvas.PutDinoBig(0, 0);
                 canvas.DrawBaseLine();
                 canvas.DrawStones(stones);
                 canvas.DrawCacti(cacti);
@@ -92,7 +94,7 @@ namespace DinoRunner
                 UpdateCacti(cacti, canvas);
 
 
-                await Task.Delay(100);
+                await Task.Delay(50);
             } while (!Console.KeyAvailable  || Console.ReadKey(true).Key != ConsoleKey.Escape);
         }
 
