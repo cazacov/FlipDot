@@ -10,11 +10,11 @@ namespace SnakeRunnerApp
     {
         private readonly int width;
         private readonly int height;
-        private readonly Random random = new Random();
+        private readonly Random random = new();
 
-        public List<Pos> snake;
-        public Pos apple;
-        public Direction snakeDirection;
+        private readonly List<Pos> snake;
+        private Pos apple;
+        private Direction snakeDirection;
 
         private readonly Field field;
         private readonly PathFinder pathFinder;
@@ -24,10 +24,9 @@ namespace SnakeRunnerApp
 
         public SnakeGame()
         {
-            //this.renderer = new ConsoleRenderer(12, 12);
             this.renderers = new List<IRenderer>();
-            this.renderers.Add(new FlipDotRenderer2(12, 10, 32, 19, "http://192.168.178.61/"));
             this.renderers.Add(new ConsoleRenderer(12, 10));
+            this.renderers.Add(new FlipDotRenderer2(12, 10, 32, 19, "http://localhost:5000/"));
 
             field =  new Field(renderers, 12, 10);
             this.width = field.Width;
@@ -86,11 +85,11 @@ namespace SnakeRunnerApp
             if (isLost)
             {
                 var head = snake.Last();
-                await  RenderersGameOver(head.X, head.Y);
+                await  RenderGameOver(head.X, head.Y);
             }
             else
             {
-                await RenderersGameWon();
+                await RenderGameWon();
             }
 
             while (!cancellationToken.IsCancellationRequested)
@@ -99,7 +98,7 @@ namespace SnakeRunnerApp
             }
         }
 
-        private async Task RenderersGameWon()
+        private async Task RenderGameWon()
         {
             foreach(var renderer in renderers)
             {
@@ -107,7 +106,7 @@ namespace SnakeRunnerApp
             }
         }
 
-        private async Task RenderersGameOver(int x, int y)
+        private async Task RenderGameOver(int x, int y)
         {
             foreach (var renderer in renderers)
             {
@@ -123,7 +122,7 @@ namespace SnakeRunnerApp
             }
         }
 
-        private async Task RenderersShowScore(int score)
+        private async Task RenderShowScore(int score)
         {
             foreach (var renderer in renderers)
             {
@@ -175,7 +174,7 @@ namespace SnakeRunnerApp
                 }
                 score += 100 - penalty;
                 penalty = 0;
-                await RenderersShowScore(score);
+                await RenderShowScore(score);
             }
             else
             {
