@@ -70,8 +70,27 @@ POST http://192.168.178.78/textSmall
 content-type: application/json
 
 {
+
   line1: "I'm sorry Dave,",
   line2: "I'm afraid I can't do that"
+}
+
+### small text
+POST http://192.168.178.78/textSmall
+content-type: application/json
+
+{
+  line1: "           First COFFEE",
+  line2: "            then CODE  "
+}
+
+### small text
+POST http://192.168.178.78/textSmall
+content-type: application/json
+
+{
+  line1: "               FRIDAY",
+  line2: "              THE 13th  "
 }
 
 ### big text
@@ -80,14 +99,6 @@ content-type: application/json
 
 {
   text: "   Hello World!"
-}
-
-### big text
-POST http://192.168.178.78/textBig
-content-type: application/json
-
-{
-  text: "   Best Secret"
 }
 
 ### Add text
@@ -184,7 +195,7 @@ content-type: application/json
   top: 1,
   width: 138,
   height: 17,
-  on: false,
+  on: true,
   update: true
 }
 
@@ -206,4 +217,12 @@ POST http://192.168.178.78/newyear
 content-type: application/json
 
 {
+}
+
+###  Waiting
+POST http://192.168.178.78/waiting
+content-type: application/json
+
+{
+  "text": "  THINKING ..."
 }

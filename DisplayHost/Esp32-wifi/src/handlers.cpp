@@ -7,6 +7,7 @@
 #include "pacman.h"
 #include "CounterAnimation.h"
 #include "newyearanimation.h"
+#include "WaitingAnimation.h"
 extern Display display;
 extern BaseAnimation* animation;
 #include "utf2ascii.h"
@@ -186,6 +187,15 @@ AsyncCallbackJsonWebHandler* postTestHandler = new AsyncCallbackJsonWebHandler("
   animation->end(display);
   Serial.println("Test");
   display.test();
+  display.update();
+  request->send(200, "application/json", "{ \"accepted\": true }");
+});
+
+AsyncCallbackJsonWebHandler* postClsHandler = new AsyncCallbackJsonWebHandler("/cls", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  animation->end(display);
+  Serial.println("CLS");
+  display.cls();
+  display.update();
   request->send(200, "application/json", "{ \"accepted\": true }");
 });
 
@@ -284,13 +294,6 @@ AsyncCallbackJsonWebHandler* postStartCounter = new AsyncCallbackJsonWebHandler(
   request->send(200, "application/json", "{ \"accepted\": true }");
 });
 
-AsyncCallbackJsonWebHandler* postClsHandler = new AsyncCallbackJsonWebHandler("/cls", [](AsyncWebServerRequest *request, JsonVariant &json) {
-  animation->end(display);
-  Serial.println("CLS");
-  display.cls();
-  display.update();
-  request->send(200, "application/json", "{ \"accepted\": true }");
-});
 
 AsyncCallbackJsonWebHandler* postSetBlockHandler = new AsyncCallbackJsonWebHandler("/setblock", [](AsyncWebServerRequest *request, JsonVariant &json) {
   StaticJsonDocument<500> jsonDoc;
@@ -411,6 +414,32 @@ AsyncCallbackJsonWebHandler* postStartNewYear = new AsyncCallbackJsonWebHandler(
   }
 
   animation = new NewYear();
+  animation->begin(display);
+ 
+  request->send(200, "application/json", "{ \"accepted\": true }");
+});
+
+AsyncCallbackJsonWebHandler* postStartWaiting = new AsyncCallbackJsonWebHandler("/waiting", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  StaticJsonDocument<500> jsonDoc;
+  if (json.is<JsonArray>())
+  {
+    jsonDoc = json.as<JsonArray>();
+  }
+  else if (json.is<JsonObject>())
+  {
+    jsonDoc = json.as<JsonObject>();
+  }
+  
+  Serial.println("Waiting...");
+  
+  if (animation != NULL) {
+    animation->end(display);
+    delete animation;
+  }
+
+  String text = utf8ascii(jsonDoc["text"]);
+
+  animation = new WaitingAnimation(text);
   animation->begin(display);
  
   request->send(200, "application/json", "{ \"accepted\": true }");

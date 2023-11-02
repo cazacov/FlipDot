@@ -100,6 +100,7 @@ void setup() {
   server.addHandler(postRunPacman);
   server.addHandler(postStartCounter);
   server.addHandler(postStartNewYear);
+  server.addHandler(postStartWaiting);
 
   // attach filesystem root at URL /
   server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");

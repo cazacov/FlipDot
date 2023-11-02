@@ -6,7 +6,7 @@ XantoI2C* xi2c;
 
 #define DISPLAY_WIDTH 140
 #define DISPLAY_HEIGHT 19
-#define FLIP_TIME 500
+#define FLIP_TIME 300
 
 void i2cWriteByteSoftware(uint8_t addr, uint8_t data) {
     xi2c->start();
@@ -93,5 +93,4 @@ void Display::cls() {
 
 void Display::test() {
   memset(frameBuffer, 0xFF, frameBufferSize);
-  update();
 }

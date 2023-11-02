@@ -17,6 +17,7 @@ extern AsyncCallbackJsonWebHandler* postStartGameOfLife;
 extern AsyncCallbackJsonWebHandler* postRunPacman;
 extern AsyncCallbackJsonWebHandler* postStartCounter;
 extern AsyncCallbackJsonWebHandler* postStartNewYear;
+extern AsyncCallbackJsonWebHandler* postStartWaiting;
 
 void getStatusHandler(AsyncWebServerRequest* request);
 void notFoundHandler(AsyncWebServerRequest* request);
