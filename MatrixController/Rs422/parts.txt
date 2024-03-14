@@ -1,2 +1,0 @@
-7824CT - Linear Voltage Regulator
-L4960H - Switching Voltage Regulator
